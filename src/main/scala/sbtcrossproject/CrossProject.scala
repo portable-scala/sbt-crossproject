@@ -11,273 +11,113 @@ import Project.projectToRef
 
 import java.io.File
 
-/** A convenience structure that creates a JVM and a Scala.js project under the
- *  hood and forwards common operations to it.
- *
- *  <h2>Basic Usage</h2>
- *  In your `build.sbt`, use [[CrossProject]] as follows:
- *  {{{
- *  lazy val p1 = crossProject.
- *    settings(
- *      name := "test", // default name would be p1
- *      libraryDependencies += "org.example" %%% "test" % "0.1"
- *    ).
- *    jvmSettings(
- *      libraryDependencies += "org.example" %% "jvm-specific" % "0.1"
- *    ).
- *    jsSettings(
- *      libraryDependencies += "org.example" %%% "js-specific" % "0.1",
- *      jsDependencies += "org.example" %% "js-thing" % "0.1" / "foo.js"
- *    )
- *
- *  // Needed, so sbt finds the projects
- *  lazy val p1JVM = p1.jvm
- *  lazy val p1JS = p1.js
- *
- *  lazy val p2 = crossProject.crossType(CrossType.Pure).dependsOn(p1 % "test")
- *
- *  // Needed, so sbt finds the projects
- *  lazy val p2JVM = p2.jvm
- *  lazy val p2JS = p2.js
- *  }}}
- *
- *  <h2>CrossProject types</h2>
- *  There are three built-in types of [[CrossProject]]s. Each of them
- *  corresponds to a concrete subclass of [[CrossType]]:
- *
- *  <h3>Full CrossProject ([[CrossType.Full]])</h3>
- *  A CrossProject that has both shared and individual JVM/JS sources.
- *  This is the default.
- *
- *  The directory structure is as follows:
- *
- *  <pre>
- *  project/
- *    shared/
- *      src/
- *        main/
- *        test/
- *    jvm/
- *      src/
- *        main/
- *        test/
- *    js/
- *      src/
- *        main/
- *        test/
- *  </pre>
- *
- *  The shared source tree is included in both the JVM and the JS project.
- *
- *  <h3>Pure CrossProject ([[CrossType.Pure]])</h3>
- *  A CrossProject that does not have individual JVM/JS sources.
- *
- *  The directory structure is as follows:
- *
- *  <pre>
- *  project/
- *    src/
- *      main/
- *      test/
- *    .jvm/
- *    .js/
- *  </pre>
- *
- *  The source tree is included in both the JVM and the JS project. The hidden
- *  folders are the true project roots in sbt's terms.
- *
- *  <h3>Dummy CrossProject ([[CrossType.Dummy]])</h3>
- *  A CrossProject that does not have shared JVM/JS sources. It is useful, since
- *  it can still be used for dependency tracking and aggregation.
- *
- *  The directory structure is as follows:
- *
- *  <pre>
- *  project/
- *    jvm/
- *      src/
- *        main/
- *        test/
- *    js/
- *      src/
- *        main/
- *        test/
- *  </pre>
- *
- *  <h2>Eclipse Support</h2>
- *  Note that by default, the sbteclipse plugin uses sbt's project names to name
- *  the Eclipse projects it generates. Since the CrossProject generates two
- *  projects with the same name, this may result in a conflict when importing
- *  the projects into Eclipse.
- *
- *  You can configure sbteclipse to
- *  [[https://github.com/typesafehub/sbteclipse/wiki/Using-sbteclipse#useprojectid
- *  use the project ID]] instead (which is unique in sbt as well):
- *
- *  {{{
- *  EclipseKeys.useProjectId := true
- *  }}}
- *
- *  Alternatively, you can of course also just import one of the two projects
- *  into your Eclipse.
- *
- *  <h2>IntelliJ IDEA Support</h2>
- *  While CrossProject works out of the box with Eclipse and the sbt eclipse
- *  plugin, it does not with IntelliJ IDEA due to its missing support for shared
- *  source directories.
- *
- *  To fix this, you should add symlinks in the hierarchy to the shared source
- *  directory and include them in your imported IntelliJ IDEA project (but not
- *  in sbt). The recommended structure is as follows (for a Full CrossProject):
- *
- *  <pre>
- *  project/
- *    shared/
- *      src/
- *        main/
- *        test/
- *    jvm/
- *      src/
- *        main/
- *        test/
- *        idea-shared-main/ --> project/shared/src/main
- *        idea-shared-test/ --> project/shared/src/test
- *    js/
- *      src/
- *        main/
- *        test/
- *        idea-shared-main/ --> project/shared/src/main
- *        idea-shared-test/ --> project/shared/src/test
- *  </pre>
- *
- *  Note that we do not recommend to put the symlinks in version control, since
- *  they do not work on Windows (Git, for example, just ignores their existence
- *  when cloning).
- *
- *  <h2>Pitfalls to Avoid</h2>
- *
- *  <h3>Altering a contained Project outside the CrossProject</h3>
- *  Since sbt projects are immutable structures, it is important that you do not
- *  "mutate" (i.e. create a new Project) outside of the CrossProject.
- *
- *  <h4>DON'T</h4>
- *  {{{
- *  lazy val p1 = crossProject
- *
- *  lazy val p1JVM = p1.jvm
- *  lazy val p1JS = p1.js.settings(jsDependencies += RuntimeDOM)
- *
- *  // Now we have p1JS != p1.js... Dependency tracking will not work anymore.
- *  }}}
- *
- *  <h4>DO</h4>
- *  {{{
- *  lazy val p1 = crossProject.
- *    jsSettings(jsDependencies += RuntimeDOM)
- *
- *  lazy val p1JVM = p1.jvm
- *  lazy val p1JS = p1.js
- *  }}}
- *
- *  <h3>Manually setting the base of a contained Project</h3>
- *  CrossProject puts its contained projects in a given directory structure. If
- *  you try to work around that, things will fail (and non-existing directories
- *  will be referenced). If you want to put your projects in a different
- *  directory structure, you are encouraged to implement your own subclass of
- *  [[CrossType]].
- *
- *  <h4>DON'T</h4>
- *  {{{
- *  lazy val p1 = crossProject.jsConfigure(_.in(file("myJSDir")))
- *  }}}
- *
- *  <h4>DO</h4>
- *  Implement your own subclass (sub-object) of [[CrossType]].
- *
- */
-final class CrossProject private (
+final class CrossProject[P <: CrossPlatform] private (
     crossType: CrossType,
-    val jvm: Project
+    val projects: Map[P, Project]
 ) {
-
   import CrossProject._
 
   // Transformers for inner projects
 
+  def configure(platform: P, transform: Project => Project) =
+    copy(projects = projects + (platform -> transform(projects(platform))))
+
+  def settings(platform: P, ss: Def.Setting[_]*): CrossProject[P] =
+    configure(platform, _.settings(ss: _*))
+
+  // Scala.js-style cross project aliases
+
+  /** Project for JVM platform. */
+  def jvm: Project = projects(JVM.asInstanceOf[P])
+
   /** Transform the underlying JVM project */
-  def jvmConfigure(transformer: Project => Project): CrossProject =
-    copy(jvm = transformer(jvm))
+  def jvmConfigure(transform: Project => Project): CrossProject[P] =
+    configure(JVM.asInstanceOf[P], transform)
 
   /** Add settings specific to the underlying JVM project */
-  def jvmSettings(ss: Def.Setting[_]*): CrossProject =
-    jvmConfigure(_.settings(ss: _*))
+  def jvmSettings(ss: Def.Setting[_]*): CrossProject[P] =
+    settings(JVM.asInstanceOf[P], ss: _*)
 
   // Concrete alteration members
 
-  def aggregate(refs: CrossProject*): CrossProject = {
-    copy(jvm.aggregate(refs.map(_.jvm: ProjectReference): _*))
-  }
+  def aggregate(refs: CrossProject[P]*): CrossProject[P] =
+    mapPlatforms { p =>
+      projects(p).aggregate(refs.map(_.projects(p): ProjectReference): _*)
+    }
 
-  def configs(cs: Configuration*): CrossProject =
-    copy(jvm.configs(cs: _*))
+  def configs(cs: Configuration*): CrossProject[P] =
+    mapProjects(_.configs(cs: _*))
 
-  def configureCross(transforms: (CrossProject => CrossProject)*): CrossProject =
+  def configureCross(transforms: (CrossProject[P] => CrossProject[P])*): CrossProject[P] =
     transforms.foldLeft(this)((p, t) => t(p))
 
-  @deprecated("Use configureCross instead.", "0.6.10")
-  def configure(transforms: (CrossProject => CrossProject)*): CrossProject =
-    configureCross(transforms: _*)
+  def configureAll(transforms: (Project => Project)*): CrossProject[P] =
+    mapProjects(_.configure(transforms: _*))
 
-  // TODO: rename to "configure" when compatibility can be broken (1.0.0)
-  //       and the existing deprecated "configure" is removed
-  def configureAll(transforms: (Project => Project)*): CrossProject =
-    copy(jvm.configure(transforms: _*))
+  def dependsOn(deps: CrossClasspathDependency[P]*): CrossProject[P] =
+    mapPlatforms(p => projects(p).dependsOn(deps.map(_.dep(p)): _*))
 
-  def dependsOn(deps: CrossClasspathDependency*): CrossProject =
-    copy(jvm.dependsOn(deps.map(_.jvm): _*))
+  def disablePlugins(ps: AutoPlugin*): CrossProject[P] =
+    mapProjects(_.enablePlugins(ps: _*))
 
-  def disablePlugins(ps: AutoPlugin*): CrossProject =
-    copy(jvm.disablePlugins(ps: _*))
+  def enablePlugins(ns: Plugins*): CrossProject[P] =
+    mapProjects(_.enablePlugins(ns: _*))
 
-  def enablePlugins(ns: Plugins*): CrossProject =
-    copy(jvm.enablePlugins(ns: _*))
+  def in(dir: File): CrossProject[P] =
+    mapPlatforms(p => projects(p).in(crossType.dir(p, dir)))
 
-  def in(dir: File): CrossProject =
-    copy(jvm.in(crossType.jvmDir(dir)))
-
-  def overrideConfigs(cs: Configuration*): CrossProject =
-    copy(jvm.overrideConfigs(cs: _*))
+  def overrideConfigs(cs: Configuration*): CrossProject[P] =
+    mapProjects(_.overrideConfigs(cs: _*))
 
   /** Configures how settings from other sources, such as .sbt files, are
    *  appended to the explicitly specified settings for this project.
    *
-   *  Note: If you disable AutoPlugins here, Scala.js will not work
+   *  Note: If you disable AutoPlugins here, non-JVM platforms will not work
    */
-  def settingSets(select: AddSettings*): CrossProject =
-    copy(jvm.settingSets(select: _*))
+  def settingSets(select: AddSettings*): CrossProject[P] =
+    mapProjects(_.settingSets(select: _*))
 
-  def settings(ss: Def.Setting[_]*): CrossProject =
-    copy(jvm.settings(ss: _*))
+  def settings(ss: Def.Setting[_]*): CrossProject[P] =
+    mapProjects(_.settings(ss: _*))
 
-  override def toString(): String = s"CrossProject(jvm = $jvm)"
+  override def toString(): String = {
+    val entries = this.projects.map {
+      case (platform, project) => "$platform = $project"
+    }
+    s"CrossProject(${entries.mkString(", ")})"
+  }
 
   // Helpers
 
-  private def copy(jvm: Project = jvm): CrossProject =
-    new CrossProject(crossType, jvm)
+  private def mapPlatforms(transform: P => Project): CrossProject[P] =
+    copy(projects.map { case (p, _) => p -> transform(p) })
 
+  private def mapProjects(transform: Project => Project): CrossProject[P] =
+    copy(projects.mapValues(transform))
+
+  private def copy(projects: Map[P, Project] = projects): CrossProject[P] =
+    new CrossProject(crossType, projects)
 }
 
 object CrossProject extends CrossProjectExtra {
-  def apply(jvmId: String, base: File,
-      crossType: CrossType): CrossProject = {
+  def apply[P <: CrossPlatform](id: String, platforms: Seq[P], base: File,
+      crossType: CrossType): CrossProject[P] =
+    apply(platforms.map(p => (p, id + p.name)).toMap, base, crossType)
+
+  def apply[P <: CrossPlatform](ids: Map[P, String], base: File,
+      crossType: CrossType): CrossProject[P] = {
 
     val sss = sharedSrcSettings(crossType)
 
-    val jvm = Project(jvmId, crossType.jvmDir(base)).
-      settings(sss: _*)
+    val projects = ids.map { case (p, id) =>
+      val project = Project(id, crossType.dir(p, base)).
+        settings(sss: _*).
+        enablePlugins(p.plugin.toSeq: _*)
 
-    new CrossProject(crossType, jvm)
+      p -> project
+    }
+
+    new CrossProject(crossType, projects)
   }
 
   private def sharedSrcSettings(crossType: CrossType) = Seq(
@@ -304,35 +144,41 @@ object CrossProject extends CrossProjectExtra {
     }
   }
 
-  final class Builder(id: String, base: File) {
-    def crossType(crossType: CrossType): CrossProject =
-      CrossProject(id, base, crossType)
+  final class Builder[P <: CrossPlatform](id: String, platforms: Seq[P], base: File) {
+    def crossType(crossType: CrossType): CrossProject[P] =
+      CrossProject(id, platforms, base, crossType)
   }
 
-  def crossProject_impl(c: Context): c.Expr[Builder] = {
+  def crossProject_impl[P <: CrossPlatform](c: Context)(platforms: c.Expr[P]*): c.Expr[Builder[P]] = {
     import c.universe._
     val enclosingValName = MacroUtils.definingValName(c, methodName =>
       s"""$methodName must be directly assigned to a val, such as `val x = $methodName`.""")
     val name = c.Expr[String](Literal(Constant(enclosingValName)))
-    reify { new Builder(name.splice, new File(name.splice)) }
+    val SeqApplyPath = Seq("scala", "collection", "Seq", "apply")
+    val SeqApply = SeqApplyPath.foldLeft[Tree](Ident("_root_")) {
+      case (t, name) => Select(t, newTermName(name))
+    }
+    val platformSeq = c.Expr[Seq[P]](Apply(SeqApply, platforms.map(_.tree).toList))
+    reify { new Builder(name.splice, platformSeq.splice, new File(name.splice)) }
   }
 
 }
 
 trait CrossProjectExtra {
 
-  def crossProject: CrossProject.Builder = macro CrossProject.crossProject_impl
+  def crossProject[P <: CrossPlatform](platforms: P*): CrossProject.Builder[P] =
+    macro CrossProject.crossProject_impl[P]
 
-  implicit def crossProjectFromBuilder(
-      builder: CrossProject.Builder): CrossProject = {
+  implicit def crossProjectFromBuilder[P <: CrossPlatform](
+      builder: CrossProject.Builder[P]): CrossProject[P] = {
     builder.crossType(CrossType.Full)
   }
 
-  implicit def crossClasspathDependencyConstructor(
-      cp: CrossProject): CrossClasspathDependency.Constructor =
+  implicit def crossClasspathDependencyConstructor[P <: CrossPlatform](
+      cp: CrossProject[P]): CrossClasspathDependency.Constructor[P] =
     new CrossClasspathDependency.Constructor(cp)
 
-  implicit def crossClasspathDependency(
-      cp: CrossProject): CrossClasspathDependency =
-    new CrossClasspathDependency(cp, None)
+  implicit def crossClasspathDependency[P <: CrossPlatform](
+      cp: CrossProject[P]): CrossClasspathDependency[P] =
+    new CrossClasspathDependency[P](cp, None)
 }

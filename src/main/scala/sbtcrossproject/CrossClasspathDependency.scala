@@ -2,18 +2,19 @@ package sbtcrossproject
 
 import sbt._
 
-final class CrossClasspathDependency(
-    val project: CrossProject,
+final class CrossClasspathDependency[P <: CrossPlatform](
+    val project: CrossProject[P],
     val configuration: Option[String]
 ) {
-  def jvm: ClasspathDependency = ClasspathDependency(project.jvm, configuration)
+  def dep(p: P): ClasspathDependency =
+    ClasspathDependency(project.projects(p), configuration)
 }
 
 object CrossClasspathDependency {
-  final class Constructor(crossProject: CrossProject) {
-    def %(conf: Configuration): CrossClasspathDependency = %(conf.name)
+  final class Constructor[P <: CrossPlatform](crossProject: CrossProject[P]) {
+    def %(conf: Configuration): CrossClasspathDependency[P] = %(conf.name)
 
-    def %(conf: String): CrossClasspathDependency =
+    def %(conf: String): CrossClasspathDependency[P] =
       new CrossClasspathDependency(crossProject, Some(conf))
   }
 }

@@ -11,62 +11,62 @@ import Project.projectToRef
 
 import java.io.File
 
-final class CrossProject[P <: CrossPlatform] private (
+final class CrossProject private (
     crossType: CrossType,
-    val projects: Map[P, Project]
+    val projects: Map[CrossPlatform, Project]
 ) {
   import CrossProject._
 
   // Transformers for inner projects
 
-  def configure(platform: P, transform: Project => Project) =
+  def configure(platform: CrossPlatform, transform: Project => Project) =
     copy(projects = projects + (platform -> transform(projects(platform))))
 
-  def settings(platform: P, ss: Def.Setting[_]*): CrossProject[P] =
+  def settings(platform: CrossPlatform, ss: Def.Setting[_]*): CrossProject =
     configure(platform, _.settings(ss: _*))
 
   // Scala.js-style cross project aliases
 
   /** Project for JVM platform. */
-  def jvm: Project = projects(JVM.asInstanceOf[P])
+  def jvm: Project = projects(JVM)
 
   /** Transform the underlying JVM project */
-  def jvmConfigure(transform: Project => Project): CrossProject[P] =
-    configure(JVM.asInstanceOf[P], transform)
+  def jvmConfigure(transform: Project => Project): CrossProject =
+    configure(JVM, transform)
 
   /** Add settings specific to the underlying JVM project */
-  def jvmSettings(ss: Def.Setting[_]*): CrossProject[P] =
-    settings(JVM.asInstanceOf[P], ss: _*)
+  def jvmSettings(ss: Def.Setting[_]*): CrossProject =
+    settings(JVM, ss: _*)
 
   // Concrete alteration members
 
-  def aggregate(refs: CrossProject[P]*): CrossProject[P] =
-    mapPlatforms { p =>
+  def aggregate(refs: CrossProject*): CrossProject =
+    mapCrossPlatforms { p =>
       projects(p).aggregate(refs.map(_.projects(p): ProjectReference): _*)
     }
 
-  def configs(cs: Configuration*): CrossProject[P] =
+  def configs(cs: Configuration*): CrossProject =
     mapProjects(_.configs(cs: _*))
 
-  def configureCross(transforms: (CrossProject[P] => CrossProject[P])*): CrossProject[P] =
+  def configureCross(transforms: (CrossProject => CrossProject)*): CrossProject =
     transforms.foldLeft(this)((p, t) => t(p))
 
-  def configureAll(transforms: (Project => Project)*): CrossProject[P] =
+  def configureAll(transforms: (Project => Project)*): CrossProject =
     mapProjects(_.configure(transforms: _*))
 
-  def dependsOn(deps: CrossClasspathDependency[P]*): CrossProject[P] =
-    mapPlatforms(p => projects(p).dependsOn(deps.map(_.dep(p)): _*))
+  def dependsOn(deps: CrossClasspathDependency*): CrossProject =
+    mapCrossPlatforms(p => projects(p).dependsOn(deps.map(_.dep(p)): _*))
 
-  def disablePlugins(ps: AutoPlugin*): CrossProject[P] =
+  def disablePlugins(ps: AutoPlugin*): CrossProject =
     mapProjects(_.enablePlugins(ps: _*))
 
-  def enablePlugins(ns: Plugins*): CrossProject[P] =
+  def enablePlugins(ns: Plugins*): CrossProject =
     mapProjects(_.enablePlugins(ns: _*))
 
-  def in(dir: File): CrossProject[P] =
-    mapPlatforms(p => projects(p).in(crossType.dir(p, dir)))
+  def in(dir: File): CrossProject =
+    mapCrossPlatforms(p => projects(p).in(crossType.dir(p, dir)))
 
-  def overrideConfigs(cs: Configuration*): CrossProject[P] =
+  def overrideConfigs(cs: Configuration*): CrossProject =
     mapProjects(_.overrideConfigs(cs: _*))
 
   /** Configures how settings from other sources, such as .sbt files, are
@@ -74,10 +74,10 @@ final class CrossProject[P <: CrossPlatform] private (
    *
    *  Note: If you disable AutoPlugins here, non-JVM platforms will not work
    */
-  def settingSets(select: AddSettings*): CrossProject[P] =
+  def settingSets(select: AddSettings*): CrossProject =
     mapProjects(_.settingSets(select: _*))
 
-  def settings(ss: Def.Setting[_]*): CrossProject[P] =
+  def settings(ss: Def.Setting[_]*): CrossProject =
     mapProjects(_.settings(ss: _*))
 
   override def toString(): String = {
@@ -89,23 +89,23 @@ final class CrossProject[P <: CrossPlatform] private (
 
   // Helpers
 
-  private def mapPlatforms(transform: P => Project): CrossProject[P] =
+  private def mapCrossPlatforms(transform: CrossPlatform => Project): CrossProject =
     copy(projects.map { case (p, _) => p -> transform(p) })
 
-  private def mapProjects(transform: Project => Project): CrossProject[P] =
+  private def mapProjects(transform: Project => Project): CrossProject =
     copy(projects.mapValues(transform))
 
-  private def copy(projects: Map[P, Project] = projects): CrossProject[P] =
+  private def copy(projects: Map[CrossPlatform, Project] = projects): CrossProject =
     new CrossProject(crossType, projects)
 }
 
 object CrossProject extends CrossProjectExtra {
-  def apply[P <: CrossPlatform](id: String, platforms: Seq[P], base: File,
-      crossType: CrossType): CrossProject[P] =
+  def apply(id: String, platforms: Seq[CrossPlatform], base: File,
+      crossType: CrossType): CrossProject =
     apply(platforms.map(p => (p, id + p.name)).toMap, base, crossType)
 
-  def apply[P <: CrossPlatform](ids: Map[P, String], base: File,
-      crossType: CrossType): CrossProject[P] = {
+  def apply(ids: Map[CrossPlatform, String], base: File,
+      crossType: CrossType): CrossProject = {
 
     val sss = sharedSrcSettings(crossType)
 
@@ -144,12 +144,12 @@ object CrossProject extends CrossProjectExtra {
     }
   }
 
-  final class Builder[P <: CrossPlatform](id: String, platforms: Seq[P], base: File) {
-    def crossType(crossType: CrossType): CrossProject[P] =
+  final class Builder(id: String, platforms: Seq[CrossPlatform], base: File) {
+    def crossType(crossType: CrossType): CrossProject =
       CrossProject(id, platforms, base, crossType)
   }
 
-  def crossProject_impl[P <: CrossPlatform](c: Context)(platforms: c.Expr[P]*): c.Expr[Builder[P]] = {
+  def crossProject_impl(c: Context)(platforms: c.Expr[CrossPlatform]*): c.Expr[Builder] = {
     import c.universe._
     val enclosingValName = MacroUtils.definingValName(c, methodName =>
       s"""$methodName must be directly assigned to a val, such as `val x = $methodName`.""")
@@ -158,7 +158,7 @@ object CrossProject extends CrossProjectExtra {
     val SeqApply = SeqApplyPath.foldLeft[Tree](Ident("_root_")) {
       case (t, name) => Select(t, newTermName(name))
     }
-    val platformSeq = c.Expr[Seq[P]](Apply(SeqApply, platforms.map(_.tree).toList))
+    val platformSeq = c.Expr[Seq[CrossPlatform]](Apply(SeqApply, platforms.map(_.tree).toList))
     reify { new Builder(name.splice, platformSeq.splice, new File(name.splice)) }
   }
 
@@ -166,19 +166,19 @@ object CrossProject extends CrossProjectExtra {
 
 trait CrossProjectExtra {
 
-  def crossProject[P <: CrossPlatform](platforms: P*): CrossProject.Builder[P] =
-    macro CrossProject.crossProject_impl[P]
+  def crossProject(platforms: CrossPlatform*): CrossProject.Builder =
+    macro CrossProject.crossProject_impl
 
-  implicit def crossProjectFromBuilder[P <: CrossPlatform](
-      builder: CrossProject.Builder[P]): CrossProject[P] = {
+  implicit def crossProjectFromBuilder(
+      builder: CrossProject.Builder): CrossProject = {
     builder.crossType(CrossType.Full)
   }
 
-  implicit def crossClasspathDependencyConstructor[P <: CrossPlatform](
-      cp: CrossProject[P]): CrossClasspathDependency.Constructor[P] =
+  implicit def crossClasspathDependencyConstructor(
+      cp: CrossProject): CrossClasspathDependency.Constructor =
     new CrossClasspathDependency.Constructor(cp)
 
-  implicit def crossClasspathDependency[P <: CrossPlatform](
-      cp: CrossProject[P]): CrossClasspathDependency[P] =
-    new CrossClasspathDependency[P](cp, None)
+  implicit def crossClasspathDependency(
+      cp: CrossProject): CrossClasspathDependency =
+    new CrossClasspathDependency(cp, None)
 }

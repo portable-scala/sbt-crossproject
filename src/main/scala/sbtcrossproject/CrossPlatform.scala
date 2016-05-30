@@ -9,6 +9,6 @@ trait CrossPlatform {
 }
 
 final object JVM extends CrossPlatform {
-  val name: String = "JVM"
+  val name: String = "jvm"
   val plugin: Option[AutoPlugin] = None
 }

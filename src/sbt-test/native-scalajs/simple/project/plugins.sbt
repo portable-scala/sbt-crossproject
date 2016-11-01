@@ -1,0 +1,1 @@
+addSbtPlugin("org.scala-native" % "sbt-cross-project" % sys.props("plugin.version"))

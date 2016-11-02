@@ -9,6 +9,10 @@ lazy val lib =
     .jvmSettings(name := "lib jvm")
     .nativeSettings(name := "lib native")
 
+lazy val libJs = lib.js
+lazy val libJVM = lib.jvm
+lazy val libNative = lib.native
+
 lazy val app = 
   crossProject2.in(file("app"))
     .settings(defaultSettings)

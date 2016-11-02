@@ -1,2 +1,4 @@
 # sbt-cross-project
-Cross-platform compilation support for sbt.
+
+compile Scala, Scala.js and Scala-Native
+

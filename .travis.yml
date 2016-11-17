@@ -1,0 +1,58 @@
+scala:
+  - "2.11.8"
+
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      jdk: oraclejdk8
+      language: scala
+      before_install:
+        - sudo apt-get -qq update
+        - sudo sh -c "echo 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.7 main' >> /etc/apt/sources.list"
+        - sudo sh -c "echo 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise main' >> /etc/apt/sources.list"
+        - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
+        - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+        - sudo apt-get -qq update
+        - sudo apt-get install -y libgc-dev clang++-3.7 llvm-3.7 llvm-3.7-dev llvm-3.7-runtime llvm-3.7-tool
+    - os: osx
+      sudo: required
+      osx_image: xcode7.3
+      before_install:
+        - brew update
+        - brew install sbt
+        - brew install bdw-gc
+        - brew link bdw-gc
+        - brew install jq
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+before_script:
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
+      echo "Incoming pull request from https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST";
+      author=$(curl -u dummy4dummy:dummy2dummy -s "https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST" | jq -r ".user.login");
+      if [ $? -ne 0 ] ; then exit 1; fi;
+      echo "Pull request submitted by $author";
+      signed=$(curl -s http://www.lightbend.com/contribute/cla/scala/check/$author | jq -r ".signed");
+      if [ $? -ne 0 ] ; then exit 1; fi;
+      if [ "$signed" = "true" ] ; then
+        echo "CLA check for $author successful";
+      else
+        echo "CLA check for $author failed";
+        echo "Please sign the Scala CLA to contribute to Scala Native";
+        echo "Go to https://www.lightbend.com/contribute/cla/scala and then resubmit this pull request";
+        exit 1;
+      fi;
+    fi;
+script:
+  - java -version
+  - bin/scalafmt --test
+  - sbt sbtVersion publishLocal
+  - git clone https://github.com/MasseGuillaume/scala-native.git
+  - pushd scala-native
+  - git checkout sbt-cross
+  - sbt cleanCache cleanLocal sbtNative/publishLocal nscplugin/publishLocal nativelib/publishLocal javalib/publishLocal scalalib/publishLocal
+  - popd
+  - sbt sbtCrossTest/scripted
+
+

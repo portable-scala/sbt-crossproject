@@ -18,8 +18,8 @@ val sbtPluginSettings = ScriptedPlugin.scriptedSettings ++ Seq(
 lazy val `sbt-cross-project` =
   project
     .in(file("."))
-    .aggregate(sbtScalaJSCross, sbtCross)
-    .dependsOn(sbtScalaJSCross, sbtCross)
+    .aggregate(sbtScalaJSCross, sbtCross, sbtCrossTest)
+    .dependsOn(sbtScalaJSCross, sbtCross, sbtCrossTest)
 
 lazy val sbtScalaJSCross =
   project
@@ -29,6 +29,7 @@ lazy val sbtScalaJSCross =
       moduleName := "sbt-scalajs-cross",
       addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
     )
+    .settings(publishSettings)
     .dependsOn(sbtCross)
 
 lazy val sbtCross =
@@ -37,11 +38,13 @@ lazy val sbtCross =
     .settings(moduleName := "sbt-cross")
     .settings(sbtPluginSettings)
     .settings(scaladocFromReadme)
+    .settings(publishSettings)
 
 lazy val sbtCrossTest =
   project
     .in(file("sbt-cross-test"))
     .settings(sbtPluginSettings)
+    .settings(noPublishSettings)
     .settings(
       scripted := scripted
         .dependsOn(

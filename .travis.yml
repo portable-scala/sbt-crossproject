@@ -27,6 +27,14 @@ matrix:
 cache:
   directories:
     - $HOME/.ivy2/cache
+
+env:
+  global:
+    - MAVEN_REALM="Sonatype Nexus Repository Manager"
+    - MAVEN_DOMAIN="oss.sonatype.org"
+    - secure: "TODO MAVEN_USER"
+    - secure: "TODO MAVEN_PASSWORD"
+
 before_script:
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
       echo "Incoming pull request from https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST";
@@ -44,6 +52,7 @@ before_script:
         exit 1;
       fi;
     fi;
+
 script:
   - java -version
   - bin/scalafmt --test
@@ -54,5 +63,3 @@ script:
   - sbt cleanCache cleanLocal sbtNative/publishLocal nscplugin/publishLocal nativelib/publishLocal javalib/publishLocal scalalib/publishLocal
   - popd
   - sbt sbtCrossTest/scripted
-
-

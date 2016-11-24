@@ -1,2 +1,9 @@
-addSbtPlugin("com.eed3si9n" % "sbt-dirty-money" % "0.1.0")
-addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.2.11")
+libraryDependencies += "org.scala-sbt" % "scripted-plugin" % sbtVersion.value
+
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-unchecked",
+  "-feature",
+  "-encoding",
+  "utf8"
+)

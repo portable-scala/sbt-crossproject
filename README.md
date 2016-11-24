@@ -1,8 +1,6 @@
-<a href="https://travis-ci.org/scala-native/sbt-cross-project" target="_blank" rel="nofollow">
-  <img src="https://travis-ci.org/scala-native/sbt-cross-project.png?branch=master" alt="Build Status"></img>
-</a>
+<h1>sbt-cross</h1>
 
-<h1>sbt-cross-project</h1>
+[![Build Status](https://travis-ci.org/scala-native/sbt-cross.svg?branch=master)](https://travis-ci.org/scala-native/sbt-cross)
 
 Cross-platform compilation support for sbt.
 
@@ -31,7 +29,7 @@ val sharedSettings = Seq(scalaVersion := "2.11.8") // Scala Native only supports
 
 lazy val bar =
   // (6) select supported platforms
-  crossProject(JSPlatform, JVMPlatform, NativePlatform) 
+  crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
     .jsSettings(/* ... */) // defined in sbt-scalajs-cross
@@ -43,7 +41,7 @@ lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
 
-lazy val foo = 
+lazy val foo =
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .settings(
       // %%% now include Scala Native. It applies to all selected platforms
@@ -72,7 +70,7 @@ val sharedSettings = Seq(scalaVersion := "2.11.8") // Scala Native only supports
 
 lazy val bar =
   // (3) select supported platforms
-  crossProject(JVMPlatform, NativePlatform) 
+  crossProject(JVMPlatform, NativePlatform)
     .settings(sharedSettings)
     // (4) configure JVM settings
     .jvmSettings(/* ... */)
@@ -105,7 +103,7 @@ import sbtcross.{crossProject, CrossType}
 
 lazy val bar =
   // (4) select supported platforms
-  crossProject(JSPlatform, JVMPlatform) 
+  crossProject(JSPlatform, JVMPlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(/* ... */)
     .jsSettings(/* ... */) // defined in sbt-scalajs-cross

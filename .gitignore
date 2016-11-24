@@ -1,5 +1,4 @@
 target/
 sbt-cross-test/src/sbt-test/**/project
-download/
-bin/coursier
-bin/scalafmt
+bin/.coursier
+bin/.scalafmt

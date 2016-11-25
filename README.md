@@ -13,10 +13,10 @@ In `project/plugins.sbt`:
 ```scala
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
 
-resolvers += Resolver.sonatypeRepo("snapshots")                         // (1)
-addSbtPlugin("org.scala-native" % "sbt-cross"         % "0.1-SNAPSHOT") // (2)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1-SNAPSHOT") // (3)
-addSbtPlugin("org.scala-native" % "sbt-native"        % "0.1-SNAPSHOT") // (4)
+resolvers += Resolver.sonatypeRepo("snapshots")                           // (1)
+addSbtPlugin("org.scala-native" % "sbt-cross"         % "0.1.0-SNAPSHOT") // (2)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1.0-SNAPSHOT") // (3)
+addSbtPlugin("org.scala-native" % "sbt-scala-native"  % "0.1.0-SNAPSHOT") // (4)
 ```
 
 In `build.sbt`:
@@ -35,7 +35,7 @@ lazy val bar =
     .jsSettings(/* ... */) // defined in sbt-scalajs-cross
     .jvmSettings(/* ... */)
     // (7) configure Scala-Native settings
-    .nativeSettings(/* ... */) // defined in sbt-native
+    .nativeSettings(/* ... */) // defined in sbt-scala-native
 
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm
@@ -59,8 +59,8 @@ In `project/plugins.sbt`:
 
 ```scala
 resolvers += Resolver.sonatypeRepo("snapshots")
-addSbtPlugin("org.scala-native" % "sbt-cross" % "0.1-SNAPSHOT") // (1)
-addSbtPlugin("org.scala-native" % "sbt-native" % "0.1-SNAPSHOT") // (2)
+addSbtPlugin("org.scala-native" % "sbt-cross" % "0.1.0-SNAPSHOT")        // (1)
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0-SNAPSHOT") // (2)
 ```
 
 In `build.sbt`:
@@ -75,7 +75,7 @@ lazy val bar =
     // (4) configure JVM settings
     .jvmSettings(/* ... */)
     // (5) configure Scala-Native settings
-    .nativeSettings(/* ... */) // defined in sbt-native
+    .nativeSettings(/* ... */) // defined in sbt-scala-native
 
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
@@ -90,9 +90,9 @@ In `project/plugins.sbt`:
 ```scala
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
 
-resolvers += Resolver.sonatypeRepo("snapshots")                         // (1)
-addSbtPlugin("org.scala-native" % "sbt-cross"         % "0.1-SNAPSHOT") // (2)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1-SNAPSHOT") // (3)
+resolvers += Resolver.sonatypeRepo("snapshots")                           // (1)
+addSbtPlugin("org.scala-native" % "sbt-cross"         % "0.1.0-SNAPSHOT") // (2)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1.0-SNAPSHOT") // (3)
 ```
 
 In `build.sbt`:

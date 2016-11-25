@@ -55,11 +55,4 @@ before_script:
 
 script:
   - java -version
-  - bin/scalafmt --test
-  - sbt sbtVersion publishLocal
-  - git clone https://github.com/MasseGuillaume/scala-native.git
-  - pushd scala-native
-  - git checkout sbt-cross
-  - sbt cleanCache cleanLocal sbtNative/publishLocal nscplugin/publishLocal nativelib/publishLocal javalib/publishLocal scalalib/publishLocal
-  - popd
-  - sbt sbtCrossTest/scripted publishSnapshot
+  - bin/scalafmt --test && sbt sbtCrossTest/scripted publishSnapshot

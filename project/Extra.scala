@@ -74,8 +74,9 @@ object Extra {
         Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
     publishSnapshot := Def.taskDyn {
-      val travis   = Try(sys.env("TRAVIS")).getOrElse("false") == "true"
-      val pr       = Try(sys.env("TRAVIS_PULL_REQUEST")).getOrElse("false") != "false"
+      val travis = Try(sys.env("TRAVIS")).getOrElse("false") == "true"
+      val pr = Try(sys.env("TRAVIS_PULL_REQUEST"))
+          .getOrElse("false") != "false"
       val branch   = Try(sys.env("TRAVIS_BRANCH")).getOrElse("")
       val snapshot = version.value.trim.endsWith("SNAPSHOT")
 
@@ -102,13 +103,16 @@ object Extra {
         Credentials(realm, domain, user, password)
       }
     }.toSeq,
-    pomIncludeRepository := { _ => false },
+    pomIncludeRepository := { _ =>
+      false
+    },
     licenses := Seq(
       "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")),
     scmInfo := Some(
       ScmInfo(
         browseUrl = url("https://github.com/scala-native/sbt-cross-project"),
-        connection = "scm:git:git@github.com:scala-native/sbt-cross-project.git"
+        connection =
+          "scm:git:git@github.com:scala-native/sbt-cross-project.git"
       ))
   )
 

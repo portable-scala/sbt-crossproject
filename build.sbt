@@ -20,6 +20,7 @@ lazy val `sbt-cross-project` =
     .in(file("."))
     .aggregate(sbtScalaJSCross, sbtCross, sbtCrossTest)
     .dependsOn(sbtScalaJSCross, sbtCross, sbtCrossTest)
+    .settings(noPublishSettings)
 
 lazy val sbtScalaJSCross =
   project

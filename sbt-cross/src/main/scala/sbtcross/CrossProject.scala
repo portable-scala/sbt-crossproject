@@ -55,12 +55,12 @@ final class CrossProject private[sbtcross] (
   def configureAll(transforms: (Project => Project)*): CrossProject =
     configure(transforms: _*)
 
-  def configurePlatform(platform: Platform*)(
+  def configurePlatform(platforms: Platform*)(
       f: Project => Project): CrossProject = {
 
     val updatedProjects =
       platforms.foldLeft(projects)((acc, platform) =>
-        projects.updated(platform, f(projects(platform))))
+        acc.updated(platform, f(acc(platform))))
 
     new CrossProject(id, crossType, updatedProjects)
   }

@@ -13,6 +13,7 @@ lazy val bar =
       moduleName := a,
       version := v
     )
+    .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots"))
 
 lazy val barNative = bar.native
 
@@ -22,7 +23,8 @@ lazy val foo =
       scalaVersion := "2.11.8"
     )
     .nativeSettings(
-      libraryDependencies += g %%% a % v
+      libraryDependencies += g %%% a % v,
+      resolvers += Resolver.sonatypeRepo("snapshots")
     )
 
 lazy val fooNative = foo.native

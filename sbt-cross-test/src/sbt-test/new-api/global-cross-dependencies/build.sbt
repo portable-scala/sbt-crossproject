@@ -12,6 +12,7 @@ lazy val bar = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     moduleName := a,
     version := v
   )
+  .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots"))
 
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm

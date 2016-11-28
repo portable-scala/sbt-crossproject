@@ -12,15 +12,18 @@ lazy val bar = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     moduleName := a,
     version := v
   )
+  .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots"))
 
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
 
-lazy val foo = crossProject(JSPlatform, JVMPlatform, NativePlatform).settings(
-  scalaVersion := "2.11.8",
-  libraryDependencies += g %%% a % v
-)
+lazy val foo = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .settings(
+    scalaVersion := "2.11.8",
+    libraryDependencies += g %%% a % v
+  )
+  .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots"))
 
 lazy val fooJS = foo.js
 lazy val fooJVM = foo.jvm

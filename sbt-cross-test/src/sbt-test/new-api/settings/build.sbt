@@ -20,13 +20,12 @@ lazy val bar =
       resolvers += Resolver.sonatypeRepo("snapshots")
     )
 
-lazy val barJS = bar.js
-lazy val barJVM = bar.jvm
+lazy val barJS     = bar.js
+lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
 
-
 check := {
-  def equals(actual: String, expected: String) : Unit = {
+  def equals(actual: String, expected: String): Unit = {
     if (actual != expected) {
       assert(false, s"actual: $actual, expected: $expected")
     }
@@ -36,4 +35,3 @@ check := {
   equals((description in barJVM).value, "jvm settings")
   equals((description in barNative).value, "native settings")
 }
-

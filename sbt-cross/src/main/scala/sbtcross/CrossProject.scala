@@ -56,6 +56,10 @@ final class CrossProject private[sbtcross] (
     configure(transforms: _*)
 
   def configurePlatform(platforms: Platform*)(
+      f: Project => Project): CrossProject =
+    configurePlatforms(platforms: _*)(f)
+
+  def configurePlatforms(platforms: Platform*)(
       f: Project => Project): CrossProject = {
 
     val updatedProjects =
@@ -83,6 +87,10 @@ final class CrossProject private[sbtcross] (
 
   def settings(ss: Def.SettingsDefinition*): CrossProject =
     transform(_.settings(ss: _*))
+
+  def platformsSettings(platforms: Platform*)(
+      ss: Def.SettingsDefinition*): CrossProject =
+    configurePlatforms(platforms: _*)(_.settings(ss: _*))
 
   override def toString(): String =
     projects.map {

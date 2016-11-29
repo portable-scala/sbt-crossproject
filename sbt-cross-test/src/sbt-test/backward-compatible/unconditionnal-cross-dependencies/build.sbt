@@ -4,7 +4,7 @@ val g = "com.example.unconditionnal-cross-dependencies"
 val a = "bar"
 val v = "0.1.0-SNAPSHOT"
 
-lazy val bar = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+lazy val bar = crossProject
   .crossType(CrossType.Pure)
   .settings(
     scalaVersion := "2.11.8",
@@ -13,9 +13,8 @@ lazy val bar = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     version := v
   )
 
-lazy val barJS     = bar.js
-lazy val barJVM    = bar.jvm
-lazy val barNative = bar.native
+lazy val barJS  = bar.js
+lazy val barJVM = bar.jvm
 
 val noMacro = g %%%! a % v
 

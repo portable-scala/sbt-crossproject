@@ -10,7 +10,9 @@ object CrossPlugin extends AutoPlugin {
   override def trigger = allRequirements
 
   val autoImport = AutoImport
-  object AutoImport extends JVMCross {
+  object AutoImport extends JVMCross with CrossProjectExtra {
+
+    val CrossType = sbtcross.CrossType
 
     val crossPlatform = SettingKey[Platform](
       "crossPlatform",

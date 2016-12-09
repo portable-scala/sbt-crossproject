@@ -36,6 +36,7 @@ lazy val bar =
     .jvmSettings(/* ... */)
     // (7) configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
+    .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots")) // until we have a stable scala-native releases
 
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm
@@ -69,13 +70,14 @@ In `build.sbt`:
 val sharedSettings = Seq(scalaVersion := "2.11.8") // Scala Native only supports 2.11
 
 lazy val bar =
-  // (3) select supported platforms
+  // (4) select supported platforms
   crossProject(JVMPlatform, NativePlatform)
     .settings(sharedSettings)
-    // (4) configure JVM settings
+    // (5) configure JVM settings
     .jvmSettings(/* ... */)
-    // (5) configure Scala-Native settings
+    // (6) configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
+    .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots")) // until we have a stable scala-native releases
 
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native

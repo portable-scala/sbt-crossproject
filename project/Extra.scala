@@ -47,7 +47,8 @@ object Extra {
       val buildProperties = (baseDirectory in ThisBuild).value / project / buildPropertiesFileName
 
       val groups = sbtTestDirectory.value.listFiles.filter(_.isDirectory)
-      val tests  = groups.flatMap(_.listFiles)
+      val tests =
+        groups.flatMap(_.listFiles).filterNot(_.name == "scala-native-only")
 
       tests.foreach { test =>
         val testProjectDir = test / project

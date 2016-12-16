@@ -86,28 +86,6 @@ object CrossType {
   }
 
   /**
-    * <pre>
-    * project base
-    * ├── .js
-    * ├── .jvm
-    * ├── .native
-    * └── src
-    * </pre>
-    */
-  object Flat extends CrossType {
-    @deprecated("use projectDir(crossBase: File, platform: Platform): File",
-      "0.1.0")
-    def projectDir(crossBase: File, projectType: String): File =
-      crossBase.getParentFile / ("." + projectType)
-
-    def projectDir(crossBase: File, platform: Platform): File =
-      crossBase.getParentFile / ("." + platform.identifier)
-
-    def sharedSrcDir(projectBase: File, conf: String): Option[File] =
-      Some(projectBase.getParentFile / "src" / conf / "scala")
-  }
-
-  /**
    * <pre>
    * .
    * ├── js

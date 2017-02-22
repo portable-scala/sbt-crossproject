@@ -4,7 +4,54 @@ import ScriptedPlugin._
 
 import scala.util.Try
 
+import bintray.BintrayKeys.{bintrayRepository, bintrayOrganization}
+
 object Extra {
+
+  val sbtPluginSettings = ScriptedPlugin.scriptedSettings ++ Seq(
+      organization := "org.scala-native",
+      version := "0.1.0",
+      sbtPlugin := true,
+      scalaVersion := "2.10.6",
+      scriptedLaunchOpts += "-Dplugin.version=" + version.value,
+      scalacOptions ++= Seq(
+        "-deprecation",
+        "-unchecked",
+        "-feature",
+        "-encoding",
+        "utf8"
+      )
+    )
+
+  // to publish plugin (we only need to do this once, it's already done!)
+  // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html
+  // then add a new package ()
+  // name: sbt-crossproject, license: BSD-like, version control: git@github.com:scala-native/sbt-crossproject.git
+  // to be available without a resolver
+  // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html#Linking+your+package+to+the+sbt+organization
+  lazy val publishSettings = Seq(
+    publishArtifact in Compile := true,
+    publishArtifact in Test := false,
+    licenses := Seq(
+      "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")
+    ),
+    scmInfo := Some(
+      ScmInfo(
+        browseUrl = url("https://github.com/scala-native/sbt-crossproject"),
+        connection = "scm:git:git@github.com:scala-native/sbt-crossproject.git"
+      )
+    ),
+    bintrayRepository := "sbt-plugins",
+    bintrayOrganization := Some("scala-native")
+  )
+
+  lazy val noPublishSettings = Seq(
+    publishArtifact := false,
+    packagedArtifacts := Map.empty,
+    publish := {},
+    publishLocal := {}
+  )
+
   private val createRootDoc = taskKey[File]("Generate ScalaDoc from README")
 
   lazy val scaladocFromReadme = Seq(
@@ -59,72 +106,4 @@ object Extra {
     },
     scripted := scripted.dependsOn(duplicateProjectFoldersTask).evaluated
   )
-
-  private lazy val publishSnapshot =
-    taskKey[Unit]("Publish snapshot to sonatype on every commit to master.")
-
-  lazy val publishSettings = Seq(
-    publishArtifact in Compile := true,
-    publishArtifact in Test := false,
-    publishMavenStyle := true,
-    publishTo := {
-      val nexus = "https://oss.sonatype.org/"
-      if (version.value.trim.endsWith("SNAPSHOT"))
-        Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
-    publishSnapshot := Def.taskDyn {
-      val travis = Try(sys.env("TRAVIS")).getOrElse("false") == "true"
-      val pr = Try(sys.env("TRAVIS_PULL_REQUEST"))
-          .getOrElse("false") != "false"
-      val branch   = Try(sys.env("TRAVIS_BRANCH")).getOrElse("")
-      val snapshot = version.value.trim.endsWith("SNAPSHOT")
-
-      (travis, pr, branch, snapshot) match {
-        case (true, false, "master", true) =>
-          println("on master, going to publish a snapshot")
-          publish
-
-        case _ =>
-          println(
-            "not going to publish a snapshot due to: " +
-              s"travis = $travis, pr = $pr, " +
-              s"branch = $branch, snapshot = $snapshot")
-          Def.task()
-      }
-    }.value,
-    credentials ++= {
-      for {
-        realm    <- sys.env.get("MAVEN_REALM")
-        domain   <- sys.env.get("MAVEN_DOMAIN")
-        user     <- sys.env.get("MAVEN_USER")
-        password <- sys.env.get("MAVEN_PASSWORD")
-      } yield {
-        Credentials(realm, domain, user, password)
-      }
-    }.toSeq,
-    pomIncludeRepository := { _ =>
-      false
-    },
-    licenses := Seq(
-      "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")),
-    scmInfo := Some(
-      ScmInfo(
-        browseUrl = url("https://github.com/scala-native/sbt-cross-project"),
-        connection =
-          "scm:git:git@github.com:scala-native/sbt-cross-project.git"
-      ))
-  )
-
-  lazy val noPublishSettings = Seq(
-    publishArtifact := false,
-    packagedArtifacts := Map.empty,
-    publish := {},
-    publishLocal := {},
-    publishSnapshot := {
-      println("no publish")
-    }
-  )
-
 }

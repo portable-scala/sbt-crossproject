@@ -1,5 +1,7 @@
 <h1>sbt-crossproject</h1>
 
+[![Join the chat at https://gitter.im/scala-native/sbt-crossproject](https://badges.gitter.im/scala-native/sbt-crossproject.svg)](https://gitter.im/scala-native/sbt-crossproject)
+
 [![Build Status](https://travis-ci.org/scala-native/sbt-crossproject.svg?branch=master)](https://travis-ci.org/scala-native/sbt-crossproject)
 
 Cross-platform compilation support for sbt.
@@ -11,12 +13,15 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.14")
 
-resolvers += Resolver.sonatypeRepo("snapshots")                           // (1)
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0-SNAPSHOT") // (2)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1.0-SNAPSHOT") // (3)
-addSbtPlugin("org.scala-native" % "sbt-scala-native"  % "0.1.0-SNAPSHOT") // (4)
+resolvers += Resolver.url(
+        "bintray-scala-native-sbt-plugins",
+        url("http://dl.bintray.com/scala-native/sbt-plugins"))(
+        Resolver.ivyStylePatterns)                                      // (1)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0") // (2)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0") // (3)
+addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.1.0") // (4)
 ```
 
 In `build.sbt`:
@@ -32,11 +37,10 @@ lazy val bar =
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
-    .jsSettings(/* ... */) // defined in sbt-scalajs-cross
+    .jsSettings(/* ... */) // defined in sbt-scalajs-crossproject
     .jvmSettings(/* ... */)
     // (7) configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
-    .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots")) // until we have a stable scala-native releases
 
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm
@@ -59,9 +63,12 @@ lazy val fooNative = foo.native
 In `project/plugins.sbt`:
 
 ```scala
-resolvers += Resolver.sonatypeRepo("snapshots")
-addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.1.0-SNAPSHOT")        // (1)
-addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0-SNAPSHOT") // (2)
+resolvers += Resolver.url(
+        "bintray-scala-native-sbt-plugins",
+        url("http://dl.bintray.com/scala-native/sbt-plugins"))(
+        Resolver.ivyStylePatterns)                              // (1)
+addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.1.0") // (2)
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0") // (3)
 ```
 
 In `build.sbt`:
@@ -77,7 +84,6 @@ lazy val bar =
     .jvmSettings(/* ... */)
     // (6) configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
-    .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots")) // until we have a stable scala-native releases
 
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
@@ -90,11 +96,14 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.14")
 
-resolvers += Resolver.sonatypeRepo("snapshots")                           // (1)
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0-SNAPSHOT") // (2)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1.0-SNAPSHOT") // (3)
+resolvers += Resolver.url(
+        "bintray-scala-native-sbt-plugins",
+        url("http://dl.bintray.com/scala-native/sbt-plugins"))(
+        Resolver.ivyStylePatterns)                                      // (1)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0") // (2)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0") // (3)
 ```
 
 In `build.sbt`:
@@ -108,7 +117,7 @@ lazy val bar =
   crossProject(JSPlatform, JVMPlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(/* ... */)
-    .jsSettings(/* ... */) // defined in sbt-scalajs-cross
+    .jsSettings(/* ... */) // defined in sbt-scalajs-crossproject
     .jvmSettings(/* ... */)
 
 lazy val barJS = bar.js

@@ -1,8 +1,8 @@
 import sbtcrossproject.{crossProject, CrossType}
 
-val g = "com.example.platform-specific"
+val g = "org.example.platform-specific"
 val a = "bar"
-val v = "0.1.0-SNAPSHOT"
+val v = "0.1.0"
 
 lazy val bar =
   crossProject(NativePlatform)
@@ -13,7 +13,6 @@ lazy val bar =
       moduleName := a,
       version := v
     )
-    .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots"))
 
 lazy val barNative = bar.native
 

@@ -1,8 +1,8 @@
 import sbtcrossproject.{crossProject, CrossType}
 
-val g = "com.example.unconditionnal-cross-dependencies"
+val g = "org.example.unconditionnal-cross-dependencies"
 val a = "bar"
-val v = "0.1.0-SNAPSHOT"
+val v = "0.1.0"
 
 lazy val bar = crossProject
   .crossType(CrossType.Pure)

@@ -1,8 +1,8 @@
 import sbtcrossproject.{crossProject, CrossType}
 
-val g = "com.example.cross-dependencies-global"
+val g = "org.example.cross-dependencies-global"
 val a = "bar"
-val v = "0.1.0-SNAPSHOT"
+val v = "0.1.0"
 
 lazy val bar = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
@@ -12,7 +12,6 @@ lazy val bar = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     moduleName := a,
     version := v
   )
-  .nativeSettings(resolvers += Resolver.sonatypeRepo("snapshots"))
 
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm

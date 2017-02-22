@@ -111,9 +111,9 @@ object Extra {
       "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")),
     scmInfo := Some(
       ScmInfo(
-        browseUrl = url("https://github.com/scala-native/sbt-cross-project"),
+        browseUrl = url("https://github.com/scala-native/sbt-crossproject-project"),
         connection =
-          "scm:git:git@github.com:scala-native/sbt-cross-project.git"
+          "scm:git:git@github.com:scala-native/sbt-crossproject-project.git"
       ))
   )
 

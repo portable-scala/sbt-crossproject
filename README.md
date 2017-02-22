@@ -1,6 +1,6 @@
-<h1>sbt-cross</h1>
+<h1>sbt-crossproject</h1>
 
-[![Build Status](https://travis-ci.org/scala-native/sbt-cross.svg?branch=master)](https://travis-ci.org/scala-native/sbt-cross)
+[![Build Status](https://travis-ci.org/scala-native/sbt-crossproject.svg?branch=master)](https://travis-ci.org/scala-native/sbt-crossproject)
 
 Cross-platform compilation support for sbt.
 
@@ -14,7 +14,7 @@ In `project/plugins.sbt`:
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
 
 resolvers += Resolver.sonatypeRepo("snapshots")                           // (1)
-addSbtPlugin("org.scala-native" % "sbt-cross"         % "0.1.0-SNAPSHOT") // (2)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0-SNAPSHOT") // (2)
 addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1.0-SNAPSHOT") // (3)
 addSbtPlugin("org.scala-native" % "sbt-scala-native"  % "0.1.0-SNAPSHOT") // (4)
 ```
@@ -23,7 +23,7 @@ In `build.sbt`:
 
 ```scala
 // (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
-import sbtcross.{crossProject, CrossType}
+import sbtcrossproject.{crossProject, CrossType}
 
 val sharedSettings = Seq(scalaVersion := "2.11.8") // Scala Native only supports 2.11
 
@@ -60,7 +60,7 @@ In `project/plugins.sbt`:
 
 ```scala
 resolvers += Resolver.sonatypeRepo("snapshots")
-addSbtPlugin("org.scala-native" % "sbt-cross" % "0.1.0-SNAPSHOT")        // (1)
+addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.1.0-SNAPSHOT")        // (1)
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0-SNAPSHOT") // (2)
 ```
 
@@ -85,7 +85,7 @@ lazy val barNative = bar.native
 
 <h3>Migration from Scala.js' default crossProject</h3>
 
-We carefully implemented sbt-cross to be mostly source compatible with Scala.js crossProject
+We carefully implemented sbt-crossproject to be mostly source compatible with Scala.js crossProject
 
 In `project/plugins.sbt`:
 
@@ -93,7 +93,7 @@ In `project/plugins.sbt`:
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
 
 resolvers += Resolver.sonatypeRepo("snapshots")                           // (1)
-addSbtPlugin("org.scala-native" % "sbt-cross"         % "0.1.0-SNAPSHOT") // (2)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0-SNAPSHOT") // (2)
 addSbtPlugin("org.scala-native" % "sbt-scalajs-cross" % "0.1.0-SNAPSHOT") // (3)
 ```
 
@@ -101,7 +101,7 @@ In `build.sbt`:
 
 ```scala
 // (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
-import sbtcross.{crossProject, CrossType}
+import sbtcrossproject.{crossProject, CrossType}
 
 lazy val bar =
   // (4) select supported platforms

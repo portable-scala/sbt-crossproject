@@ -1,4 +1,4 @@
 target/
-sbt-cross-test/src/sbt-test/**/project
+sbt-crossproject-test/src/sbt-test/**/project
 bin/.coursier
 bin/.scalafmt

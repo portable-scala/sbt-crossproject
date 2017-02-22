@@ -55,4 +55,4 @@ before_script:
 
 script:
   - java -version
-  - bin/scalafmt --test && sbt sbtCrossTest/scripted publishSnapshot
+  - bin/scalafmt --test && sbt sbt-crossproject-test/scripted publishSnapshot

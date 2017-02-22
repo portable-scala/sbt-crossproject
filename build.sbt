@@ -1,25 +1,14 @@
 import Extra._
 
-val sbtPluginSettings = ScriptedPlugin.scriptedSettings ++ Seq(
-    organization := "org.scala-native",
-    version := "0.1.0-SNAPSHOT",
-    sbtPlugin := true,
-    scalaVersion := "2.10.6",
-    scriptedLaunchOpts += "-Dplugin.version=" + version.value,
-    scalacOptions ++= Seq(
-      "-deprecation",
-      "-unchecked",
-      "-feature",
-      "-encoding",
-      "utf8"
-    )
-  )
-
 lazy val `sbt-crossproject-root` =
   project
     .in(file("."))
-    .aggregate(`sbt-scalajs-crossproject`, `sbt-crossproject`, `sbt-crossproject-test`)
-    .dependsOn(`sbt-scalajs-crossproject`, `sbt-crossproject`, `sbt-crossproject-test`)
+    .aggregate(`sbt-scalajs-crossproject`,
+               `sbt-crossproject`,
+               `sbt-crossproject-test`)
+    .dependsOn(`sbt-scalajs-crossproject`,
+               `sbt-crossproject`,
+               `sbt-crossproject-test`)
     .settings(noPublishSettings)
 
 lazy val `sbt-scalajs-crossproject` =
@@ -31,6 +20,7 @@ lazy val `sbt-scalajs-crossproject` =
       addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
     )
     .settings(publishSettings)
+    .enablePlugins(BintrayPlugin)
     .dependsOn(`sbt-crossproject`)
 
 lazy val `sbt-crossproject` =
@@ -40,6 +30,7 @@ lazy val `sbt-crossproject` =
     .settings(sbtPluginSettings)
     .settings(scaladocFromReadme)
     .settings(publishSettings)
+    .enablePlugins(BintrayPlugin)
 
 lazy val `sbt-crossproject-test` =
   project

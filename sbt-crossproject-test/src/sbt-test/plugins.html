@@ -1018,7 +1018,7 @@ body .markdown-body
 <p>resolvers += Resolver.sonatypeRepo(&ldquo;snapshots&rdquo;)</p>
 <p>val pluginVersion = sys.props.get(&ldquo;plugin.version&rdquo;).getOrElse(&ldquo;0.1.0-SNAPSHOT&rdquo;)</p>
 <p>addSbtPlugin(&ldquo;org.scala-js&rdquo;     % &ldquo;sbt-scalajs&rdquo;       % &ldquo;0.6.13&rdquo;)<br />
-addSbtPlugin(&ldquo;org.scala-native&rdquo; % &ldquo;sbt-scalajs-cross&rdquo; % pluginVersion)<br />
+addSbtPlugin(&ldquo;org.scala-native&rdquo; % &ldquo;sbt-scalajs-crossproject&rdquo; % pluginVersion)<br />
 addSbtPlugin(&ldquo;org.scala-native&rdquo; % &ldquo;sbt-crossproject&rdquo;         % pluginVersion)<br />
 addSbtPlugin(&ldquo;org.scala-native&rdquo; % &ldquo;sbt-scala-native&rdquo;  % &ldquo;0.1.0-SNAPSHOT&rdquo;)</p>
 <p>scalacOptions ++= Seq(<br />

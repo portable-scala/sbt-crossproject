@@ -28,13 +28,6 @@ cache:
   directories:
     - $HOME/.ivy2/cache
 
-env:
-  global:
-    - MAVEN_REALM="Sonatype Nexus Repository Manager"
-    - MAVEN_DOMAIN="oss.sonatype.org"
-    - secure: "LUWaEVwDOFlihINjm2yBji0WoZ7KXf7pt9yFUD+Opnsex+VAFPRuzdDmHd9NPneKO8laHteSHmQrFP5yFcy+or3pKL5oSdGSST1f+ir/VULwCiAvxTFx0BAX5DwqIUljxuYvR9ISMquDtXqYG6bi/L2O4JjQJzO2i1qJM9z+aWYy0nczATNJqRbSC2FwQoKcsMAXZbCzslgqm8lMulpb1P1RQNsFxsFDrWYMIfdxEiQPQS0gtzsEHxJ1yQUqI8wkhV1Mb3TVBaWKGtI1lm3A5eTRtWMxzisnn5APPbwZGsVILAXRYGg2miaLyAuz9PS09gnQ5jHi0z/bbwBJI3BnY5PE3bvfd1pn3qEhUiPMRCLMYQuymGK6UTFAoVDtjmo754tvZeb5uhD9Tkye11qXPGyFm6zR15ZLVMfXSBQ0TftUubuQGKCuMqv/jvxZ+FE7OH2HEEpuzzF0KlVqX630iD9M8FYpL3tw0lfFY8x8fD1ot8BGzft841SMKL2jRjyPZYmPl43rQCBiG1s6Q3vUuw+M/Kd2KUOEIx524h05yFQedSc2GYCic0uLhe62r7lpLE4b8u99fcl3raE+Ku7czRbIu4gDlifJ8uOuq4XXFnTAoENao4wSe1OIU7uzryTS0C9TNMQnxMhftyiZZ8Itl82y5NwkbDh/EaZN4Iw5Lks="
-    - secure: "Eiex0yninNFTT4CaldF7ej+z6jhRkbmHD7ox2NUOP/Wlonsgn6y65MALMQrSYZ1vYavwA9kDNYfkhZYeoqT4fjMZlFPnDUvY0emLh8XsjKm9LtlOOFhi4wX0lfjQKOcQOPBJOQZmrJtgC7BgC1H3A/lw0x/Vz5xI/qfpp3lbSC6PZ3ARQbroTwPp2QjURcxeOlmbaSC/U5XguyC1ZFfikynI1XIOeXqiu3v+sImYEWdHSqmBSv6ggvEz/cCm0Z1lP07+N/bEoCvllQ7Ru1kHnsqgUHSpu5N8KXWW+FDmn9Df+xXR7lkucETJhCNxMitpCTmQknjdeLgsxlMekdDyUzfdJL2AmtdPsc6MZ3Q/HymB4flJoZTGzO3jNLNwwiKB6t3TXUACLKUKYoo5oL4kxspljvaOEhvWynl4rnNTvlyGGo8Gksb4338F3iyvcaokzLDSO6rdDZGwH4Nlhin80sqgvS+56G6pHNUHJXNPq8OJE+0CMA2qKc419lGNgSQnCJsTL5TKGDIExF5DoRddBkq+8Q/Y/vxqE7FQooxal59O8b89oSx4yQzC0Z3agejx2oC7n5xGE7teXumeHyhSjuA0KVAjgEyxuT2UCAcb+a921qRoLUDa2F3fYpzT29FR1tmvStoAACyAl5y5CwkoSrQrDPyRtyl1GeYVJeszWzs="
-
 before_script:
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
       echo "Incoming pull request from https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST";
@@ -55,4 +48,4 @@ before_script:
 
 script:
   - java -version
-  - bin/scalafmt --test && sbt sbt-crossproject-test/scripted publishSnapshot
+  - bin/scalafmt --test && sbt sbt-crossproject-test/scripted

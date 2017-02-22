@@ -1,5 +1,7 @@
 <h1>sbt-crossproject</h1>
 
+[![Join the chat at https://gitter.im/scala-native/sbt-crossproject](https://badges.gitter.im/scala-native/crossproject.svg)](https://gitter.im/scala-native/crossproject)
+
 [![Build Status](https://travis-ci.org/scala-native/sbt-crossproject.svg?branch=master)](https://travis-ci.org/scala-native/sbt-crossproject)
 
 Cross-platform compilation support for sbt.

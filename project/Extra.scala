@@ -23,7 +23,7 @@ object Extra {
       )
     )
 
-  // to publish plugin
+  // to publish plugin (we only need to do this once, it's already done!)
   // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html
   // then add a new package ()
   // name: sbt-crossproject, license: BSD-like, version control: git@github.com:scala-native/sbt-crossproject.git

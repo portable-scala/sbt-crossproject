@@ -1,5 +1,6 @@
 <h1>sbt-crossproject</h1>
 
+
 [![Join the chat at https://gitter.im/scala-native/sbt-crossproject](https://badges.gitter.im/scala-native/sbt-crossproject.svg)](https://gitter.im/scala-native/sbt-crossproject)
 
 [![Build Status](https://travis-ci.org/scala-native/sbt-crossproject.svg?branch=master)](https://travis-ci.org/scala-native/sbt-crossproject)
@@ -13,15 +14,10 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.14")
-
-resolvers += Resolver.url(
-        "bintray-scala-native-sbt-plugins",
-        url("http://dl.bintray.com/scala-native/sbt-plugins"))(
-        Resolver.ivyStylePatterns)                                      // (1)
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0") // (2)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0") // (3)
-addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.1.0") // (4)
+addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.14")
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0")  // (1)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0")  // (2)
+addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.1.0")  // (3)
 ```
 
 In `build.sbt`:
@@ -63,12 +59,8 @@ lazy val fooNative = foo.native
 In `project/plugins.sbt`:
 
 ```scala
-resolvers += Resolver.url(
-        "bintray-scala-native-sbt-plugins",
-        url("http://dl.bintray.com/scala-native/sbt-plugins"))(
-        Resolver.ivyStylePatterns)                              // (1)
-addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.1.0") // (2)
-addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0") // (3)
+addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.1.0") // (1)
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0") // (2)
 ```
 
 In `build.sbt`:
@@ -96,14 +88,9 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.14")
-
-resolvers += Resolver.url(
-        "bintray-scala-native-sbt-plugins",
-        url("http://dl.bintray.com/scala-native/sbt-plugins"))(
-        Resolver.ivyStylePatterns)                                      // (1)
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0") // (2)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0") // (3)
+addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.14")
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0")  // (1)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0")  // (2)
 ```
 
 In `build.sbt`:

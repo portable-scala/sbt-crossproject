@@ -110,3 +110,6 @@ lazy val bar =
 lazy val barJS = bar.js
 lazy val barJVM = bar.jvm
 ```
+
+
+[![Join the chat at https://gitter.im/scala-native/sbt-cross](https://badges.gitter.im/scala-native/sbt-cross.svg)](https://gitter.im/scala-native/sbt-cross?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

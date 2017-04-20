@@ -14,7 +14,7 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.14")
+addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.15")
 addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0")  // (1)
 addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0")  // (2)
 addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.1.0")  // (3)
@@ -88,7 +88,7 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.14")
+addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.15")
 addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0")  // (1)
 addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0")  // (2)
 ```

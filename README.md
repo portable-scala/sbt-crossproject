@@ -110,3 +110,13 @@ lazy val bar =
 lazy val barJS = bar.js
 lazy val barJVM = bar.jvm
 ```
+
+<h3>When using Build.scala</h3>
+
+```
+import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
+import sbtcrossproject.CrossPlugin.autoImport._
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
+import scalajscrossproject.JSPlatform
+import sbtcrossproject.{crossProject, CrossType}
+```

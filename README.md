@@ -17,7 +17,7 @@ In `project/plugins.sbt`:
 addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.15")
 addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0")  // (1)
 addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0")  // (2)
-addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.1.0")  // (3)
+addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.2.0")  // (3)
 ```
 
 In `build.sbt`:
@@ -26,7 +26,7 @@ In `build.sbt`:
 // (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.{crossProject, CrossType}
 
-val sharedSettings = Seq(scalaVersion := "2.11.8") // Scala Native only supports 2.11
+val sharedSettings = Seq(scalaVersion := "2.11.11")
 
 lazy val bar =
   // (6) select supported platforms
@@ -60,13 +60,13 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.1.0") // (1)
-addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0") // (2)
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.2.0") // (2)
 ```
 
 In `build.sbt`:
 
 ```scala
-val sharedSettings = Seq(scalaVersion := "2.11.8") // Scala Native only supports 2.11
+val sharedSettings = Seq(scalaVersion := "2.11.11")
 
 lazy val bar =
   // (4) select supported platforms

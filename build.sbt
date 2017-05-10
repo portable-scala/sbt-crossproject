@@ -16,8 +16,9 @@ lazy val `sbt-scalajs-crossproject` =
     .in(file("sbt-scalajs-crossproject"))
     .settings(sbtPluginSettings)
     .settings(
+      version := "0.6.16",
       moduleName := "sbt-scalajs-crossproject",
-      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.15")
+      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.16")
     )
     .settings(publishSettings)
     .enablePlugins(BintrayPlugin)
@@ -28,6 +29,7 @@ lazy val `sbt-crossproject` =
     .in(file("sbt-crossproject"))
     .settings(moduleName := "sbt-crossproject")
     .settings(sbtPluginSettings)
+    .settings(version := "0.2.0")
     .settings(scaladocFromReadme)
     .settings(publishSettings)
     .enablePlugins(BintrayPlugin)

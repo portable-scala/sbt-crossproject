@@ -1,7 +1,7 @@
 sudo: required
 
 scala:
-  - "2.11.8"
+  - "2.11.11"
 
 matrix:
   include:
@@ -15,7 +15,28 @@ matrix:
         - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
         - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
         - sudo apt-get -qq update
-        - sudo apt-get install -y libgc-dev clang++-3.7 llvm-3.7 llvm-3.7-dev llvm-3.7-runtime llvm-3.7-tool libunwind7-dev
+        - |
+          sudo apt-get install -y \
+            clang++-3.7 \
+            llvm-3.7 \
+            llvm-3.7-dev \
+            llvm-3.7-runtime \
+            llvm-3.7-tool \
+            libgc-dev \
+            libunwind7-dev
+
+        # Install re2
+        # (libre2-dev) since Xenial (16.04 LTS) http://packages.ubuntu.com/xenial/libre2-dev
+        - sudo apt-get install -y make
+        - export CXX=clang++-3.7
+        - git clone https://code.googlesource.com/re2
+        - pushd re2
+        - git checkout 2017-03-01
+        - make -j4 test
+        - sudo make install prefix=/usr
+        - make testinstall prefix=/usr
+        - popd
+
     - os: osx
       osx_image: xcode7.3
       before_install:
@@ -24,8 +45,10 @@ matrix:
         - brew install bdw-gc
         - brew link bdw-gc
         - brew install jq
+        - brew install re2
 
 before_script:
+  - sudo chmod +x /usr/local/bin/sbt
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
       echo "Incoming pull request from https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST";
       author=$(curl -u dummy4dummy:dummy2dummy -s "https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST" | jq -r ".user.login");

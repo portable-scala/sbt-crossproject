@@ -14,10 +14,10 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.15")
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0")  // (1)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0")  // (2)
-addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.2.0")  // (3)
+addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.16")
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.6.16") // (1)
+addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.2.1")  // (2)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.2.0")  // (3)
 ```
 
 In `build.sbt`:
@@ -59,8 +59,8 @@ lazy val fooNative = foo.native
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.1.0") // (1)
-addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.2.0") // (2)
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.2.1") // (1)
+addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.2.0") // (2)
 ```
 
 In `build.sbt`:
@@ -88,9 +88,9 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.15")
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.1.0")  // (1)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.1.0")  // (2)
+addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.16")
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.6.16") // (1)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.2.0")  // (2)
 ```
 
 In `build.sbt`:
@@ -114,9 +114,64 @@ lazy val barJVM = bar.jvm
 <h3>When using Build.scala</h3>
 
 ```
-import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
+import sbtcrossproject.{crossProject, CrossType}
 import sbtcrossproject.CrossPlugin.autoImport._
+
+import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
+
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
 import scalajscrossproject.JSPlatform
-import sbtcrossproject.{crossProject, CrossType}
 ```
+
+<h2>Configuration</h2>
+
+<h3>CrossTypes</h3>
+
+Setting a specific CrossType allows the definition of a custom source tree
+layout for managing native-, js- and jvm-specific sources in directories of their
+own.
+
+sbt-cross provides by default 3 implementations of the CrossType class that one can
+pass as `.crossType` parameter:
+
+- `.crossType(CrossType.Pure)`:
+
+```
+.
+├── .js
+├── .jvm
+├── .native
+└── src
+```
+This layout is preferred for codebases which do not contain any platform-specific code.
+
+Since this is the case of most existing sbt projects it is often desired during conversion to sbt-cross to place the cross-project at the root of the project source tree.
+
+This can be done with the following set of options:
+
+`lazy val foo = crossProject.crossType(CrossType.Pure).in(file("."))`
+
+- `.crossType(CrossType.Full)`
+
+```
+.
+├── js
+├── jvm
+├── native
+└── shared
+```
+
+This layout gives full control by providing a `shared` directory for common code.
+
+- `.crossType(CrossType.Dummy)`
+
+```
+.
+├── js
+├── jvm
+└── native
+```
+
+- `.crossType({/*custom*/})`
+
+One can easily extend CrossType and provide a custom tree structure.

@@ -122,3 +122,56 @@ import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
 import scalajscrossproject.JSPlatform
 ```
+
+<h2>Configuration</h2>
+
+<h3>CrossTypes</h3>
+
+Setting a specific CrossType allows the definition of a custom source tree
+layout for managing native-, js- and jvm-specific sources in directories of their
+own.
+
+sbt-cross provides by default 3 implementations of the CrossType class that one can
+pass as `.crossType` parameter:
+
+- `.crossType(CrossType.Pure)`:
+
+```
+.
+├── .js
+├── .jvm
+├── .native
+└── src
+```
+This layout is preferred for codebases which do not contain any platform-specific code.
+
+Since this is the case of most existing sbt projects it is often desired during conversion to sbt-cross to place the cross-project at the root of the project source tree.
+
+This can be done with the following set of options:
+
+`lazy val foo = crossProject.crossType(CrossType.Pure).in(file("."))`
+
+- `.crossType(CrossType.Full)`
+
+```
+.
+├── js
+├── jvm
+├── native
+└── shared
+```
+
+This layout gives full control by providing a `shared` directory for common code.
+
+- `.crossType(CrossType.Dummy)`
+
+```
+.
+├── js
+├── jvm
+└── native
+```
+
+- `.crossType({/*custom*/})`
+
+One can easily extend CrossType and provide a custom tree structure.

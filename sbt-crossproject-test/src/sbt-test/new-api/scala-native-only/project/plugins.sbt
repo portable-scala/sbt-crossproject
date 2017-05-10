@@ -1,4 +1,4 @@
-addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.1.0")
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.2.1")
 
 scalacOptions ++= Seq(
   "-deprecation",

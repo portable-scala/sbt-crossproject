@@ -7,7 +7,7 @@ val v = "0.1.0"
 lazy val bar = crossProject
   .crossType(CrossType.Pure)
   .settings(
-    scalaVersion := "2.11.8",
+    scalaVersion := "2.11.11",
     organization := g,
     moduleName := a,
     version := v
@@ -19,6 +19,6 @@ lazy val barJVM = bar.jvm
 val noMacro = g %%%! a % v
 
 lazy val foo = project.settings(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.11",
   libraryDependencies += noMacro
 )

@@ -82,9 +82,6 @@ final class CrossProject private[sbtcrossproject] (
   def overrideConfigs(cs: Configuration*): CrossProject =
     transform(_.overrideConfigs(cs: _*))
 
-  def settingSets(select: AddSettings*): CrossProject =
-    transform(_.settingSets(select: _*))
-
   def settings(ss: Def.SettingsDefinition*): CrossProject =
     transform(_.settings(ss: _*))
 

@@ -24,6 +24,14 @@ object CrossPlugin extends AutoPlugin {
       nonEmpty(groupID, "Group ID")
       new CrossGroupID(groupID)
     }
+
+    final implicit def toCrossClasspathDependencyConstructor(
+        cp: CrossProject): CrossClasspathDependency.Constructor =
+      new CrossClasspathDependency.Constructor(cp)
+
+    final implicit def toCrossClasspathDependency(
+        cp: CrossProject): CrossClasspathDependency =
+      new CrossClasspathDependency(cp, None)
   }
   import AutoImport._
 

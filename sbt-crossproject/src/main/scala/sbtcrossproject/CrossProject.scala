@@ -152,14 +152,6 @@ final class CrossProject private[sbtcrossproject] (
 }
 
 object CrossProject {
-  final implicit def crossClasspathDependencyConstructor(
-      cp: CrossProject): CrossClasspathDependency.Constructor =
-    new CrossClasspathDependency.Constructor(cp)
-
-  final implicit def crossClasspathDependency(
-      cp: CrossProject): CrossClasspathDependency =
-    new CrossClasspathDependency(cp, None)
-
   final class Builder(id: String, base: File, platforms: Platform*) {
     def crossType(crossType: CrossType): CrossProject =
       CrossProject(id, base, crossType, platforms: _*)

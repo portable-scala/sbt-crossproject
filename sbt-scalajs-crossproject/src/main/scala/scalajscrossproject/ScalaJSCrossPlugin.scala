@@ -22,6 +22,8 @@ object ScalaJSCrossPlugin extends AutoPlugin {
       new ScalaJSGroupIDCompat(groupID)
   }
 
+  import autoImport._
+
   override def projectSettings: Seq[Setting[_]] = Seq(
     crossPlatform := JSPlatform
   )

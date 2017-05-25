@@ -26,8 +26,14 @@ object CrossProjectExtra {
         val jsPlatform =
           Select(
             Select(
-              Ident(newTermName("_root_")),
-              newTermName("scalajscrossproject")
+              Select(
+                Select(
+                  Ident(newTermName("_root_")),
+                  newTermName("org")
+                ),
+                newTermName("scalajs")
+              ),
+              newTermName("sbtplugin")
             ),
             newTermName("JSPlatform")
           )

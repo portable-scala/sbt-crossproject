@@ -9,7 +9,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin
 import scala.language.implicitConversions
 
 trait ScalaJSCross {
-  val JSPlatform = scalajscrossproject.JSPlatform
+  val JSPlatform = org.scalajs.sbtplugin.JSPlatform
 
   implicit def JSCrossProjectBuilderOps(
       builder: CrossProject.Builder): JSCrossProjectOps =

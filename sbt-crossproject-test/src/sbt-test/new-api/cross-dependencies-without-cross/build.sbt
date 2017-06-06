@@ -2,7 +2,7 @@ val g = "org.example.cross-dependencies-without-cross"
 val a = "bar"
 val v = "0.1.0"
 
-val baseSettings = Seq(scalaVersion := "2.11.8")
+val baseSettings = Seq(scalaVersion := "2.11.11")
 
 val externalDependency = Seq(libraryDependencies += g %%% a % v)
 

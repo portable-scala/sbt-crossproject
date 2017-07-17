@@ -1,7 +1,6 @@
 package sbtcrossproject
 
 import sbt._
-import StringUtilities.nonEmpty
 
 final class CrossGroupArtifactID(groupID: String,
                                  artifactID: String,

@@ -92,4 +92,7 @@ trait CrossProjectExtra {
 
   def crossProject(platforms: Platform*): CrossProject.Builder =
     macro CrossProjectExtra.vargCrossProject_impl
+
+  private[sbtcrossproject] def nonEmpty(s: String, label: String): Unit =
+    require(s.trim.length > 0, label + " cannot be empty.")
 }

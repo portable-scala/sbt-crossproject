@@ -1,7 +1,6 @@
 package sbtcrossproject
 
 import sbt._
-import StringUtilities.nonEmpty
 
 import scala.language.experimental.macros
 import scala.reflect.macros.Context

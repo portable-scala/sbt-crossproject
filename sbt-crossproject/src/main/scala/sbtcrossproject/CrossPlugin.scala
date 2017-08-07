@@ -2,7 +2,6 @@ package sbtcrossproject
 
 import sbt._
 import sbt.KeyRanks.BSetting
-import StringUtilities.nonEmpty
 
 import scala.language.implicitConversions
 

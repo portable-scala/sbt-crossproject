@@ -17,7 +17,7 @@ lazy val `sbt-scalajs-crossproject` =
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scalajs-crossproject",
-      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.16")
+      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.19")
     )
     .settings(publishSettings)
     .enablePlugins(BintrayPlugin)

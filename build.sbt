@@ -17,7 +17,19 @@ lazy val `sbt-scalajs-crossproject` =
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scalajs-crossproject",
-      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.19")
+      /* Work around https://github.com/sbt/sbt/issues/3393.
+       * Should be:
+       *   addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.19")
+       * We inline the fixed definition of addSbtPlugin to be
+       * released with sbt 0.13.17.
+       */
+      libraryDependencies += {
+        val sbtV   = (sbtBinaryVersion in pluginCrossBuild).value
+        val scalaV = (scalaBinaryVersion in update).value
+        Defaults.sbtPluginExtra("org.scala-js" % "sbt-scalajs" % "0.6.19",
+                                sbtV,
+                                scalaV)
+      }
     )
     .settings(publishSettings)
     .enablePlugins(BintrayPlugin)

@@ -14,7 +14,7 @@ object Extra {
       sbtPlugin := true,
       scriptedLaunchOpts ++= Seq(
         "-Dplugin.version=" + version.value,
-        "-Dplugin.sn-version=0.3.2",
+        "-Dplugin.sn-version=0.3.3",
         "-Dplugin.sjs-version=0.6.19"
       ),
       scalacOptions ++= Seq(

@@ -1,6 +1,5 @@
 <h1>sbt-crossproject</h1>
 
-
 [![Join the chat at https://gitter.im/scala-native/sbt-crossproject](https://badges.gitter.im/scala-native/sbt-crossproject.svg)](https://gitter.im/scala-native/sbt-crossproject)
 
 [![Build Status](https://travis-ci.org/scala-native/sbt-crossproject.svg?branch=master)](https://travis-ci.org/scala-native/sbt-crossproject)
@@ -23,19 +22,19 @@ addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.3.3")  // (3)
 In `build.sbt`:
 
 ```scala
-// (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
+// (4) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.{crossProject, CrossType}
 
 val sharedSettings = Seq(scalaVersion := "2.11.11")
 
 lazy val bar =
-  // (6) select supported platforms
+  // (5) select supported platforms
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
     .jsSettings(/* ... */) // defined in sbt-scalajs-crossproject
     .jvmSettings(/* ... */)
-    // (7) configure Scala-Native settings
+    // (6) configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
 
 lazy val barJS     = bar.js
@@ -69,12 +68,12 @@ In `build.sbt`:
 val sharedSettings = Seq(scalaVersion := "2.11.11")
 
 lazy val bar =
-  // (4) select supported platforms
+  // (3) select supported platforms
   crossProject(JVMPlatform, NativePlatform)
     .settings(sharedSettings)
-    // (5) configure JVM settings
+    // (4) configure JVM settings
     .jvmSettings(/* ... */)
-    // (6) configure Scala-Native settings
+    // (5) configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
 
 lazy val barJVM    = bar.jvm
@@ -96,7 +95,7 @@ addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.2")  // (2)
 In `build.sbt`:
 
 ```scala
-// (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
+// (3) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.{crossProject, CrossType}
 
 lazy val bar =
@@ -110,6 +109,28 @@ lazy val bar =
 lazy val barJS = bar.js
 lazy val barJVM = bar.jvm
 ```
+
+<h3>No prefix for jvm project</h3>
+
+sbt-crossproject appends the platform suffix to the sbt project. For the sake of brevity,
+it's possible to not append the suffix for the jvm platform.
+
+```scala
+In `build.sbt`:
+
+lazy val bar =
+  // (4) select supported platforms
+  crossProject(JSPlatform, JVMPlatformNoSuffix)
+    .crossType(CrossType.Pure)
+    .settings(/* ... */)
+    .jsSettings(/* ... */)
+    .jvmSettings(/* ... */)
+
+lazy val barJS = bar.js
+lazy val barJVM = bar.jvm
+```
+
+the `barJVM` project is now available as simply `bar` in your sbt prompt.
 
 <h3>When using Build.scala</h3>
 

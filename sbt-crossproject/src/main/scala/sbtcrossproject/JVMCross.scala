@@ -4,14 +4,6 @@ import sbt._
 
 import scala.language.implicitConversions
 
-case object JVMPlatform extends Platform {
-  def identifier: String                = "jvm"
-  def sbtSuffix: String                 = "JVM"
-  def enable(project: Project): Project = project
-  val crossBinary: CrossVersion         = CrossVersion.binary
-  val crossFull: CrossVersion           = CrossVersion.full
-}
-
 trait JVMCross {
   val JVMPlatform = sbtcrossproject.JVMPlatform
 
@@ -20,12 +12,27 @@ trait JVMCross {
     new JVMCrossProjectOps(builder)
 
   implicit class JVMCrossProjectOps(project: CrossProject) {
-    def jvm: Project = project.projects(JVMPlatform)
+    def jvm: Project = {
+      (project.projects.get(JVMPlatform),
+       project.projects.get(JVMPlatformNoSuffix)) match {
+
+        case (Some(project), _) => project
+
+        case (_, Some(project)) => project
+
+        case (Some(_), Some(_)) =>
+          sys.error("use JVMPlatform or JVMPlatformNoSuffix but not both")
+
+        case (None, None) =>
+          sys.error(s"$project does not contain JVMPlatform")
+      }
+    }
 
     def jvmSettings(ss: Def.SettingsDefinition*): CrossProject =
       jvmConfigure(_.settings(ss: _*))
 
-    def jvmConfigure(transformer: Project => Project): CrossProject =
-      project.configurePlatform(JVMPlatform)(transformer)
+    def jvmConfigure(transformer: Project => Project): CrossProject = {
+      project.configurePlatform(JVMPlatform, JVMPlatformNoSuffix)(transformer)
+    }
   }
 }

@@ -146,8 +146,6 @@ final class CrossProject private[sbtcrossproject] (
       s"""|Project defines platforms: $projectPlatforms
           |$depedenciesInfo""".stripMargin
     }
-
-    if (hasMissing || hasDiscard) println(msg)
   }
 }
 

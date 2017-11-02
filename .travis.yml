@@ -31,7 +31,7 @@ before_script:
         echo "CLA check for $author successful";
       else
         echo "CLA check for $author failed";
-        echo "Please sign the Scala CLA to contribute to Scala Native";
+        echo "Please sign the Scala CLA to contribute to sbt-crossproject";
         echo "Go to https://www.lightbend.com/contribute/cla/scala and then resubmit this pull request";
         exit 1;
       fi;

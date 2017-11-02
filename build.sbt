@@ -32,7 +32,6 @@ lazy val `sbt-scalajs-crossproject` =
       }
     )
     .settings(publishSettings)
-    .enablePlugins(BintrayPlugin)
     .dependsOn(`sbt-crossproject`)
 
 lazy val `sbt-crossproject` =
@@ -42,7 +41,6 @@ lazy val `sbt-crossproject` =
     .settings(sbtPluginSettings)
     .settings(scaladocFromReadme)
     .settings(publishSettings)
-    .enablePlugins(BintrayPlugin)
 
 lazy val `sbt-crossproject-test` =
   project

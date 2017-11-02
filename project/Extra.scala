@@ -4,8 +4,6 @@ import ScriptedPlugin._
 
 import scala.util.Try
 
-import bintray.BintrayKeys.{bintrayRepository, bintrayOrganization}
-
 object Extra {
 
   val sbtPluginSettings = ScriptedPlugin.scriptedSettings ++ Seq(
@@ -45,8 +43,20 @@ object Extra {
           "scm:git:git@github.com:portable-scala/sbt-crossproject.git"
       )
     ),
-    bintrayRepository := "sbt-plugins",
-    bintrayOrganization := Some("portable-scala")
+    // Publish to Bintray, without the sbt-bintray plugin
+    publishMavenStyle := false,
+    publishTo := {
+      val proj = moduleName.value
+      val ver  = version.value
+      if (isSnapshot.value) {
+        None // Bintray does not support snapshots
+      } else {
+        val url = new java.net.URL(
+          s"https://api.bintray.com/content/portable-scala/sbt-plugins/$proj/$ver")
+        val patterns = Resolver.ivyStylePatterns
+        Some(Resolver.url("bintray", url)(patterns))
+      }
+    }
   )
 
   lazy val noPublishSettings = Seq(

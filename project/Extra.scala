@@ -10,7 +10,7 @@ object Extra {
 
   val sbtPluginSettings = ScriptedPlugin.scriptedSettings ++ Seq(
       organization := "org.scala-native",
-      version := "0.2.3-SNAPSHOT",
+      version := "0.3.0-SNAPSHOT",
       sbtPlugin := true,
       scriptedLaunchOpts ++= Seq(
         "-Dplugin.version=" + version.value,

@@ -1,9 +1,9 @@
 package scalajscrossproject
 
-import org.scalajs.sbtplugin.ScalaJSPlugin
+import org.scalajs.sbtplugin.{ScalaJSCrossVersion, ScalaJSPlugin}
 import org.scalajs.sbtplugin.impl.ScalaJSGroupID
 
-import sbtcrossproject.CrossPlugin.autoImport._
+import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 
 import sbt._
 
@@ -25,6 +25,6 @@ object ScalaJSCrossPlugin extends AutoPlugin {
   import autoImport._
 
   override def projectSettings: Seq[Setting[_]] = Seq(
-    crossPlatform := JSPlatform
+    platformDepsCrossVersion := ScalaJSCrossVersion.binary
   )
 }

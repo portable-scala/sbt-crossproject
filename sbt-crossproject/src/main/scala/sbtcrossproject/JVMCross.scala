@@ -8,8 +8,12 @@ case object JVMPlatform extends Platform {
   def identifier: String                = "jvm"
   def sbtSuffix: String                 = "JVM"
   def enable(project: Project): Project = project
-  val crossBinary: CrossVersion         = CrossVersion.binary
-  val crossFull: CrossVersion           = CrossVersion.full
+
+  @deprecated("Will be removed", "0.3.0")
+  val crossBinary: CrossVersion = CrossVersion.binary
+
+  @deprecated("Will be removed", "0.3.0")
+  val crossFull: CrossVersion = CrossVersion.full
 }
 
 trait JVMCross {

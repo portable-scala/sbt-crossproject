@@ -5,11 +5,13 @@ import sbt._
 import scala.language.experimental.macros
 import scala.reflect.macros.Context
 
+@deprecated("Kept for binary compatibility; will be removed", "0.3.0")
 final class CrossGroupID private[sbtcrossproject] (private val groupID: String) {
   def %%%(artifactID: String): CrossGroupArtifactID =
     macro CrossGroupID.cross_binary_impl
 }
 
+@deprecated("Kept for binary compatibility; will be removed", "0.3.0")
 object CrossGroupID {
 
   /** Internal. Used by the macro implementing [[CrossGroupID.%%%]]. Use:

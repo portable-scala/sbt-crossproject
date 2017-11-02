@@ -9,7 +9,7 @@ import bintray.BintrayKeys.{bintrayRepository, bintrayOrganization}
 object Extra {
 
   val sbtPluginSettings = ScriptedPlugin.scriptedSettings ++ Seq(
-      organization := "org.scala-native",
+      organization := "org.portable-scala",
       version := "0.3.0-SNAPSHOT",
       sbtPlugin := true,
       scriptedLaunchOpts ++= Seq(
@@ -29,7 +29,7 @@ object Extra {
   // to publish plugin (we only need to do this once, it's already done!)
   // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html
   // then add a new package ()
-  // name: sbt-crossproject, license: BSD-like, version control: git@github.com:scala-native/sbt-crossproject.git
+  // name: sbt-crossproject, license: BSD-like, version control: git@github.com:portable-scala/sbt-crossproject.git
   // to be available without a resolver
   // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html#Linking+your+package+to+the+sbt+organization
   lazy val publishSettings = Seq(
@@ -40,12 +40,13 @@ object Extra {
     ),
     scmInfo := Some(
       ScmInfo(
-        browseUrl = url("https://github.com/scala-native/sbt-crossproject"),
-        connection = "scm:git:git@github.com:scala-native/sbt-crossproject.git"
+        browseUrl = url("https://github.com/portable-scala/sbt-crossproject"),
+        connection =
+          "scm:git:git@github.com:portable-scala/sbt-crossproject.git"
       )
     ),
     bintrayRepository := "sbt-plugins",
-    bintrayOrganization := Some("scala-native")
+    bintrayOrganization := Some("portable-scala")
   )
 
   lazy val noPublishSettings = Seq(

@@ -110,14 +110,12 @@ final class CrossProject private[sbtcrossproject] (
     val infos =
       refs.flatMap { ref =>
         val missings = platforms -- ref.platforms
-        val discards = ref.platforms -- platforms
 
-        if (missings.isEmpty && discards.isEmpty) Nil
-        else List((ref, missings, discards))
+        if (missings.isEmpty) Nil
+        else List((ref, missings))
       }
 
     val hasMissing = infos.exists(!_._2.isEmpty)
-    val hasDiscard = infos.exists(!_._3.isEmpty)
 
     def msg = {
       val nl = System.lineSeparator
@@ -126,26 +124,20 @@ final class CrossProject private[sbtcrossproject] (
 
       val depedenciesInfo =
         infos.map {
-          case (ref, missings, discards) =>
+          case (ref, missings) =>
             val missingMessage =
               if (missings.isEmpty) ""
               else "missings: " + missings.map(_.identifier).mkString(", ")
 
-            val discardedMessage =
-              if (discards.isEmpty) ""
-              else "discards: " + discards.map(_.identifier).mkString(", ")
-
             s"""|project ${ref.id}
-                |  $missingMessage
-                |  $discardedMessage""".stripMargin
-
+                |  $missingMessage""".stripMargin
         }.mkString(nl)
 
       s"""|Project defines platforms: $projectPlatforms
           |$depedenciesInfo""".stripMargin
     }
 
-    if (hasMissing || hasDiscard) println(msg)
+    if (hasMissing) println(msg)
   }
 }
 

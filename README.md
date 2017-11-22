@@ -15,8 +15,8 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.19")
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.2.2")  // (1)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.2")  // (2)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.3.0")  // (1)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.3.0")  // (2)
 addSbtPlugin("org.scala-native" % "sbt-scala-native"         % "0.3.3")  // (3)
 ```
 
@@ -59,7 +59,7 @@ lazy val fooNative = foo.native
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.2.2") // (1)
+addSbtPlugin("org.scala-native" % "sbt-crossproject" % "0.3.0") // (1)
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.3.3") // (2)
 ```
 
@@ -89,8 +89,8 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.scala-js"     % "sbt-scalajs"              % "0.6.19")
-addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.2.2")  // (1)
-addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.2")  // (2)
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.3.0")  // (1)
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.3.0")  // (2)
 ```
 
 In `build.sbt`:

@@ -14,8 +14,6 @@ final class CrossProject private[sbtcrossproject] (
 ) {
 
   def aggregate(refs: CrossProject*): CrossProject = {
-    requireDependencies(refs.toList)
-
     val aggregatesByPlatform =
       refs.toSeq.flatMap(_.projects).groupBy(_._1).mapValues(_.map(_._2))
 

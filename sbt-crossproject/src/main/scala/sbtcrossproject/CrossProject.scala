@@ -107,37 +107,16 @@ final class CrossProject private[sbtcrossproject] (
     mapProjectsByPlatform((platform, project) => f(project))
 
   private def requireDependencies(refs: List[CrossProject]): Unit = {
-    val infos =
-      refs.flatMap { ref =>
-        val missings = platforms -- ref.platforms
-
-        if (missings.isEmpty) Nil
-        else List((ref, missings))
+    for (ref <- refs) {
+      val missings = platforms -- ref.platforms
+      if (missings.nonEmpty) {
+        throw new IllegalArgumentException(
+          s"The cross-project ${this.id} cannot depend on ${ref.id} because " +
+            "the latter lacks some platforms of the former: " +
+            missings.mkString(", ")
+        )
       }
-
-    val hasMissing = infos.exists(!_._2.isEmpty)
-
-    def msg = {
-      val nl = System.lineSeparator
-
-      val projectPlatforms = platforms.map(_.identifier).mkString(", ")
-
-      val depedenciesInfo =
-        infos.map {
-          case (ref, missings) =>
-            val missingMessage =
-              if (missings.isEmpty) ""
-              else "missings: " + missings.map(_.identifier).mkString(", ")
-
-            s"""|project ${ref.id}
-                |  $missingMessage""".stripMargin
-        }.mkString(nl)
-
-      s"""|Project defines platforms: $projectPlatforms
-          |$depedenciesInfo""".stripMargin
     }
-
-    if (hasMissing) println(msg)
   }
 }
 

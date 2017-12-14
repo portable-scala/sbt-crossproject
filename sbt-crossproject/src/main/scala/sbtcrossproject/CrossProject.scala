@@ -93,7 +93,7 @@ final class CrossProject private[sbtcrossproject] (
         s"${platform.identifier} = $project"
     }.mkString("CrossProject(", ",", ")")
 
-  private def platforms = projects.keySet
+  private[sbtcrossproject] def platforms = projects.keySet
 
   private def mapProjectsByPlatform(
       f: (Platform, Project) => Project): CrossProject = {

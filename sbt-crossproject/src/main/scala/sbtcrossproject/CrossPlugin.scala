@@ -11,7 +11,7 @@ object CrossPlugin extends AutoPlugin {
   override def trigger = allRequirements
 
   val autoImport = AutoImport
-  object AutoImport extends JVMCross with CrossProjectExtra {
+  object AutoImport extends JVMCross with ScalaCross with CrossProjectExtra {
 
     val CrossType = sbtcrossproject.CrossType
 

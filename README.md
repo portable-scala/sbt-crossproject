@@ -14,10 +14,10 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.19")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.21")
 addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.0")  // (1)
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.0")  // (2)
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"         % "0.3.3")  // (3)
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"         % "0.3.6")  // (3)
 ```
 
 In `build.sbt`:
@@ -26,7 +26,7 @@ In `build.sbt`:
 // (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.{crossProject, CrossType}
 
-val sharedSettings = Seq(scalaVersion := "2.11.11")
+val sharedSettings = Seq(scalaVersion := "2.11.12")
 
 lazy val bar =
   // (6) select supported platforms
@@ -60,13 +60,13 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.portable-scala" % "sbt-crossproject" % "0.3.0") // (1)
-addSbtPlugin("org.scala-native"   % "sbt-scala-native" % "0.3.3") // (2)
+addSbtPlugin("org.scala-native"   % "sbt-scala-native" % "0.3.6") // (2)
 ```
 
 In `build.sbt`:
 
 ```scala
-val sharedSettings = Seq(scalaVersion := "2.11.11")
+val sharedSettings = Seq(scalaVersion := "2.11.12")
 
 lazy val bar =
   // (4) select supported platforms
@@ -88,7 +88,7 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.19")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.21")
 addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.0")  // (1)
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.0")  // (2)
 ```

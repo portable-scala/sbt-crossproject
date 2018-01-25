@@ -49,28 +49,28 @@ object CrossProjectExtra {
         List(jsPlatform, jvmPlatform)
       }
 
-    val builderTerm =
+    val crossProjectCompanionTerm =
       Select(
         Select(
-          Select(
-            Ident(newTermName("_root_")),
-            newTermName("sbtcrossproject")
-          ),
-          newTermName("CrossProject")
+          Ident(newTermName("_root_")),
+          newTermName("sbtcrossproject")
         ),
-        newTypeName("Builder")
+        newTermName("CrossProject")
       )
 
-    val constructor =
+    val applyFun =
       Select(
-        New(builderTerm),
-        nme.CONSTRUCTOR
+        crossProjectCompanionTerm,
+        newTermName("apply")
       )
 
     c.Expr[CrossProject.Builder](
       Apply(
-        constructor,
-        List(name, javaIoFile) ::: platforms
+        Apply(
+          applyFun,
+          List(name, javaIoFile)
+        ),
+        platforms
       ))
   }
 

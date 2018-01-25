@@ -121,22 +121,53 @@ final class CrossProject private[sbtcrossproject] (
 }
 
 object CrossProject {
-  final class Builder(id: String, base: File, platforms: Platform*) {
-    def crossType(crossType: CrossType): CrossProject =
-      CrossProject(id, base, crossType, platforms: _*)
-  }
-  object Builder {
-    final implicit def crossProjectFromBuilder(
-        builder: CrossProject.Builder): CrossProject = {
-      builder.crossType(CrossType.Full)
-    }
-  }
+  final class Builder private[CrossProject] (
+      id: String,
+      base: File,
+      platforms: Seq[Platform],
+      _crossType: CrossType
+  ) {
+    private[CrossProject] def this(id: String,
+                                   base: File,
+                                   platforms: Seq[Platform],
+                                   internal: Boolean) =
+      this(id, base, platforms, CrossType.Full)
 
-  def apply(id: String,
-            base: File,
-            crossType: CrossType,
-            platforms: Platform*): CrossProject = {
-    def sharedSrcSettings(crossType: CrossType) = {
+    @deprecated("Use CrossProject(id, base)(platforms) instead", "0.3.1")
+    def this(id: String, base: File, platforms: Platform*) =
+      this(id, base, platforms, internal = true)
+
+    /* TODO When we can break binary compatibility, change the result type to
+     * Builder (and remove the call to `build()`), so that we can chain further
+     * methods of Builder after calling crossType.
+     */
+    def crossType(crossType: CrossType): CrossProject =
+      copy(crossType = crossType).build()
+
+    private def copy(
+        crossType: CrossType = _crossType
+    ): Builder = {
+      new Builder(id, base, platforms, crossType)
+    }
+
+    def build(): CrossProject = {
+      val crossType = _crossType
+      val shared    = sharedSrcSettings(crossType)
+
+      val projects =
+        platforms.map { platform =>
+          platform -> platform.enable(
+            Project(
+              id + platform.sbtSuffix,
+              crossType.platformDir(base, platform)
+            ).settings(shared)
+          )
+        }.toMap
+
+      new CrossProject(id, crossType, projects)
+    }
+
+    private def sharedSrcSettings(crossType: CrossType): Seq[Setting[_]] = {
       def makeCrossSources(sharedSrcDir: Option[File],
                            scalaBinaryVersion: String,
                            cross: Boolean): Seq[File] = {
@@ -163,19 +194,25 @@ object CrossProject {
         }
       )
     }
+  }
 
-    val shared = sharedSrcSettings(crossType)
+  object Builder {
+    final implicit def crossProjectFromBuilder(
+        builder: CrossProject.Builder): CrossProject = {
+      builder.build()
+    }
+  }
 
-    val projects =
-      platforms.map { platform =>
-        platform -> platform.enable(
-          Project(
-            id + platform.sbtSuffix,
-            crossType.platformDir(base, platform)
-          ).settings(shared)
-        )
-      }.toMap
+  def apply(id: String, base: File)(platforms: Platform*): Builder =
+    new Builder(id, base, platforms, internal = true)
 
-    new CrossProject(id, crossType, projects)
+  @deprecated(
+    "Use the other overload of apply() and methods of the returned Builder.",
+    "0.3.1")
+  def apply(id: String,
+            base: File,
+            crossType: CrossType,
+            platforms: Platform*): CrossProject = {
+    apply(id, base)(platforms: _*).crossType(crossType)
   }
 }

@@ -125,17 +125,47 @@ object CrossProject {
       id: String,
       base: File,
       platforms: Seq[Platform],
-      _crossType: CrossType
+      _crossType: CrossType,
+      platformWithoutSuffix: Option[Platform]
   ) {
     private[CrossProject] def this(id: String,
                                    base: File,
                                    platforms: Seq[Platform],
                                    internal: Boolean) =
-      this(id, base, platforms, CrossType.Full)
+      this(id, base, platforms, CrossType.Full, None)
 
     @deprecated("Use CrossProject(id, base)(platforms) instead", "0.3.1")
     def this(id: String, base: File, platforms: Platform*) =
       this(id, base, platforms, internal = true)
+
+    /** Specify a platform that should not receive a suffix in its ID.
+     *
+     *  For example,
+     *  {{{
+     *  val foo = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+     *    .withoutSuffixFor(JVMPlatform)
+     *    .settings(...)
+     *
+     *  val fooJS = foo.js
+     *  val fooJVM = foo.jvm
+     *  val fooNative = foo.native
+     *  }}}
+     *  will give the ID `foo` to `foo.jvm`, instead of the default `fooJVM`.
+     *  This then allows to run sbt tasks such as
+     *  {{{
+     *  > foo/test
+     *  }}}
+     *  instead of
+     *  {{{
+     *  > fooJVM/test
+     *  }}}
+     *  for the JVM.
+     *
+     *  This is useful if there is one "default" platform in your project,
+     *  which is more commonly manipulated than the others.
+     */
+    def withoutSuffixFor(platform: Platform): Builder =
+      copy(platformWithoutSuffix = Some(platform))
 
     /* TODO When we can break binary compatibility, change the result type to
      * Builder (and remove the call to `build()`), so that we can chain further
@@ -145,9 +175,10 @@ object CrossProject {
       copy(crossType = crossType).build()
 
     private def copy(
-        crossType: CrossType = _crossType
+        crossType: CrossType = _crossType,
+        platformWithoutSuffix: Option[Platform] = platformWithoutSuffix
     ): Builder = {
-      new Builder(id, base, platforms, crossType)
+      new Builder(id, base, platforms, crossType, platformWithoutSuffix)
     }
 
     def build(): CrossProject = {
@@ -156,9 +187,13 @@ object CrossProject {
 
       val projects =
         platforms.map { platform =>
+          val projectID =
+            if (platformWithoutSuffix.exists(_ == platform)) id
+            else id + platform.sbtSuffix
+
           platform -> platform.enable(
             Project(
-              id + platform.sbtSuffix,
+              projectID,
               crossType.platformDir(base, platform)
             ).settings(shared)
           )

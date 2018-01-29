@@ -15,8 +15,8 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.21")
-addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.0")  // (1)
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.0")  // (2)
+addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.1")  // (1)
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.1")  // (2)
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"         % "0.3.6")  // (3)
 ```
 
@@ -54,12 +54,43 @@ lazy val fooJVM = foo.jvm
 lazy val fooNative = foo.native
 ```
 
+<h3>Removing the platform suffix for one "default" platform</h3>
+
+If you mainly use one "default" platform in your everyday development, you can tell sbt-crossproject not to add the platform suffix to its project ID.
+For example, assuming you mainly compile and test for the JVM, you can write:
+
+```scala
+lazy val bar =
+  crossProject(JSPlatform, JVMPlatform, NativePlatform)
+    .withoutSuffixFor(JVMPlatform)
+    .crossType(...)
+    .settings(...)
+
+lazy val barJS     = bar.js
+lazy val barJVM    = bar.jvm
+lazy val barNative = bar.native
+```
+
+The call to `withoutSuffixFor` must come first after the call to `crossProject()`, otherwise it will not compile.
+
+Now, in the sbt prompt, you can do
+
+```
+> bar/test
+```
+
+to test the JVM platform (instead of `barJVM/test`).
+This of course applies to all tasks.
+
+Note that *inside the build*, you still need to use `barJVM` to the JVM `Project`.
+`withoutSuffixFor` only changes the `id` of the project, which is used in the sbt prompt.
+
 <h3>Cross-Compiling JVM and Native</h3>
 
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-crossproject" % "0.3.0") // (1)
+addSbtPlugin("org.portable-scala" % "sbt-crossproject" % "0.3.1") // (1)
 addSbtPlugin("org.scala-native"   % "sbt-scala-native" % "0.3.6") // (2)
 ```
 
@@ -89,8 +120,8 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.21")
-addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.0")  // (1)
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.0")  // (2)
+addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.1")  // (1)
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.1")  // (2)
 ```
 
 In `build.sbt`:

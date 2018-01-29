@@ -183,7 +183,7 @@ object CrossProject {
 
     def build(): CrossProject = {
       val crossType = _crossType
-      val shared    = sharedSrcSettings(crossType)
+      val sharedSrc = sharedSrcSettings(crossType)
 
       val projects =
         platforms.map { platform =>
@@ -195,7 +195,10 @@ object CrossProject {
             Project(
               projectID,
               crossType.platformDir(base, platform)
-            ).settings(shared)
+            ).settings(
+              name := id, // #80
+              sharedSrc
+            )
           )
         }.toMap
 

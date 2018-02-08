@@ -149,7 +149,7 @@ import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 import sbtcrossproject.CrossPlugin.autoImport._
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
-import scalajscrossproject.JSPlatform
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport.JSPlatform
 import sbtcrossproject.{crossProject, CrossType}
 ```
 

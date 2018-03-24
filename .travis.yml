@@ -14,7 +14,7 @@ matrix:
       osx_image: xcode7.3
 
 before_install:
-  - curl -O https://raw.githubusercontent.com/scala-native/scala-native/master/bin/travis_setup.sh
+  - curl -O https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh
   - chmod +x travis_setup.sh
   - bash travis_setup.sh
 

@@ -1,6 +1,6 @@
 package scalanativecrossproject
 
-import sbt._
+import sbt._, Keys._
 import scalanative.sbtplugin._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 
@@ -15,6 +15,8 @@ object ScalaNativeCrossPlugin extends AutoPlugin {
   import autoImport._
 
   override def projectSettings: Seq[Setting[_]] = Seq(
-    platformDepsCrossVersion := ScalaNativeCrossVersion.binary
+    platformDepsCrossVersion := ScalaNativeCrossVersion.binary,
+    resolvers +=
+      "Sonatype Staging" at "https://oss.sonatype.org/content/repositories/staging"
   )
 }

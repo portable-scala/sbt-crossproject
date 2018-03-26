@@ -16,9 +16,11 @@ lazy val `sbt-crossproject-root` =
   project
     .in(file("."))
     .aggregate(`sbt-scalajs-crossproject`,
+               `sbt-scala-native-crossproject`,
                `sbt-crossproject`,
                `sbt-crossproject-test`)
     .dependsOn(`sbt-scalajs-crossproject`,
+               `sbt-scala-native-crossproject`,
                `sbt-crossproject`,
                `sbt-crossproject-test`)
     .settings(noPublishSettings)

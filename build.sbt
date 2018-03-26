@@ -31,7 +31,20 @@ lazy val `sbt-scalajs-crossproject` =
       moduleName := "sbt-scalajs-crossproject",
       addSbtPluginWorkaround(
         "org.portable-scala"                % "sbt-platform-deps" % "1.0.0-M2"),
-      addSbtPluginWorkaround("org.scala-js" % "sbt-scalajs"       % "0.6.19")
+      addSbtPluginWorkaround("org.scala-js" % "sbt-scalajs"       % "0.6.22")
+    )
+    .settings(publishSettings)
+    .dependsOn(`sbt-crossproject`)
+
+lazy val `sbt-scala-native-crossproject` =
+  project
+    .in(file("sbt-scala-native-crossproject"))
+    .settings(sbtPluginSettings)
+    .settings(
+      moduleName := "sbt-scala-native-crossproject",
+      addSbtPluginWorkaround(
+        "org.portable-scala"                    % "sbt-platform-deps" % "1.0.0-M2"),
+      addSbtPluginWorkaround("org.scala-native" % "sbt-scala-native"  % "0.3.7")
     )
     .settings(publishSettings)
     .dependsOn(`sbt-crossproject`)

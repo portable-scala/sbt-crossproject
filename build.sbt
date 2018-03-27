@@ -72,8 +72,8 @@ lazy val `sbt-crossproject-test` =
       scripted := scripted
         .dependsOn(
           publishLocal in `sbt-crossproject`,
-          publishLocal in `sbt-scalajs-crossproject`
-            publishLocal in `sbt-scala-native-crossproject`
+          publishLocal in `sbt-scalajs-crossproject`,
+          publishLocal in `sbt-scala-native-crossproject`
         )
         .evaluated
     )

@@ -15,7 +15,6 @@ object ScalaNativeCrossPlugin extends AutoPlugin {
   import autoImport._
 
   override def projectSettings: Seq[Setting[_]] = Seq(
-    platformDepsCrossVersion := ScalaNativeCrossVersion.binary,
     resolvers +=
       "Sonatype Staging" at "https://oss.sonatype.org/content/repositories/staging"
   )

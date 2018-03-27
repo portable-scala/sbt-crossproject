@@ -9,6 +9,10 @@ case object NativePlatform extends Platform {
   def sbtSuffix: String  = "Native"
   def enable(project: Project): Project =
     project.enablePlugins(ScalaNativePlugin)
+
+  @deprecated("Will be removed", "0.3.0")
   val crossBinary: CrossVersion = ScalaNativeCrossVersion.binary
-  val crossFull: CrossVersion   = ScalaNativeCrossVersion.full
+
+  @deprecated("Will be removed", "0.3.0")
+  val crossFull: CrossVersion = ScalaNativeCrossVersion.full
 }

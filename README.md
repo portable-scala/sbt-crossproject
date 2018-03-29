@@ -14,28 +14,28 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.21")
-addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.1")  // (1)
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.1")  // (2)
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"         % "0.3.6")  // (3)
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.4.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.4.0")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "0.6.22")
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
 
 In `build.sbt`:
 
 ```scala
-// (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
+// shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.{crossProject, CrossType}
 
 val sharedSettings = Seq(scalaVersion := "2.11.12")
 
 lazy val bar =
-  // (6) select supported platforms
+  // select supported platforms
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
     .jsSettings(/* ... */) // defined in sbt-scalajs-crossproject
     .jvmSettings(/* ... */)
-    // (7) configure Scala-Native settings
+    // configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
 
 lazy val barJS     = bar.js
@@ -90,8 +90,8 @@ Note that *inside the build*, you still need to use `barJVM` to the JVM `Project
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-crossproject" % "0.3.1") // (1)
-addSbtPlugin("org.scala-native"   % "sbt-scala-native" % "0.3.6") // (2)
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.4.0")
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
 
 In `build.sbt`:
@@ -100,12 +100,12 @@ In `build.sbt`:
 val sharedSettings = Seq(scalaVersion := "2.11.12")
 
 lazy val bar =
-  // (4) select supported platforms
+  // select supported platforms
   crossProject(JVMPlatform, NativePlatform)
     .settings(sharedSettings)
-    // (5) configure JVM settings
+    // configure JVM settings
     .jvmSettings(/* ... */)
-    // (6) configure Scala-Native settings
+    // configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
 
 lazy val barJVM    = bar.jvm
@@ -119,19 +119,18 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.21")
-addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.3.1")  // (1)
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.3.1")  // (2)
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.4.0")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.22")
 ```
 
 In `build.sbt`:
 
 ```scala
-// (5) shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
+// shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.{crossProject, CrossType}
 
 lazy val bar =
-  // (4) select supported platforms
+  // select supported platforms
   crossProject(JSPlatform, JVMPlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(/* ... */)
@@ -146,11 +145,10 @@ lazy val barJVM = bar.jvm
 
 ```
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
-import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
+import sbtcrossproject.{crossProject, CrossType}
 import sbtcrossproject.CrossPlugin.autoImport._
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport.JSPlatform
-import sbtcrossproject.{crossProject, CrossType}
+import scalanativecrossproject.ScalaNativeCrossPlugin.autoImport._
 ```
 
 <h2>Configuration</h2>

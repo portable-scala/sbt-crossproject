@@ -11,11 +11,4 @@ object ScalaNativeCrossPlugin extends AutoPlugin {
   override def requires: Plugins = ScalaNativePlugin
 
   object autoImport extends ScalaNativeCross
-
-  import autoImport._
-
-  override def projectSettings: Seq[Setting[_]] = Seq(
-    resolvers +=
-      "Sonatype Staging" at "https://oss.sonatype.org/content/repositories/staging"
-  )
 }

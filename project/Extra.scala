@@ -21,9 +21,7 @@ object Extra {
         "-feature",
         "-encoding",
         "utf8"
-      ),
-      resolvers +=
-        "Sonatype Staging" at "https://oss.sonatype.org/content/repositories/staging"
+      )
     )
 
   // to publish plugin (we only need to do this once, it's already done!)

@@ -19,7 +19,7 @@ lazy val `sbt-scalajs-crossproject` =
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scalajs-crossproject",
-      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0-M2"),
+      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0"),
       addSbtPlugin("org.scala-js"       % "sbt-scalajs"       % "0.6.22")
     )
     .settings(publishSettings)
@@ -31,7 +31,7 @@ lazy val `sbt-scala-native-crossproject` =
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scala-native-crossproject",
-      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0-M2"),
+      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0"),
       addSbtPlugin("org.scala-native"   % "sbt-scala-native"  % "0.3.7")
     )
     .settings(publishSettings)
@@ -45,7 +45,7 @@ lazy val `sbt-crossproject` =
     .settings(scaladocFromReadme)
     .settings(publishSettings)
     .settings(
-      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0-M2")
+      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0")
     )
 
 lazy val `sbt-crossproject-test` =

@@ -20,7 +20,7 @@ lazy val `sbt-scalajs-crossproject` =
     .settings(
       moduleName := "sbt-scalajs-crossproject",
       addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0"),
-      addSbtPlugin("org.scala-js"       % "sbt-scalajs"       % "0.6.22")
+      addSbtPlugin("org.scala-js"       % "sbt-scalajs"       % "0.6.23")
     )
     .settings(publishSettings)
     .dependsOn(`sbt-crossproject`)

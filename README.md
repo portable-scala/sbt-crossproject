@@ -23,8 +23,8 @@ addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 In `build.sbt`:
 
 ```scala
-// shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
-import sbtcrossproject.{crossProject, CrossType}
+// shadow sbt-scalajs' crossProject and CrossType from Scala.js 0.6.x
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 val sharedSettings = Seq(scalaVersion := "2.11.12")
 
@@ -126,8 +126,8 @@ addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.23")
 In `build.sbt`:
 
 ```scala
-// shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
-import sbtcrossproject.{crossProject, CrossType}
+// shadow sbt-scalajs' crossProject and CrossType from Scala.js 0.6.x
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val bar =
   // select supported platforms
@@ -145,8 +145,7 @@ lazy val barJVM = bar.jvm
 
 ```
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
-import sbtcrossproject.{crossProject, CrossType}
-import sbtcrossproject.CrossPlugin.autoImport._
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType, _}
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
 import scalanativecrossproject.ScalaNativeCrossPlugin.autoImport._
 ```

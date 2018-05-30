@@ -167,12 +167,8 @@ object CrossProject {
     def withoutSuffixFor(platform: Platform): Builder =
       copy(platformWithoutSuffix = Some(platform))
 
-    /* TODO When we can break binary compatibility, change the result type to
-     * Builder (and remove the call to `build()`), so that we can chain further
-     * methods of Builder after calling crossType.
-     */
-    def crossType(crossType: CrossType): CrossProject =
-      copy(crossType = crossType).build()
+    def crossType(crossType: CrossType): Builder =
+      copy(crossType = crossType)
 
     private def copy(
         crossType: CrossType = _crossType,

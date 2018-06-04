@@ -14,8 +14,8 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.4.0")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.4.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.5.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.5.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "0.6.23")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
@@ -90,7 +90,7 @@ Note that *inside the build*, you still need to use `barJVM` to the JVM `Project
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.4.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.5.0")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
 
@@ -119,7 +119,7 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.4.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.5.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.23")
 ```
 

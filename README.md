@@ -146,7 +146,7 @@ lazy val barJVM = bar.jvm
 ```
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType, _}
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport.{toScalaJSGroupID => _, _}
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport._
 import scalanativecrossproject.ScalaNativeCrossPlugin.autoImport._
 ```
 

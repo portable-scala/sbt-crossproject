@@ -42,8 +42,9 @@ before_script:
 
 script:
   - java -version
-  - scripts/scalafmt --test && sbt sbt-crossproject-test/scripted
-  - sbt "++ 2.12.3" "^^ 1.0.0" sbt-crossproject/publishLocal sbt-scalajs-crossproject/publishLocal sbt-scala-native-crossproject/publishLocal
+  - scripts/scalafmt --test
+  - sbt sbt-crossproject-test/scripted
+  - sbt ++2.10.7 ^^0.13.17 sbt-crossproject-test/scripted
 
 cache:
   directories:

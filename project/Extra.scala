@@ -1,28 +1,23 @@
 import sbt._
 import Keys._
-import ScriptedPlugin._
+import ScriptedPlugin.autoImport._
 
 import scala.util.Try
 
 object Extra {
 
-  val sbtPluginSettings = ScriptedPlugin.scriptedSettings ++ Seq(
-      organization := "org.portable-scala",
-      version := "0.6.0-SNAPSHOT",
-      sbtPlugin := true,
-      scriptedLaunchOpts ++= Seq(
-        "-Dplugin.version=" + version.value,
-        "-Dplugin.sn-version=0.3.7",
-        "-Dplugin.sjs-version=0.6.23"
-      ),
-      scalacOptions ++= Seq(
-        "-deprecation",
-        "-unchecked",
-        "-feature",
-        "-encoding",
-        "utf8"
-      )
+  val sbtPluginSettings = Def.settings(
+    organization := "org.portable-scala",
+    version := "0.6.0-SNAPSHOT",
+    sbtPlugin := true,
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-unchecked",
+      "-feature",
+      "-encoding",
+      "utf8"
     )
+  )
 
   // to publish plugin (we only need to do this once, it's already done!)
   // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html
@@ -97,15 +92,12 @@ object Extra {
 
   val duplicateProjectFolders = Seq(
     duplicateProjectFoldersTask := {
-
       println("duplicating")
 
-      val pluginsFileName         = "plugins.sbt"
-      val buildPropertiesFileName = "build.properties"
-      val project                 = "project"
+      val pluginsFileName = "plugins.sbt"
+      val project         = "project"
 
-      val pluginsSbt      = sbtTestDirectory.value / pluginsFileName
-      val buildProperties = (baseDirectory in ThisBuild).value / project / buildPropertiesFileName
+      val pluginsSbt = sbtTestDirectory.value / pluginsFileName
 
       val groups = sbtTestDirectory.value.listFiles.filter(_.isDirectory)
       val tests =
@@ -115,7 +107,6 @@ object Extra {
         val testProjectDir = test / project
         IO.createDirectory(testProjectDir)
         IO.copyFile(pluginsSbt, testProjectDir / pluginsFileName)
-        IO.copyFile(buildProperties, testProjectDir / buildPropertiesFileName)
       }
     },
     scripted := scripted.dependsOn(duplicateProjectFoldersTask).evaluated

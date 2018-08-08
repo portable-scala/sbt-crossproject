@@ -7,6 +7,12 @@
 
 Cross-platform compilation support for sbt.
 
+Requirements:
+
+* sbt 0.13.17+ or 1.2.1+
+* For `JSPlatform`: Scala.js 0.6.23+ or 1.0.0-M2+
+* For `NativePlatform`: Scala Native 0.3.7+
+
 <h2>Installation</h2>
 
 <h3>Cross-Compiling Scala.js, JVM and Native</h3>
@@ -14,8 +20,8 @@ Cross-platform compilation support for sbt.
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.5.0")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.5.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.6.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "0.6.23")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
@@ -38,6 +44,7 @@ lazy val bar =
     // configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
 
+// Optional in sbt 1.x (mandatory in sbt 0.13.x)
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
@@ -49,6 +56,7 @@ lazy val foo =
       libraryDependencies += "org.example" %%% "foo" % "1.2.3"
     )
 
+// Optional in sbt 1.x (mandatory in sbt 0.13.x)
 lazy val fooJS = foo.js
 lazy val fooJVM = foo.jvm
 lazy val fooNative = foo.native
@@ -66,6 +74,7 @@ lazy val bar =
     .crossType(...)
     .settings(...)
 
+// Optional in sbt 1.x (mandatory in sbt 0.13.x)
 lazy val barJS     = bar.js
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
@@ -90,7 +99,7 @@ Note that *inside the build*, you still need to use `barJVM` to the JVM `Project
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.5.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.0")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
 
@@ -108,6 +117,7 @@ lazy val bar =
     // configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
 
+// Optional in sbt 1.x (mandatory in sbt 0.13.x)
 lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
 ```
@@ -119,7 +129,7 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.5.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.6.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.23")
 ```
 
@@ -137,6 +147,7 @@ lazy val bar =
     .jsSettings(/* ... */) // defined in sbt-scalajs-crossproject
     .jvmSettings(/* ... */)
 
+// Optional in sbt 1.x (mandatory in sbt 0.13.x)
 lazy val barJS = bar.js
 lazy val barJVM = bar.jvm
 ```

@@ -51,6 +51,7 @@ lazy val barNative = bar.native
 
 lazy val foo =
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
+    .settings(sharedSettings)
     .settings(
       // %%% now include Scala Native. It applies to all selected platforms
       libraryDependencies += "org.example" %%% "foo" % "1.2.3"

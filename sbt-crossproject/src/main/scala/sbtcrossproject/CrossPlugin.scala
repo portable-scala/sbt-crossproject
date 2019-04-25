@@ -56,5 +56,8 @@ object CrossPlugin extends AutoPlugin {
         project.configurePlatform(JVMPlatform)(transformer)
     }
 
+    lazy val crossProjectPlatform =
+      settingKey[Platform]("platform of the current project")
+
   }
 }

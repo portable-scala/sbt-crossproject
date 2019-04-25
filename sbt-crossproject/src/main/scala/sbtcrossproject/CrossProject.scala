@@ -195,6 +195,7 @@ object CrossProject {
               projectID,
               crossType.platformDir(base, platform)
             ).settings(
+              CrossPlugin.autoImport.crossProjectPlatform := platform,
               name := id, // #80
               sharedSrc
             )

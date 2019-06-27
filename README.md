@@ -20,8 +20,8 @@ Requirements:
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.6.0")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.6.1")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.1")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "0.6.23")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
@@ -95,12 +95,28 @@ This of course applies to all tasks.
 Note that *inside the build*, you still need to use `barJVM` to the JVM `Project`.
 `withoutSuffixFor` only changes the `id` of the project, which is used in the sbt prompt.
 
+<h3>Detecting the current platform in a project's settings</h3>
+
+Within the settings of a `crossProject`, you can detect the platform for which those settings are being applied to with `crossProjectPlatform`.
+Here is a contrived example:
+
+```scala
+lazy val bar =
+  crossProject(JSPlatform, JVMPlatform, NativePlatform)
+    .crossType(...)
+    .settings(
+      name := "bar for " + crossProjectPlatform.value.identifier
+    )
+
+...
+```
+
 <h3>Cross-Compiling JVM and Native</h3>
 
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.1")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
 
@@ -130,7 +146,7 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.6.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.6.1")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.23")
 ```
 

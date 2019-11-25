@@ -10,7 +10,7 @@ matrix:
   include:
     - os: linux
       dist: trusty
-      jdk: oraclejdk8
+      jdk: openjdk8
       language: scala
 
     - os: osx

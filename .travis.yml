@@ -14,12 +14,10 @@ matrix:
       language: scala
 
     - os: osx
-      osx_image: xcode9.2
+      osx_image: xcode9.3
 
 before_install:
-  - curl -O https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh
-  - chmod +x travis_setup.sh
-  - bash travis_setup.sh
+  - ./scripts/travis_setup.sh
 
 before_script:
   - sudo chmod +x /usr/local/bin/sbt

@@ -20,11 +20,11 @@ object Extra {
   )
 
   // to publish plugin (we only need to do this once, it's already done!)
-  // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html
+  // follow: https://www.scala-sbt.org/1.x/docs/Bintray-For-Plugins.html
   // then add a new package ()
   // name: sbt-crossproject, license: BSD-like, version control: git@github.com:portable-scala/sbt-crossproject.git
   // to be available without a resolver
-  // follow: http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html#Linking+your+package+to+the+sbt+organization
+  // follow: http://www.scala-sbt.org/1.x/docs/Bintray-For-Plugins.html#Linking+your+package+to+the+sbt+organization
   lazy val publishSettings = Seq(
     publishArtifact in Compile := true,
     publishArtifact in Test := false,

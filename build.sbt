@@ -2,8 +2,7 @@ import Extra._
 
 inThisBuild(
   Def.settings(
-    crossSbtVersions := Seq((sbtVersion in Global).value, "0.13.17"),
-    crossScalaVersions := Seq("2.12.10", "2.10.7")
+    scalaVersion := "2.12.10"
   ))
 
 lazy val `sbt-crossproject-root` =

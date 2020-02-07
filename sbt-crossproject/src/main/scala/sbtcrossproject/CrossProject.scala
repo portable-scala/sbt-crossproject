@@ -11,7 +11,7 @@ final class CrossProject private[sbtcrossproject] (
     private val id: String,
     crossType: CrossType,
     val projects: Map[Platform, Project]
-) extends SBTCompat.CompositeProject {
+) extends CompositeProject {
 
   // CompositeProject API
   override def componentProjects: Seq[Project] = projects.valuesIterator.toSeq

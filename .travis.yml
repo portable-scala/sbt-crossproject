@@ -26,7 +26,6 @@ script:
   - java -version
   - scripts/scalafmt --test
   - sbt sbt-crossproject-test/scripted
-  - sbt ++2.10.7 ^^0.13.17 sbt-crossproject-test/scripted
 
 cache:
   directories:

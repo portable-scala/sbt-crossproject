@@ -9,9 +9,11 @@ Cross-platform compilation support for sbt.
 
 Requirements:
 
-* sbt 0.13.17+ or 1.2.1+
-* For `JSPlatform`: Scala.js 0.6.23+ or 1.0.0-M2+
+* sbt 1.2.1+
+* For `JSPlatform`: Scala.js 0.6.23+ or 1.0.0+
 * For `NativePlatform`: Scala Native 0.3.7+
+
+If you are still using sbt 0.13.x, you must use sbt-crossproject v0.6.1 instead of v1.0.0.
 
 <h2>Installation</h2>
 
@@ -20,17 +22,17 @@ Requirements:
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.6.1")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.1")
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "0.6.23")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.0.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.0.0")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "1.0.0")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
 
 In `build.sbt`:
 
 ```scala
-// shadow sbt-scalajs' crossProject and CrossType from Scala.js 0.6.x
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+// If you are using Scala.js 0.6.x, you need the following import:
+//import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 val sharedSettings = Seq(scalaVersion := "2.11.12")
 
@@ -116,7 +118,7 @@ lazy val bar =
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.1")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.0.0")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
 ```
 
@@ -139,14 +141,14 @@ lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native
 ```
 
-<h3>Migration from Scala.js' default crossProject</h3>
+<h3>Migration from Scala.js 0.6.x' default crossProject</h3>
 
 We carefully implemented sbt-crossproject to be mostly source compatible with Scala.js crossProject
 
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.6.1")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.0.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.23")
 ```
 

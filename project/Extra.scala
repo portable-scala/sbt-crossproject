@@ -8,7 +8,7 @@ object Extra {
 
   val sbtPluginSettings = Def.settings(
     organization := "org.portable-scala",
-    version := "1.0.0",
+    version := "1.0.1-SNAPSHOT",
     sbtPlugin := true,
     scalacOptions ++= Seq(
       "-deprecation",

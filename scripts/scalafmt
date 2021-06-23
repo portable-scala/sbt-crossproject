@@ -5,7 +5,7 @@
 HERE="`dirname $0`"
 
 if [ ! -f $HERE/.coursier ]; then
-  curl -L -o $HERE/.coursier https://git.io/vgvpD
+  curl -L -o $HERE/.coursier https://github.com/coursier/coursier/releases/download/v2.0.16/coursier
   chmod +x $HERE/.coursier
 fi
 

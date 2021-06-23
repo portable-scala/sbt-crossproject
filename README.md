@@ -3,7 +3,7 @@
 
 [![Join the chat at https://gitter.im/scala-native/sbt-crossproject](https://badges.gitter.im/scala-native/sbt-crossproject.svg)](https://gitter.im/scala-native/sbt-crossproject)
 
-[![Build Status](https://travis-ci.org/portable-scala/sbt-crossproject.svg?branch=master)](https://travis-ci.org/portable-scala/sbt-crossproject)
+[![Build Status](https://github.com/portable-scala/sbt-crossproject/actions/workflows/ci.yml/badge.svg)](https://github.com/portable-scala/sbt-crossproject/actions)
 
 Cross-platform compilation support for sbt.
 

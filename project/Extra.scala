@@ -2,9 +2,14 @@ import sbt._
 import Keys._
 import ScriptedPlugin.autoImport._
 
+import com.typesafe.tools.mima.plugin.MimaPlugin.autoImport._
+
 import scala.util.Try
 
 object Extra {
+
+  val previousVersion: Option[String]                  = Some("1.0.0")
+  val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
 
   val sbtPluginSettings = Def.settings(
     organization := "org.portable-scala",
@@ -50,6 +55,30 @@ object Extra {
           s"https://api.bintray.com/content/portable-scala/sbt-plugins/$proj/$ver")
         val patterns = Resolver.ivyStylePatterns
         Some(Resolver.url("bintray", url)(patterns))
+      }
+    },
+    // MiMa auto-configuration
+    mimaPreviousArtifacts ++= {
+      val scalaV        = scalaVersion.value
+      val scalaBinaryV  = scalaBinaryVersion.value
+      val thisProjectID = projectID.value
+      previousVersion match {
+        case None =>
+          Set.empty
+        case _ if newScalaBinaryVersionsInThisRelease.contains(scalaBinaryV) =>
+          // New in this release, no binary compatibility to comply to
+          Set.empty
+        case Some(prevVersion) =>
+          /* Filter out e:info.apiURL as it expects 1.1.1-SNAPSHOT, whereas the
+           * artifact we're looking for has 1.1.0 (for example).
+           */
+          val prevExtraAttributes =
+            thisProjectID.extraAttributes.filterKeys(_ != "e:info.apiURL")
+          val prevProjectID =
+            (thisProjectID.organization % thisProjectID.name % prevVersion)
+              .cross(thisProjectID.crossVersion)
+              .extra(prevExtraAttributes.toSeq: _*)
+          Set(prevProjectID)
       }
     }
   )

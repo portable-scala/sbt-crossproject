@@ -181,8 +181,9 @@ object CrossProject {
     }
 
     def build(): CrossProject = {
-      val crossType = _crossType
-      val sharedSrc = sharedSrcSettings(crossType)
+      val crossType       = _crossType
+      val sharedSrc       = sharedSrcSettings(crossType)
+      val sharedResources = sharedResourcesSettings(crossType)
 
       val projects =
         platforms.map { platform =>
@@ -197,7 +198,8 @@ object CrossProject {
             ).settings(
               CrossPlugin.autoImport.crossProjectPlatform := platform,
               name := id, // #80
-              sharedSrc
+              sharedSrc,
+              sharedResources
             )
           )
         }.toMap
@@ -241,6 +243,19 @@ object CrossProject {
         }
       )
     }
+
+    private def sharedResourcesSettings(
+        crossType: CrossType): Seq[Setting[_]] = {
+      Seq(
+        unmanagedResourceDirectories in Compile ++= {
+          crossType.sharedResourcesDir(baseDirectory.value, "main")
+        },
+        unmanagedResourceDirectories in Test ++= {
+          crossType.sharedResourcesDir(baseDirectory.value, "test")
+        }
+      )
+    }
+
   }
 
   object Builder {

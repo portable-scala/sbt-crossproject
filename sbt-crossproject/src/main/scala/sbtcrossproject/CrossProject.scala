@@ -211,10 +211,19 @@ object CrossProject {
                            cross: Boolean): Seq[File] = {
         sharedSrcDir match {
           case Some(dir) =>
-            if (cross)
-              Seq(dir.getParentFile / s"${dir.name}-$scalaBinaryVersion", dir)
-            else
+            if (cross) {
+              val scalaEpochVersion = scalaBinaryVersion.takeWhile(_ != '.')
+              Seq(
+                Some(dir.getParentFile / s"${dir.name}-$scalaBinaryVersion"),
+                if (scalaEpochVersion != scalaBinaryVersion)
+                  Some(dir.getParentFile / s"${dir.name}-$scalaEpochVersion")
+                else
+                  None,
+                Some(dir)
+              ).flatten
+            } else {
               Seq(dir)
+            }
           case None => Seq()
         }
       }

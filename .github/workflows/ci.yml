@@ -21,5 +21,7 @@ jobs:
         run: sudo apt-get install libgc-dev libunwind8-dev
       - name: scalafmt
         run: ./scripts/scalafmt --test
+      - name: MiMa
+        run: sbt ";sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
       - name: Test
         run: sbt sbt-crossproject-test/scripted

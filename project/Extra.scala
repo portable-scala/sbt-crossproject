@@ -14,14 +14,15 @@ object Extra {
   val sbtPluginSettings = Def.settings(
     organization := "org.portable-scala",
     version := "1.1.0-SNAPSHOT",
-    sbtPlugin := true,
+    versionScheme := Some("semver-spec"),
     scalacOptions ++= Seq(
       "-deprecation",
       "-unchecked",
       "-feature",
       "-encoding",
       "utf8"
-    )
+    ),
+    sbtVersion := "1.2.1"
   )
 
   // to publish plugin (we only need to do this once, it's already done!)
@@ -31,8 +32,8 @@ object Extra {
   // to be available without a resolver
   // follow: http://www.scala-sbt.org/1.x/docs/Bintray-For-Plugins.html#Linking+your+package+to+the+sbt+organization
   lazy val publishSettings = Seq(
-    publishArtifact in Compile := true,
-    publishArtifact in Test := false,
+    Compile / publishArtifact := true,
+    Test / publishArtifact := false,
     licenses := Seq(
       "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")
     ),
@@ -97,7 +98,7 @@ object Extra {
       // rootdoc.txt is the ScalaDoc landing page
       // we tweak the markdown so it's valid Scaladoc
 
-      val readmeFile = (baseDirectory in ThisBuild).value / "README.md"
+      val readmeFile = (ThisBuild / baseDirectory).value / "README.md"
       val readme     = IO.read(readmeFile)
       val scaladocReadme =
         readme
@@ -109,11 +110,11 @@ object Extra {
       IO.write(rootdoc, scaladocReadme)
       rootdoc
     },
-    scalacOptions in (Compile, doc) ++= Seq(
+    Compile / doc / scalacOptions ++= Seq(
       "-doc-root-content",
       (target.value / "rootdoc.txt").getPath
     ),
-    doc in Compile := (doc in Compile).dependsOn(createRootDoc).value
+    Compile / doc := (Compile / doc).dependsOn(createRootDoc).value
   )
 
   private lazy val duplicateProjectFoldersTask =

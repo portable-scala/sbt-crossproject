@@ -37,6 +37,13 @@ abstract class CrossType {
    */
   def sharedSrcDir(projectBase: File, conf: String): Option[File]
 
+  /** The location of a shared resources directory (if it exists)
+   *  @param projectBase the base directory of a (true sbt) Project
+   *  @param conf name of sub-directory for the configuration (typically "main"
+   *      or "test")
+   */
+  def sharedResourcesDir(projectBase: File, conf: String): Option[File] = None
+
 }
 
 object CrossType {
@@ -61,6 +68,10 @@ object CrossType {
 
     def sharedSrcDir(projectBase: File, conf: String): Option[File] =
       Some(projectBase.getParentFile / "shared" / "src" / conf / "scala")
+
+    override def sharedResourcesDir(projectBase: File,
+                                    conf: String): Option[File] =
+      Some(projectBase.getParentFile / "shared" / "src" / conf / "resources")
   }
 
   /**
@@ -83,6 +94,10 @@ object CrossType {
 
     def sharedSrcDir(projectBase: File, conf: String): Option[File] =
       Some(projectBase.getParentFile / "src" / conf / "scala")
+
+    override def sharedResourcesDir(projectBase: File,
+                                    conf: String): Option[File] =
+      Some(projectBase.getParentFile / "src" / conf / "resources")
   }
 
   /**
@@ -103,5 +118,9 @@ object CrossType {
       crossBase / platform.identifier
 
     def sharedSrcDir(projectBase: File, conf: String): Option[File] = None
+
+    override def sharedResourcesDir(projectBase: File,
+                                    conf: String): Option[File] =
+      None
   }
 }

@@ -25,12 +25,6 @@ object Extra {
     sbtVersion := "1.2.1"
   )
 
-  // to publish plugin (we only need to do this once, it's already done!)
-  // follow: https://www.scala-sbt.org/1.x/docs/Bintray-For-Plugins.html
-  // then add a new package ()
-  // name: sbt-crossproject, license: BSD-like, version control: git@github.com:portable-scala/sbt-crossproject.git
-  // to be available without a resolver
-  // follow: http://www.scala-sbt.org/1.x/docs/Bintray-For-Plugins.html#Linking+your+package+to+the+sbt+organization
   lazy val publishSettings = Seq(
     Compile / publishArtifact := true,
     Test / publishArtifact := false,
@@ -44,19 +38,31 @@ object Extra {
           "scm:git:git@github.com:portable-scala/sbt-crossproject.git"
       )
     ),
-    // Publish to Bintray, without the sbt-bintray plugin
-    publishMavenStyle := false,
+    // Publishing
+    publishMavenStyle := true,
     publishTo := {
-      val proj = moduleName.value
-      val ver  = version.value
-      if (isSnapshot.value) {
-        None // Bintray does not support snapshots
-      } else {
-        val url = new java.net.URL(
-          s"https://api.bintray.com/content/portable-scala/sbt-plugins/$proj/$ver")
-        val patterns = Resolver.ivyStylePatterns
-        Some(Resolver.url("bintray", url)(patterns))
-      }
+      val nexus = "https://oss.sonatype.org/"
+      if (version.value.endsWith("-SNAPSHOT"))
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    },
+    pomExtra := (
+      <developers>
+        <developer>
+          <id>sjrd</id>
+          <name>Sébastien Doeraene</name>
+          <url>https://github.com/sjrd/</url>
+        </developer>
+        <developer>
+          <id>gzm0</id>
+          <name>Tobias Schlatter</name>
+          <url>https://github.com/gzm0/</url>
+        </developer>
+      </developers>
+    ),
+    pomIncludeRepository := { _ =>
+      false
     },
     // MiMa auto-configuration
     mimaPreviousArtifacts ++= {

@@ -21,6 +21,7 @@ lazy val `sbt-crossproject-root` =
 lazy val `sbt-scalajs-crossproject` =
   project
     .in(file("sbt-scalajs-crossproject"))
+    .enablePlugins(SbtPlugin)
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scalajs-crossproject",
@@ -33,6 +34,7 @@ lazy val `sbt-scalajs-crossproject` =
 lazy val `sbt-scala-native-crossproject` =
   project
     .in(file("sbt-scala-native-crossproject"))
+    .enablePlugins(SbtPlugin)
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scala-native-crossproject",
@@ -45,6 +47,7 @@ lazy val `sbt-scala-native-crossproject` =
 lazy val `sbt-crossproject` =
   project
     .in(file("sbt-crossproject"))
+    .enablePlugins(SbtPlugin)
     .settings(moduleName := "sbt-crossproject")
     .settings(sbtPluginSettings)
     .settings(scaladocFromReadme)
@@ -56,7 +59,7 @@ lazy val `sbt-crossproject` =
 lazy val `sbt-crossproject-test` =
   project
     .in(file("sbt-crossproject-test"))
-    .enablePlugins(ScriptedPlugin)
+    .enablePlugins(SbtPlugin) // for scripted
     .settings(sbtPluginSettings)
     .settings(noPublishSettings)
     .settings(
@@ -67,9 +70,9 @@ lazy val `sbt-crossproject-test` =
       ),
       scripted := scripted
         .dependsOn(
-          publishLocal in `sbt-crossproject`,
-          publishLocal in `sbt-scalajs-crossproject`,
-          publishLocal in `sbt-scala-native-crossproject`
+          `sbt-crossproject` / publishLocal,
+          `sbt-scalajs-crossproject` / publishLocal,
+          `sbt-scala-native-crossproject` / publishLocal
         )
         .evaluated
     )

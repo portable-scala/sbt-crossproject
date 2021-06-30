@@ -14,6 +14,7 @@ object Extra {
   val sbtPluginSettings = Def.settings(
     organization := "org.portable-scala",
     version := "1.1.0-SNAPSHOT",
+    versionScheme := Some("semver-spec"),
     scalacOptions ++= Seq(
       "-deprecation",
       "-unchecked",

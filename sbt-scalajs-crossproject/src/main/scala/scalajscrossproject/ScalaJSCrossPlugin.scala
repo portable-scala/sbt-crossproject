@@ -25,6 +25,9 @@ object ScalaJSCrossPlugin extends AutoPlugin {
       def jsSettings(ss: Def.SettingsDefinition*): CrossProject =
         jsConfigure(_.settings(ss: _*))
 
+      def jsEnablePlugins(plugins: Plugins*): CrossProject =
+        jsConfigure(_.enablePlugins(plugins: _*))
+
       def jsConfigure(transformer: Project => Project): CrossProject =
         project.configurePlatform(JSPlatform)(transformer)
     }

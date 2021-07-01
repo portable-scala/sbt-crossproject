@@ -76,6 +76,10 @@ final class CrossProject private[sbtcrossproject] (
   def enablePlugins(ns: Plugins*): CrossProject =
     transform(_.enablePlugins(ns: _*))
 
+  def platformsEnablePlugins(platforms: Platform*)(
+      plugins: Plugins*): CrossProject =
+    configurePlatforms(platforms: _*)(_.enablePlugins(plugins: _*))
+
   def in(dir: File): CrossProject =
     mapProjectsByPlatform(
       (platform, project) => project.in(crossType.platformDir(dir, platform)))

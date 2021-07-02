@@ -8,12 +8,12 @@ import scala.util.Try
 
 object Extra {
 
-  val previousVersion: Option[String]                  = Some("1.0.0")
+  val previousVersion: Option[String]                  = Some("1.1.0")
   val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
 
   val sbtPluginSettings = Def.settings(
     organization := "org.portable-scala",
-    version := "1.1.0",
+    version := "1.1.1-SNAPSHOT",
     versionScheme := Some("semver-spec"),
     scalacOptions ++= Seq(
       "-deprecation",

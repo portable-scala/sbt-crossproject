@@ -37,12 +37,31 @@ abstract class CrossType {
    */
   def sharedSrcDir(projectBase: File, conf: String): Option[File]
 
+  /** The location of a partially shared source directory (if it exists)
+   *  @param projectBase the base directory of a (true sbt) Project
+   *  @param platforms non-empty seq of JSPlatform, JVMPlatform, NativePlatform, ...
+   *  @param conf name of sub-directory for the configuration (typically "main"
+   *      or "test")
+   */
+  def partiallySharedSrcDir(projectBase: File,
+                            platforms: Seq[Platform],
+                            conf: String): Option[File] = None
+
   /** The location of a shared resources directory (if it exists)
    *  @param projectBase the base directory of a (true sbt) Project
    *  @param conf name of sub-directory for the configuration (typically "main"
    *      or "test")
    */
   def sharedResourcesDir(projectBase: File, conf: String): Option[File] = None
+
+  /** The location of a partially shared resources directory (if it exists)
+   *  @param projectBase the base directory of a (true sbt) Project
+   *  @param conf name of sub-directory for the configuration (typically "main"
+   *      or "test")
+   */
+  def partiallySharedResourcesDir(projectBase: File,
+                                  platforms: Seq[Platform],
+                                  conf: String): Option[File] = None
 
 }
 
@@ -69,9 +88,23 @@ object CrossType {
     def sharedSrcDir(projectBase: File, conf: String): Option[File] =
       Some(projectBase.getParentFile / "shared" / "src" / conf / "scala")
 
+    override def partiallySharedSrcDir(projectBase: File,
+                                       platforms: Seq[Platform],
+                                       conf: String): Option[File] = {
+      val dir = platforms.map(_.identifier).mkString("-")
+      Some(projectBase.getParentFile / dir / "src" / conf / "scala")
+    }
+
     override def sharedResourcesDir(projectBase: File,
                                     conf: String): Option[File] =
       Some(projectBase.getParentFile / "shared" / "src" / conf / "resources")
+
+    override def partiallySharedResourcesDir(projectBase: File,
+                                             platforms: Seq[Platform],
+                                             conf: String): Option[File] = {
+      val dir = platforms.map(_.identifier).mkString("-")
+      Some(projectBase.getParentFile / dir / "src" / conf / "resources")
+    }
   }
 
   /**

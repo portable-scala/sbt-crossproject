@@ -4,6 +4,9 @@ import sbtcrossproject._
 
 import scala.language.implicitConversions
 
+import scala.collection.immutable.HashMap
+import scala.collection.immutable.ListSet
+
 import sbt._
 import Keys._
 
@@ -202,8 +205,8 @@ object CrossProject {
             ).settings(
               CrossPlugin.autoImport.crossProjectPlatform := platform,
               name := id, // #80
-              sharedSrc,
-              sharedResources
+              sharedSrc(platform),
+              sharedResources(platform)
             )
           )
         }.toMap
@@ -211,7 +214,8 @@ object CrossProject {
       new CrossProject(id, crossType, projects)
     }
 
-    private def sharedSrcSettings(crossType: CrossType): Seq[Setting[_]] = {
+    private def sharedSrcSettings(
+        crossType: CrossType): Map[Platform, Seq[Setting[_]]] = {
       def makeCrossSources(sharedSrcDir: Option[File],
                            scalaBinaryVersion: String,
                            cross: Boolean): Seq[File] = {
@@ -234,30 +238,89 @@ object CrossProject {
         }
       }
 
-      Seq(
-        unmanagedSourceDirectories in Compile ++= {
-          makeCrossSources(crossType.sharedSrcDir(baseDirectory.value, "main"),
-                           scalaBinaryVersion.value,
-                           crossPaths.value)
-        },
-        unmanagedSourceDirectories in Test ++= {
-          makeCrossSources(crossType.sharedSrcDir(baseDirectory.value, "test"),
-                           scalaBinaryVersion.value,
-                           crossPaths.value)
+      def makeSharedSettings(
+          key: SettingKey[Seq[File]],
+          config: String): Seq[(Platform, Seq[Setting[_]])] = {
+        val partiallyShared = makePartiallySharedSettings(platforms) {
+          platformSubset =>
+            Seq(
+              key ++= makeCrossSources(
+                crossType.partiallySharedSrcDir(baseDirectory.value,
+                                                platformSubset,
+                                                config),
+                scalaBinaryVersion.value,
+                crossPaths.value)
+            )
         }
-      )
+
+        val shared = Seq(
+          key ++= makeCrossSources(
+            crossType.sharedSrcDir(baseDirectory.value, config),
+            scalaBinaryVersion.value,
+            crossPaths.value)
+        )
+
+        partiallyShared ++ platforms.map(_ -> shared) // add shared to each platform
+      }
+
+      val compileSettings =
+        makeSharedSettings(unmanagedSourceDirectories in Compile, "main")
+      val testSettings =
+        makeSharedSettings(unmanagedSourceDirectories in Test, "test")
+
+      (compileSettings ++ testSettings) // group-reduce the settings per-platform
+        .groupBy(_._1)
+        .map(kv => kv._1 -> kv._2.flatMap(_._2))
     }
 
     private def sharedResourcesSettings(
-        crossType: CrossType): Seq[Setting[_]] = {
-      Seq(
-        unmanagedResourceDirectories in Compile ++= {
-          crossType.sharedResourcesDir(baseDirectory.value, "main")
-        },
-        unmanagedResourceDirectories in Test ++= {
-          crossType.sharedResourcesDir(baseDirectory.value, "test")
+        crossType: CrossType): Map[Platform, Seq[Setting[_]]] = {
+      def makeSharedSettings(
+          key: SettingKey[Seq[File]],
+          config: String): Seq[(Platform, Seq[Setting[_]])] = {
+        val partiallyShared = makePartiallySharedSettings(platforms) {
+          platformSubset =>
+            Seq(
+              key ++= crossType
+                .partiallySharedResourcesDir(baseDirectory.value,
+                                             platformSubset,
+                                             config)
+                .toSeq
+            )
         }
-      )
+
+        val shared = Seq(
+          key ++= crossType
+            .sharedResourcesDir(baseDirectory.value, config)
+            .toSeq
+        )
+
+        partiallyShared ++ platforms.map(_ -> shared) // add shared to each platform
+      }
+
+      val compileSettings =
+        makeSharedSettings(unmanagedResourceDirectories in Compile, "main")
+      val testSettings =
+        makeSharedSettings(unmanagedResourceDirectories in Test, "test")
+
+      (compileSettings ++ testSettings) // group-reduce the settings per-platform
+        .groupBy(_._1)
+        .map(kv => kv._1 -> kv._2.flatMap(_._2))
+    }
+
+    private def makePartiallySharedSettings(platforms: Seq[Platform])(
+        mkSettings: Seq[Platform] => Seq[Setting[_]])
+      : Seq[(Platform, Seq[Setting[_]])] = {
+      platforms.toSet
+        .subsets()
+        .filter(_.size > 1) // skip the empty+singleton subsets
+        .filterNot(_.size == platforms.size) // skip the all-platform subset
+        .toSeq
+        .map(_.toSeq.sortBy(_.identifier)) // use a consistent ordering
+        .flatMap { platformSubset => // make the settings for this subset of platforms
+          val settings = mkSettings(platformSubset)
+          platformSubset.map(_ -> settings)
+        }
     }
 
   }

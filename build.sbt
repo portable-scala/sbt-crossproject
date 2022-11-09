@@ -39,7 +39,7 @@ lazy val `sbt-scala-native-crossproject` =
     .settings(
       moduleName := "sbt-scala-native-crossproject",
       addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.0"),
-      addSbtPlugin("org.scala-native"   % "sbt-scala-native"  % "0.3.7")
+      addSbtPlugin("org.scala-native"   % "sbt-scala-native"  % "0.4.0")
     )
     .settings(publishSettings)
     .dependsOn(`sbt-crossproject`)
@@ -65,7 +65,7 @@ lazy val `sbt-crossproject-test` =
     .settings(
       scriptedLaunchOpts ++= Seq(
         "-Dplugin.version=" + version.value,
-        "-Dplugin.sn-version=0.3.7",
+        "-Dplugin.sn-version=0.4.0",
         "-Dplugin.sjs-version=0.6.23"
       ),
       scripted := scripted

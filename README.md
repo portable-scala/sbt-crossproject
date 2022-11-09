@@ -11,7 +11,7 @@ Requirements:
 
 * sbt 1.2.1+
 * For `JSPlatform`: Scala.js 0.6.23+ or 1.0.0+
-* For `NativePlatform`: Scala Native 0.3.7+
+* For `NativePlatform`: Scala Native 0.4.0+
 
 If you are still using sbt 0.13.x, you must use sbt-crossproject v0.6.1 instead of v1.2.0.
 
@@ -25,7 +25,7 @@ In `project/plugins.sbt`:
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.2.0")
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.2.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "1.0.0")
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.4.0")
 ```
 
 In `build.sbt`:
@@ -119,7 +119,7 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.2.0")
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.3.7")
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.4.0")
 ```
 
 In `build.sbt`:

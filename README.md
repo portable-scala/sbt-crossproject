@@ -232,3 +232,48 @@ This layout gives full control by providing a `shared` directory for common code
 - `.crossType({/*custom*/})`
 
 One can easily extend CrossType and provide a custom tree structure.
+
+<h3>Customizing Directory Structure for Complex Projects</h3>
+
+For complex projects it can be desirable to adopt a non-flat directory structure.
+
+SBT provides an `in file("path")` mechanism for multi-project builds ( https://www.scala-sbt.org/1.x/docs/Multi-Project.html )
+
+CrossProject also has support, for example:
+
+```
+.
+├── apps
+│   ├── a
+│   └── b
+└── lib
+    ├── a
+    ├── b
+    └── c
+```
+
+can be configured as a normal `CrossProject` with
+
+```
+lazy val appA = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("app/a"))
+  .dependsOn(libA, libB)
+
+lazy val appB = crossProject(JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
+  .in(file("app/b"))
+  .dependsOn(libB, libC)
+
+lazy val libA = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("lib/a"))
+
+lazy val libB = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
+  .in(file("lib/b"))
+
+lazy val libC = crossProject(JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
+  .in(file("lib/c"))
+```

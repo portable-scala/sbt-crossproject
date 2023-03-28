@@ -65,5 +65,7 @@ object CrossPlugin extends AutoPlugin {
     lazy val crossProjectCrossType =
       settingKey[CrossType]("cross type of the current cross project")
 
+    lazy val crossProjectBaseDirectory =
+      settingKey[File]("base directory of the current cross project")
   }
 }

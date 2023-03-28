@@ -8,6 +8,9 @@ def doCheckPlatform(platform: Platform, id: String) =
 def doCheckType(got: CrossType, expected: CrossType) =
   assert(got == expected)
 
+def doCheckBase(got: File, expected: File) =
+  assert(got == expected)
+
 lazy val root =
   crossProject(JVMPlatform, NativePlatform, JSPlatform)
     .crossType(CrossType.Pure)
@@ -15,18 +18,21 @@ lazy val root =
       check := {
         doCheckPlatform(crossProjectPlatform.value, "jvm")
         doCheckType(crossProjectCrossType.value, CrossType.Pure)
+        doCheckBase(crossProjectBaseDirectory.value, file("root"))
       }
     )
     .jsSettings(
       check := {
         doCheckPlatform(crossProjectPlatform.value, "js")
         doCheckType(crossProjectCrossType.value, CrossType.Pure)
+        doCheckBase(crossProjectBaseDirectory.value, file("root"))
       }
     )
     .nativeSettings(
       check := {
         doCheckPlatform(crossProjectPlatform.value, "native")
         doCheckType(crossProjectCrossType.value, CrossType.Pure)
+        doCheckBase(crossProjectBaseDirectory.value, file("root"))
       }
     )
 
@@ -41,17 +47,20 @@ lazy val fullCross =
       check := {
         doCheckPlatform(crossProjectPlatform.value, "jvm")
         doCheckType(crossProjectCrossType.value, CrossType.Full)
+        doCheckBase(crossProjectBaseDirectory.value, file("fullCross"))
       }
     )
     .jsSettings(
       check := {
         doCheckPlatform(crossProjectPlatform.value, "js")
         doCheckType(crossProjectCrossType.value, CrossType.Full)
+        doCheckBase(crossProjectBaseDirectory.value, file("fullCross"))
       }
     )
     .nativeSettings(
       check := {
         doCheckPlatform(crossProjectPlatform.value, "native")
         doCheckType(crossProjectCrossType.value, CrossType.Full)
+        doCheckBase(crossProjectBaseDirectory.value, file("fullCross"))
       }
     )

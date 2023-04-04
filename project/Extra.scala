@@ -13,7 +13,7 @@ object Extra {
 
   val sbtPluginSettings = Def.settings(
     organization := "org.portable-scala",
-    version := "1.2.1-SNAPSHOT",
+    version := "1.3.0-SNAPSHOT",
     versionScheme := Some("semver-spec"),
     scalacOptions ++= Seq(
       "-deprecation",

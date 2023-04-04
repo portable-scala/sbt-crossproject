@@ -1,3 +1,6 @@
 > rootJVM/check
 > rootJS/check
 > rootNative/check
+> fullCrossJVM/check
+> fullCrossJS/check
+> fullCrossNative/check

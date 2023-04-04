@@ -13,7 +13,6 @@ object Extra {
 
   val sbtPluginSettings = Def.settings(
     organization := "org.portable-scala",
-    version := "1.3.0-SNAPSHOT",
     versionScheme := Some("semver-spec"),
     scalacOptions ++= Seq(
       "-deprecation",
@@ -41,14 +40,6 @@ object Extra {
       )
     ),
     // Publishing
-    publishMavenStyle := true,
-    publishTo := {
-      val nexus = "https://oss.sonatype.org/"
-      if (version.value.endsWith("-SNAPSHOT"))
-        Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
     pomExtra := (
       <developers>
         <developer>
@@ -95,8 +86,7 @@ object Extra {
   lazy val noPublishSettings = Seq(
     publishArtifact := false,
     packagedArtifacts := Map.empty,
-    publish := {},
-    publishLocal := {}
+    publish / skip := true
   )
 
   private val createRootDoc = taskKey[File]("Generate ScalaDoc from README")

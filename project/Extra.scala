@@ -12,33 +12,10 @@ object Extra {
   val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
 
   val sbtPluginSettings = Def.settings(
-    organization := "org.portable-scala",
-    versionScheme := Some("semver-spec"),
-    scalacOptions ++= Seq(
-      "-deprecation",
-      "-unchecked",
-      "-feature",
-      "-encoding",
-      "utf8"
-    ),
     sbtVersion := "1.2.1"
   )
 
   lazy val publishSettings = Seq(
-    Compile / publishArtifact := true,
-    Test / publishArtifact := false,
-    homepage := Some(
-      url("https://github.com/portable-scala/sbt-crossproject")),
-    licenses := Seq(
-      "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")
-    ),
-    scmInfo := Some(
-      ScmInfo(
-        url("https://github.com/portable-scala/sbt-crossproject"),
-        "scm:git:git@github.com:portable-scala/sbt-crossproject.git",
-        Some("scm:git:git@github.com:portable-scala/sbt-crossproject.git")
-      )
-    ),
     // Publishing
     pomExtra := (
       <developers>

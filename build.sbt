@@ -2,7 +2,28 @@ import Extra._
 
 inThisBuild(
   Def.settings(
-    scalaVersion := "2.12.10"
+    scalaVersion := "2.12.10",
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-unchecked",
+      "-feature",
+      "-encoding",
+      "utf8"
+    ),
+    organization := "org.portable-scala",
+    versionScheme := Some("semver-spec"),
+    homepage := Some(
+      url("https://github.com/portable-scala/sbt-crossproject")),
+    licenses := Seq(
+      "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")
+    ),
+    scmInfo := Some(
+      ScmInfo(
+        url("https://github.com/portable-scala/sbt-crossproject"),
+        "scm:git:git@github.com:portable-scala/sbt-crossproject.git",
+        Some("scm:git:git@github.com:portable-scala/sbt-crossproject.git")
+      )
+    )
   ))
 
 lazy val `sbt-crossproject-root` =

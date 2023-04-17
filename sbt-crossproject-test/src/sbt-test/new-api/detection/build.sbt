@@ -9,7 +9,7 @@ def doCheckType(got: CrossType, expected: CrossType) =
   assert(got == expected)
 
 def doCheckBase(got: File, expected: File) =
-  assert(got == expected)
+  assert(got == expected.getAbsoluteFile)
 
 lazy val root =
   crossProject(JVMPlatform, NativePlatform, JSPlatform)

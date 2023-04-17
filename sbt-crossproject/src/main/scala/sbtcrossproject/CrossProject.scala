@@ -205,7 +205,8 @@ object CrossProject {
             ).settings(
               CrossPlugin.autoImport.crossProjectPlatform := platform,
               CrossPlugin.autoImport.crossProjectCrossType := crossType,
-              CrossPlugin.autoImport.crossProjectBaseDirectory := base,
+              CrossPlugin.autoImport.crossProjectBaseDirectory :=
+                IO.resolve((LocalRootProject / baseDirectory).value, base),
               name := id, // #80
               sharedSrc(platform),
               sharedResources(platform)

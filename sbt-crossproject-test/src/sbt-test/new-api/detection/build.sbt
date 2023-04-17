@@ -64,3 +64,28 @@ lazy val fullCross =
         doCheckBase(crossProjectBaseDirectory.value, file("fullCross"))
       }
     )
+
+lazy val nonDefaultBase =
+  crossProject(JVMPlatform, NativePlatform, JSPlatform)
+    .in(file("non-default-base"))
+    .jvmSettings(
+      check := {
+        doCheckPlatform(crossProjectPlatform.value, "jvm")
+        doCheckType(crossProjectCrossType.value, CrossType.Full)
+        doCheckBase(crossProjectBaseDirectory.value, file("non-default-base"))
+      }
+    )
+    .jsSettings(
+      check := {
+        doCheckPlatform(crossProjectPlatform.value, "js")
+        doCheckType(crossProjectCrossType.value, CrossType.Full)
+        doCheckBase(crossProjectBaseDirectory.value, file("non-default-base"))
+      }
+    )
+    .nativeSettings(
+      check := {
+        doCheckPlatform(crossProjectPlatform.value, "native")
+        doCheckType(crossProjectCrossType.value, CrossType.Full)
+        doCheckBase(crossProjectBaseDirectory.value, file("non-default-base"))
+      }
+    )

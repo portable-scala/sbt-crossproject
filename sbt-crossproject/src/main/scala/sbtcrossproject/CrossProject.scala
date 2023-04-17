@@ -84,8 +84,12 @@ final class CrossProject private[sbtcrossproject] (
     configurePlatforms(platforms: _*)(_.enablePlugins(plugins: _*))
 
   def in(dir: File): CrossProject =
-    mapProjectsByPlatform(
-      (platform, project) => project.in(crossType.platformDir(dir, platform)))
+    settings(
+      CrossPlugin.autoImport.crossProjectBaseDirectory :=
+        IO.resolve((LocalRootProject / baseDirectory).value, dir)
+    ).mapProjectsByPlatform { (platform, project) =>
+      project.in(crossType.platformDir(dir, platform))
+    }
 
   def overrideConfigs(cs: Configuration*): CrossProject =
     transform(_.overrideConfigs(cs: _*))

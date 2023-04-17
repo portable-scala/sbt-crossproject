@@ -4,3 +4,6 @@
 > fullCrossJVM/check
 > fullCrossJS/check
 > fullCrossNative/check
+> nonDefaultBaseJVM/check
+> nonDefaultBaseJS/check
+> nonDefaultBaseNative/check

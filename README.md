@@ -45,6 +45,9 @@ lazy val bar =
     .jvmSettings(/* ... */)
     // configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
+    .jvmConfigure(p => p) // call _.dependsOn or configure other specific properties specific to the jvm
+    .jsConfigure(p => p)
+    .nativeConfigure(p => p)
 
 // Optional in sbt 1.x (mandatory in sbt 0.13.x)
 lazy val barJS     = bar.js

@@ -149,7 +149,7 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.4")
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "1.0.16")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.33")
 ```
 
 In `build.sbt`:

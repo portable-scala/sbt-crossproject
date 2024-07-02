@@ -119,7 +119,7 @@ In `project/plugins.sbt`:
 
 ```scala
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.4")
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.3")
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.4")
 ```
 
 In `build.sbt`:

@@ -13,7 +13,7 @@ Requirements:
 * For `JSPlatform`: Scala.js 0.6.23+ or 1.0.0+
 * For `NativePlatform`: Scala Native 0.3.7+
 
-If you are still using sbt 0.13.x, you must use sbt-crossproject v0.6.1 instead of v1.3.4.
+If you are still using sbt 0.13.x, you must use sbt-crossproject v0.6.1 instead of v1.3.2.
 
 <h2>Installation</h2>
 
@@ -22,8 +22,8 @@ If you are still using sbt 0.13.x, you must use sbt-crossproject v0.6.1 instead 
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.3.4")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.4")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.3.2")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "1.16.0")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.4")
 ```
@@ -118,7 +118,7 @@ lazy val bar =
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.4")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.4")
 ```
 
@@ -148,7 +148,7 @@ We carefully implemented sbt-crossproject to be mostly source compatible with Sc
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.4")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.33")
 ```
 

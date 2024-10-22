@@ -12,7 +12,7 @@ private[sbtcrossproject] object MacroUtils {
     val methodName = c.macroApplication.symbol.name
 
     // trim is not strictly correct, but macros don't expose the API necessary
-    def processName(n: Name): String = n.decoded.trim
+    def processName(n: Name): String = n.decodedName.toString.trim
 
     def enclosingVal(trees: List[c.Tree]): String = trees match {
       case vd @ ValDef(_, name, _, _) :: ts =>
@@ -27,7 +27,8 @@ private[sbtcrossproject] object MacroUtils {
           if mods.hasFlag(Flag.LAZY) =>
         processName(name)
       case _ =>
-        c.error(c.enclosingPosition, invalidEnclosingTree(methodName.decoded))
+        c.error(c.enclosingPosition,
+                invalidEnclosingTree(methodName.decodedName.toString))
         "<error>"
     }
 

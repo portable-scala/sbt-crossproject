@@ -25,18 +25,18 @@ private[sbtcrossproject] object CrossProjectMacros {
         val jsPlatform =
           Select(
             Select(
-              Ident(newTermName("_root_")),
-              newTermName("scalajscrossproject")
+              Ident(TermName("_root_")),
+              TermName("scalajscrossproject")
             ),
-            newTermName("JSPlatform")
+            TermName("JSPlatform")
           )
         val jvmPlatform =
           Select(
             Select(
-              Ident(newTermName("_root_")),
-              newTermName("sbtcrossproject")
+              Ident(TermName("_root_")),
+              TermName("sbtcrossproject")
             ),
-            newTermName("JVMPlatform")
+            TermName("JVMPlatform")
           )
 
         List(jsPlatform, jvmPlatform)
@@ -45,16 +45,16 @@ private[sbtcrossproject] object CrossProjectMacros {
     val crossProjectCompanionTerm =
       Select(
         Select(
-          Ident(newTermName("_root_")),
-          newTermName("sbtcrossproject")
+          Ident(TermName("_root_")),
+          TermName("sbtcrossproject")
         ),
-        newTermName("CrossProject")
+        TermName("CrossProject")
       )
 
     val applyFun =
       Select(
         crossProjectCompanionTerm,
-        newTermName("apply")
+        TermName("apply")
       )
 
     c.Expr[CrossProject.Builder](

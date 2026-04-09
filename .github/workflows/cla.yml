@@ -4,5 +4,6 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - run: ./scripts/check-cla.sh
+    - uses: scala/cla-checker@v1
+      with:
+        author: ${{ github.event.pull_request.user.login }}

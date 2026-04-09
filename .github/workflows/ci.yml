@@ -21,7 +21,7 @@ jobs:
           distribution: temurin
           java-version: 8
       - uses: sbt/setup-sbt@v1
-      - uses: coursier/cache-action@v5
+      - uses: coursier/cache-action@v8
       - name: Install Scala Native dependencies
         run: sudo apt-get install libgc-dev libunwind8-dev
       - name: scalafmt

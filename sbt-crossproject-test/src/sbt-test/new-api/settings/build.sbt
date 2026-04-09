@@ -31,7 +31,7 @@ check := {
     }
   }
 
-  equals((description in barJS).value, "js settings")
-  equals((description in barJVM).value, "jvm settings")
-  equals((description in barNative).value, "native settings")
+  equals((barJS / description).value, "js settings")
+  equals((barJVM / description).value, "jvm settings")
+  equals((barNative / description).value, "native settings")
 }

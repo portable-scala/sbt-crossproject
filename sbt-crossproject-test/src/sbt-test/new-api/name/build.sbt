@@ -21,7 +21,7 @@ check := {
     }
   }
 
-  equals((name in barJS).value, "bar")
-  equals((name in barJVM).value, "bar")
-  equals((name in barNative).value, "bar")
+  equals((barJS / name).value, "bar")
+  equals((barJVM / name).value, "bar")
+  equals((barNative / name).value, "bar")
 }

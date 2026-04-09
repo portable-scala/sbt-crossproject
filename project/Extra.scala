@@ -61,9 +61,9 @@ object Extra {
   )
 
   lazy val noPublishSettings = Seq(
-    publishArtifact := false,
+    publishArtifact   := false,
     packagedArtifacts := Map.empty,
-    publish / skip := true
+    publish / skip    := true
   )
 
   private val createRootDoc = taskKey[File]("Generate ScalaDoc from README")
@@ -73,8 +73,8 @@ object Extra {
       // rootdoc.txt is the ScalaDoc landing page
       // we tweak the markdown so it's valid Scaladoc
 
-      val readmeFile = (ThisBuild / baseDirectory).value / "README.md"
-      val readme     = IO.read(readmeFile)
+      val readmeFile     = (ThisBuild / baseDirectory).value / "README.md"
+      val readme         = IO.read(readmeFile)
       val scaladocReadme =
         readme
           .replaceAllLiterally("```scala", "{{{")
@@ -105,7 +105,7 @@ object Extra {
       val pluginsSbt = sbtTestDirectory.value / pluginsFileName
 
       val groups = sbtTestDirectory.value.listFiles.filter(_.isDirectory)
-      val tests =
+      val tests  =
         groups.flatMap(_.listFiles).filterNot(_.name == "scala-native-only")
 
       tests.foreach { test =>

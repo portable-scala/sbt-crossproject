@@ -5,12 +5,12 @@
 HERE="`dirname $0`"
 
 if [ ! -f $HERE/.coursier ]; then
-  curl -L -o $HERE/.coursier https://github.com/coursier/coursier/releases/download/v2.0.16/coursier
+  curl -L -o $HERE/.coursier https://github.com/coursier/coursier/releases/download/v2.1.24/coursier
   chmod +x $HERE/.coursier
 fi
 
 if [ ! -f $HERE/.scalafmt ]; then
-  $HERE/.coursier bootstrap com.geirsson:scalafmt-cli_2.11:0.4.7 --main org.scalafmt.cli.Cli -o $HERE/.scalafmt
+  $HERE/.coursier bootstrap org.scalameta:scalafmt-cli_2.13:3.10.7 --main org.scalafmt.cli.Cli -o $HERE/.scalafmt
   chmod +x $HERE/.scalafmt
 fi
 

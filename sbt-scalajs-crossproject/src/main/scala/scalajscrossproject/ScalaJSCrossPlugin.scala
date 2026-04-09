@@ -16,7 +16,8 @@ object ScalaJSCrossPlugin extends AutoPlugin {
     val JSPlatform = scalajscrossproject.JSPlatform
 
     implicit def JSCrossProjectBuilderOps(
-        builder: CrossProject.Builder): JSCrossProjectOps =
+        builder: CrossProject.Builder
+    ): JSCrossProjectOps =
       new JSCrossProjectOps(builder.crossType(CrossType.Full))
 
     implicit class JSCrossProjectOps(project: CrossProject) {

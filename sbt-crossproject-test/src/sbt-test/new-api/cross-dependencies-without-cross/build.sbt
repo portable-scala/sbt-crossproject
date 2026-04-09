@@ -10,8 +10,8 @@ lazy val bar = project
   .settings(baseSettings)
   .settings(
     organization := g,
-    moduleName := a,
-    version := v
+    moduleName   := a,
+    version      := v
   )
 
 lazy val foo = project.settings(baseSettings).settings(externalDependency)

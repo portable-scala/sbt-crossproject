@@ -7,7 +7,7 @@ lazy val bar =
     .crossType(CrossType.Pure)
     .settings(
       scalaVersion := "2.11.11",
-      description := "common settings"
+      description  := "common settings"
     )
 
 lazy val barJS     = bar.js

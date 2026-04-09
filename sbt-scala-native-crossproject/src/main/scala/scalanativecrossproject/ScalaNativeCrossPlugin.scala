@@ -11,7 +11,8 @@ object ScalaNativeCrossPlugin extends sbt.AutoPlugin {
     val NativePlatform = scalanativecrossproject.NativePlatform
 
     implicit def NativeCrossProjectBuilderOps(
-        builder: CrossProject.Builder): NativeCrossProjectOps =
+        builder: CrossProject.Builder
+    ): NativeCrossProjectOps =
       new NativeCrossProjectOps(builder.crossType(CrossType.Full))
 
     implicit class NativeCrossProjectOps(project: CrossProject) {

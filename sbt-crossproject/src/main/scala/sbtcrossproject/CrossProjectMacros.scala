@@ -1,6 +1,5 @@
 package sbtcrossproject
 
-import java.io.File
 import scala.reflect.macros.Context
 
 private[sbtcrossproject] object CrossProjectMacros {
@@ -74,7 +73,6 @@ private[sbtcrossproject] object CrossProjectMacros {
 
   def vargCrossProject_impl(c: Context)(
       platforms: c.Expr[Platform]*): c.Expr[CrossProject.Builder] = {
-    import c.universe._
     crossProject_impl(c)(platforms.toList)
   }
 }

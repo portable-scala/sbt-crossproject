@@ -3,11 +3,8 @@ package sbtcrossproject
 import scala.language.experimental.macros
 
 import sbt._
-import sbt.KeyRanks.BSetting
 
 import scala.language.implicitConversions
-
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 
 object CrossPlugin extends AutoPlugin {
   override def trigger = allRequirements

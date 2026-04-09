@@ -1,11 +1,6 @@
 package sbtcrossproject
 
-import sbtcrossproject._
-
 import scala.language.implicitConversions
-
-import scala.collection.immutable.HashMap
-import scala.collection.immutable.ListSet
 
 import sbt._
 import Keys._

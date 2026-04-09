@@ -271,9 +271,9 @@ object CrossProject {
       }
 
       val compileSettings =
-        makeSharedSettings(unmanagedSourceDirectories in Compile, "main")
+        makeSharedSettings(Compile / unmanagedSourceDirectories, "main")
       val testSettings =
-        makeSharedSettings(unmanagedSourceDirectories in Test, "test")
+        makeSharedSettings(Test / unmanagedSourceDirectories, "test")
 
       (compileSettings ++ testSettings) // group-reduce the settings per-platform
         .groupBy(_._1)
@@ -306,9 +306,9 @@ object CrossProject {
       }
 
       val compileSettings =
-        makeSharedSettings(unmanagedResourceDirectories in Compile, "main")
+        makeSharedSettings(Compile / unmanagedResourceDirectories, "main")
       val testSettings =
-        makeSharedSettings(unmanagedResourceDirectories in Test, "test")
+        makeSharedSettings(Test / unmanagedResourceDirectories, "test")
 
       (compileSettings ++ testSettings) // group-reduce the settings per-platform
         .groupBy(_._1)

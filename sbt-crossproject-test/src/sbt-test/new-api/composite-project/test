@@ -4,6 +4,6 @@
 > fooJS/run
 > fooJVM/run
 > fooNative/run
-> foobarJVM/test:compile
-> foobarNative/test:compile
--> foobarJS/test:compile
+> foobarJVM/Test/compile
+> foobarNative/Test/compile
+-> foobarJS/Test/compile

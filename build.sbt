@@ -4,6 +4,20 @@ val ScalaJSVersionBaseline     = "1.22.0"  // first version supporting sbt 2.x
 val ScalaNativeVersionBaseline = "0.5.11"  // first version supporting sbt 2.x
 val SBT1xVersionBaseline       = "1.11.5"  // required by sbt-scala-native 0.5.11
 val SBT1xScalaVersion          = "2.12.20" // version used to build sbt 1.11.5
+val SBT2xVersionBaseline       = "2.0.6"
+val SBT2xScalaVersion          = "3.8.4"
+
+val sbtPluginSettings = Def.settings(
+  crossScalaVersions += SBT2xScalaVersion,
+  pluginCrossBuild / sbtVersion := {
+    scalaBinaryVersion.value match {
+      case "2.12" =>
+        SBT1xVersionBaseline
+      case "3" =>
+        SBT2xVersionBaseline
+    }
+  }
+)
 
 inThisBuild(
   Def.settings(
@@ -49,7 +63,7 @@ lazy val `sbt-scalajs-crossproject` =
     .in(file("sbt-scalajs-crossproject"))
     .enablePlugins(SbtPlugin)
     .settings(
-      sbtVersion := SBT1xVersionBaseline,
+      sbtPluginSettings,
       moduleName := "sbt-scalajs-crossproject",
       addSbtPlugin("org.scala-js" % "sbt-scalajs" % ScalaJSVersionBaseline)
     )
@@ -61,7 +75,7 @@ lazy val `sbt-scala-native-crossproject` =
     .in(file("sbt-scala-native-crossproject"))
     .enablePlugins(SbtPlugin)
     .settings(
-      sbtVersion := SBT1xVersionBaseline,
+      sbtPluginSettings,
       moduleName := "sbt-scala-native-crossproject",
       addSbtPlugin("org.scala-native" % "sbt-scala-native" % ScalaNativeVersionBaseline)
     )
@@ -76,8 +90,23 @@ lazy val `sbt-crossproject` =
     .settings(scaladocFromReadme)
     .settings(publishSettings)
     .settings(
-      sbtVersion := SBT1xVersionBaseline,
-      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.2")
+      sbtPluginSettings,
+      libraryDependencies ++= {
+        val sbtV = (pluginCrossBuild / sbtBinaryVersion).value
+        sbtV match {
+          case "2" =>
+            Nil
+          case _ =>
+            val scalaV = (update / scalaBinaryVersion).value
+            Seq(
+              Defaults.sbtPluginExtra(
+                "org.portable-scala" % "sbt-platform-deps" % "1.0.2",
+                sbtV,
+                scalaV
+              )
+            )
+        }
+      }
     )
 
 lazy val `sbt-crossproject-test` =
@@ -86,7 +115,7 @@ lazy val `sbt-crossproject-test` =
     .enablePlugins(SbtPlugin) // for scripted
     .settings(noPublishSettings)
     .settings(
-      sbtVersion := SBT1xVersionBaseline,
+      sbtPluginSettings,
       scriptedLaunchOpts ++= Seq(
         "-Dplugin.version=" + version.value,
         s"-Dplugin.sn-version=$ScalaNativeVersionBaseline",

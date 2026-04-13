@@ -28,5 +28,7 @@ jobs:
         run: ./scripts/scalafmt --test
       - name: MiMa
         run: sbt ";sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
-      - name: Test
+      - name: Test sbt 1
         run: sbt sbt-crossproject-test/scripted
+      - name: Test sbt 2
+        run: sbt '++ 3.x' "sbt-crossproject/test ; sbt-scala-native-crossproject/test"

@@ -2,7 +2,7 @@ package sbtcrossproject
 
 import scala.language.implicitConversions
 
-import sbt._
+import sbt.{given, _}
 import Keys._
 
 final class CrossProject private[sbtcrossproject] (

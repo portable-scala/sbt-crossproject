@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        java:
+          - 8
+          - 17
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -19,7 +23,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 8
+          java-version: ${{ matrix.java }}
       - uses: sbt/setup-sbt@v1
       - uses: coursier/cache-action@v8
       - name: Install Scala Native dependencies
@@ -28,5 +32,10 @@ jobs:
         run: ./scripts/scalafmt --test
       - name: MiMa
         run: sbt ";sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
-      - name: Test
+        if: ${{ matrix.java == '8' }}
+      - name: Test sbt 1
         run: sbt sbt-crossproject-test/scripted
+        if: ${{ matrix.java == '8' }}
+      - name: Test sbt 2
+        run: sbt '++ 3.x' "sbt-crossproject/test ; sbt-scala-native-crossproject/test"
+        if: ${{ matrix.java != '8' }}

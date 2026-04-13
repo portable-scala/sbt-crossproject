@@ -9,8 +9,8 @@ private[sbtcrossproject] object CrossProjectMacros {
 
     val enclosingValName = MacroUtils.definingValName(
       c,
-      methodName =>
-        s"""$methodName must be directly assigned to a val, such as `val x = $methodName`.""")
+      methodName => CrossPlugin.enclosingValError(methodName)
+    )
 
     val name = Literal(Constant(enclosingValName))
 

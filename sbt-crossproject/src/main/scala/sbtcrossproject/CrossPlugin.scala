@@ -1,7 +1,5 @@
 package sbtcrossproject
 
-import scala.language.experimental.macros
-
 import sbt._
 
 import scala.language.implicitConversions
@@ -9,21 +7,16 @@ import scala.language.implicitConversions
 object CrossPlugin extends AutoPlugin {
   override def trigger = allRequirements
 
+  private[sbtcrossproject] def enclosingValError(methodName: String): String =
+    s"""$methodName must be directly assigned to a val, such as `val x = $methodName`."""
+
   @deprecated("Use autoImport instead.", "0.5.0")
   val AutoImport = autoImport
 
-  object autoImport {
+  object autoImport extends CrossPluginCompat {
 
     type CrossType = sbtcrossproject.CrossType
     val CrossType = sbtcrossproject.CrossType
-
-    // The crossProject macro
-
-    @deprecated("use crossProject(JSPlatform, JVMPlatform)", "0.1.0") def crossProject: CrossProject.Builder =
-      macro CrossProjectMacros.oldCrossProject_impl
-
-    def crossProject(platforms: Platform*): CrossProject.Builder =
-      macro CrossProjectMacros.vargCrossProject_impl
 
     // Cross-classpath dependency builders
 

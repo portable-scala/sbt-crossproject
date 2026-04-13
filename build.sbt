@@ -2,7 +2,7 @@ import Extra._
 
 inThisBuild(
   Def.settings(
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.21",
     scalacOptions ++= Seq(
       "-deprecation",
       "-unchecked",
@@ -46,7 +46,12 @@ lazy val `sbt-scalajs-crossproject` =
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scalajs-crossproject",
-      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.23")
+      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.23"),
+      publish / skip := {
+        // TODO
+        // https://github.com/scala-js/scala-js/issues/5238
+        scalaBinaryVersion.value == "3"
+      }
     )
     .settings(publishSettings)
     .dependsOn(`sbt-crossproject`)
@@ -58,7 +63,21 @@ lazy val `sbt-scala-native-crossproject` =
     .settings(sbtPluginSettings)
     .settings(
       moduleName := "sbt-scala-native-crossproject",
-      addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.3.7")
+      libraryDependencies += {
+        val scalaV = (update / scalaBinaryVersion).value
+        val sbtV   = (pluginCrossBuild / sbtBinaryVersion).value
+        val scalaNativeVersion = sbtV match {
+          case "2" =>
+            "0.5.11"
+          case _ =>
+            "0.3.7"
+        }
+        Defaults.sbtPluginExtra(
+          "org.scala-native" % "sbt-scala-native" % scalaNativeVersion,
+          sbtV,
+          scalaV
+        )
+      }
     )
     .settings(publishSettings)
     .dependsOn(`sbt-crossproject`)
@@ -72,7 +91,22 @@ lazy val `sbt-crossproject` =
     .settings(scaladocFromReadme)
     .settings(publishSettings)
     .settings(
-      addSbtPlugin("org.portable-scala" % "sbt-platform-deps" % "1.0.2")
+      libraryDependencies ++= {
+        val sbtV = (pluginCrossBuild / sbtBinaryVersion).value
+        sbtV match {
+          case "2" =>
+            Nil
+          case _ =>
+            val scalaV = (update / scalaBinaryVersion).value
+            Seq(
+              Defaults.sbtPluginExtra(
+                "org.portable-scala" % "sbt-platform-deps" % "1.0.2",
+                sbtV,
+                scalaV
+              )
+            )
+        }
+      }
     )
 
 lazy val `sbt-crossproject-test` =

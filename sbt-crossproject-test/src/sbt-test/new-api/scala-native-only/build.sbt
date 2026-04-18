@@ -3,5 +3,5 @@ lazy val bar =
     .crossType(CrossType.Pure)
     .settings(scalaVersion := "2.11.11")
 
-lazy val barJVM = bar.jvm
+lazy val barJVM    = bar.jvm
 lazy val barNative = bar.native

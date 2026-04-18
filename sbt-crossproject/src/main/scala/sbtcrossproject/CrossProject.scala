@@ -19,8 +19,10 @@ final class CrossProject private[sbtcrossproject] (
       refs.toSeq.flatMap(_.projects).groupBy(_._1).mapValues(_.map(_._2))
 
     mapProjectsByPlatform((platform, project) =>
-      project.aggregate(aggregatesByPlatform(platform).map(p =>
-        p: ProjectReference): _*))
+      project.aggregate(
+        aggregatesByPlatform(platform).map(p => p: ProjectReference): _*
+      )
+    )
   }
 
   def dependsOn(deps: CrossClasspathDependency*): CrossProject = {
@@ -29,22 +31,24 @@ final class CrossProject private[sbtcrossproject] (
     val dependenciesByPlatform =
       deps.toSeq
         .flatMap(dep =>
-          dep.project.projects.map {
-            case (platform, project) =>
-              platform -> ClasspathDependency(project, dep.configuration)
-        })
+          dep.project.projects.map { case (platform, project) =>
+            platform -> ClasspathDependency(project, dep.configuration)
+          }
+        )
         .groupBy(_._1)
         .mapValues(_.map(_._2))
 
     mapProjectsByPlatform((platform, project) =>
-      project.dependsOn(dependenciesByPlatform(platform): _*))
+      project.dependsOn(dependenciesByPlatform(platform): _*)
+    )
   }
 
   def configs(cs: Configuration*): CrossProject =
     transform(_.configs(cs: _*))
 
   def configureCross(
-      transforms: (CrossProject => CrossProject)*): CrossProject =
+      transforms: (CrossProject => CrossProject)*
+  ): CrossProject =
     transforms.foldLeft(this)((p, t) => t(p))
 
   def configure(transforms: (Project => Project)*): CrossProject =
@@ -55,15 +59,18 @@ final class CrossProject private[sbtcrossproject] (
     configure(transforms: _*)
 
   def configurePlatform(platforms: Platform*)(
-      f: Project => Project): CrossProject =
+      f: Project => Project
+  ): CrossProject =
     configurePlatforms(platforms: _*)(f)
 
-  def configurePlatforms(platforms: Platform*)(
-      f: Project => Project): CrossProject = {
+  def configurePlatforms(
+      platforms: Platform*
+  )(f: Project => Project): CrossProject = {
 
     val updatedProjects =
       platforms.foldLeft(projects)((acc, platform) =>
-        acc.updated(platform, f(acc(platform))))
+        acc.updated(platform, f(acc(platform)))
+      )
 
     new CrossProject(id, crossType, updatedProjects)
   }
@@ -75,7 +82,8 @@ final class CrossProject private[sbtcrossproject] (
     transform(_.enablePlugins(ns: _*))
 
   def platformsEnablePlugins(platforms: Platform*)(
-      plugins: Plugins*): CrossProject =
+      plugins: Plugins*
+  ): CrossProject =
     configurePlatforms(platforms: _*)(_.enablePlugins(plugins: _*))
 
   def in(dir: File): CrossProject =
@@ -93,21 +101,24 @@ final class CrossProject private[sbtcrossproject] (
     transform(_.settings(ss: _*))
 
   def platformsSettings(platforms: Platform*)(
-      ss: Def.SettingsDefinition*): CrossProject =
+      ss: Def.SettingsDefinition*
+  ): CrossProject =
     configurePlatforms(platforms: _*)(_.settings(ss: _*))
 
   override def toString(): String =
-    projects.map {
-      case (platform, project) =>
+    projects
+      .map { case (platform, project) =>
         s"${platform.identifier} = $project"
-    }.mkString("CrossProject(", ",", ")")
+      }
+      .mkString("CrossProject(", ",", ")")
 
   private def platforms = projects.keySet
 
   private def mapProjectsByPlatform(
-      f: (Platform, Project) => Project): CrossProject = {
-    val updatedProjects = projects.map {
-      case (platform, project) => platform -> f(platform, project)
+      f: (Platform, Project) => Project
+  ): CrossProject = {
+    val updatedProjects = projects.map { case (platform, project) =>
+      platform -> f(platform, project)
     }
     new CrossProject(id, crossType, updatedProjects)
   }
@@ -137,10 +148,12 @@ object CrossProject {
       _crossType: CrossType,
       platformWithoutSuffix: Option[Platform]
   ) {
-    private[CrossProject] def this(id: String,
-                                   base: File,
-                                   platforms: Seq[Platform],
-                                   internal: Boolean) =
+    private[CrossProject] def this(
+        id: String,
+        base: File,
+        platforms: Seq[Platform],
+        internal: Boolean
+    ) =
       this(id, base, platforms, CrossType.Full, None)
 
     @deprecated("Use CrossProject(id, base)(platforms) instead", "0.3.1")
@@ -202,8 +215,8 @@ object CrossProject {
               projectID,
               crossType.platformDir(base, platform)
             ).settings(
-              CrossPlugin.autoImport.crossProjectPlatform := platform,
-              CrossPlugin.autoImport.crossProjectCrossType := crossType,
+              CrossPlugin.autoImport.crossProjectPlatform      := platform,
+              CrossPlugin.autoImport.crossProjectCrossType     := crossType,
               CrossPlugin.autoImport.crossProjectBaseDirectory :=
                 IO.resolve((LocalRootProject / baseDirectory).value, base),
               name := id, // #80
@@ -217,10 +230,13 @@ object CrossProject {
     }
 
     private def sharedSrcSettings(
-        crossType: CrossType): Map[Platform, Seq[Setting[_]]] = {
-      def makeCrossSources(sharedSrcDir: Option[File],
-                           scalaBinaryVersion: String,
-                           cross: Boolean): Seq[File] = {
+        crossType: CrossType
+    ): Map[Platform, Seq[Setting[_]]] = {
+      def makeCrossSources(
+          sharedSrcDir: Option[File],
+          scalaBinaryVersion: String,
+          cross: Boolean
+      ): Seq[File] = {
         sharedSrcDir match {
           case Some(dir) =>
             if (cross) {
@@ -242,16 +258,20 @@ object CrossProject {
 
       def makeSharedSettings(
           key: SettingKey[Seq[File]],
-          config: String): Seq[(Platform, Seq[Setting[_]])] = {
+          config: String
+      ): Seq[(Platform, Seq[Setting[_]])] = {
         val partiallyShared = makePartiallySharedSettings(platforms) {
           platformSubset =>
             Seq(
               key ++= makeCrossSources(
-                crossType.partiallySharedSrcDir(baseDirectory.value,
-                                                platformSubset,
-                                                config),
+                crossType.partiallySharedSrcDir(
+                  baseDirectory.value,
+                  platformSubset,
+                  config
+                ),
                 scalaBinaryVersion.value,
-                crossPaths.value)
+                crossPaths.value
+              )
             )
         }
 
@@ -259,10 +279,13 @@ object CrossProject {
           key ++= makeCrossSources(
             crossType.sharedSrcDir(baseDirectory.value, config),
             scalaBinaryVersion.value,
-            crossPaths.value)
+            crossPaths.value
+          )
         )
 
-        partiallyShared ++ platforms.map(_ -> shared) // add shared to each platform
+        partiallyShared ++ platforms.map(
+          _ -> shared
+        ) // add shared to each platform
       }
 
       val compileSettings =
@@ -276,17 +299,21 @@ object CrossProject {
     }
 
     private def sharedResourcesSettings(
-        crossType: CrossType): Map[Platform, Seq[Setting[_]]] = {
+        crossType: CrossType
+    ): Map[Platform, Seq[Setting[_]]] = {
       def makeSharedSettings(
           key: SettingKey[Seq[File]],
-          config: String): Seq[(Platform, Seq[Setting[_]])] = {
+          config: String
+      ): Seq[(Platform, Seq[Setting[_]])] = {
         val partiallyShared = makePartiallySharedSettings(platforms) {
           platformSubset =>
             Seq(
               key ++= crossType
-                .partiallySharedResourcesDir(baseDirectory.value,
-                                             platformSubset,
-                                             config)
+                .partiallySharedResourcesDir(
+                  baseDirectory.value,
+                  platformSubset,
+                  config
+                )
                 .toSeq
             )
         }
@@ -297,7 +324,9 @@ object CrossProject {
             .toSeq
         )
 
-        partiallyShared ++ platforms.map(_ -> shared) // add shared to each platform
+        partiallyShared ++ platforms.map(
+          _ -> shared
+        ) // add shared to each platform
       }
 
       val compileSettings =
@@ -311,17 +340,18 @@ object CrossProject {
     }
 
     private def makePartiallySharedSettings(platforms: Seq[Platform])(
-        mkSettings: Seq[Platform] => Seq[Setting[_]])
-      : Seq[(Platform, Seq[Setting[_]])] = {
+        mkSettings: Seq[Platform] => Seq[Setting[_]]
+    ): Seq[(Platform, Seq[Setting[_]])] = {
       platforms.toSet
         .subsets()
-        .filter(_.size > 1) // skip the empty+singleton subsets
+        .filter(_.size > 1)                  // skip the empty+singleton subsets
         .filterNot(_.size == platforms.size) // skip the all-platform subset
         .toSeq
         .map(_.toSeq.sortBy(_.identifier)) // use a consistent ordering
-        .flatMap { platformSubset => // make the settings for this subset of platforms
-          val settings = mkSettings(platformSubset)
-          platformSubset.map(_ -> settings)
+        .flatMap {
+          platformSubset => // make the settings for this subset of platforms
+            val settings = mkSettings(platformSubset)
+            platformSubset.map(_ -> settings)
         }
     }
 
@@ -329,7 +359,8 @@ object CrossProject {
 
   object Builder {
     final implicit def crossProjectFromBuilder(
-        builder: CrossProject.Builder): CrossProject = {
+        builder: CrossProject.Builder
+    ): CrossProject = {
       builder.build()
     }
   }
@@ -339,11 +370,14 @@ object CrossProject {
 
   @deprecated(
     "Use the other overload of apply() and methods of the returned Builder.",
-    "0.3.1")
-  def apply(id: String,
-            base: File,
-            crossType: CrossType,
-            platforms: Platform*): CrossProject = {
+    "0.3.1"
+  )
+  def apply(
+      id: String,
+      base: File,
+      crossType: CrossType,
+      platforms: Platform*
+  ): CrossProject = {
     apply(id, base)(platforms: _*).crossType(crossType)
   }
 }

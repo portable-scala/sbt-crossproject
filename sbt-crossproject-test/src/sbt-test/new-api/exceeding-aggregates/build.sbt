@@ -22,5 +22,5 @@ lazy val foo = crossProject(JVMPlatform, NativePlatform)
   .aggregate(bar, buzz)
   .dependsOn(bar, buzz)
 
-lazy val fooJVM = foo.jvm
+lazy val fooJVM    = foo.jvm
 lazy val fooNative = foo.native

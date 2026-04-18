@@ -10,10 +10,9 @@ inThisBuild(
       "-encoding",
       "utf8"
     ),
-    organization := "org.portable-scala",
+    organization  := "org.portable-scala",
     versionScheme := Some("semver-spec"),
-    homepage := Some(
-      url("https://github.com/portable-scala/sbt-crossproject")),
+    homepage := Some(url("https://github.com/portable-scala/sbt-crossproject")),
     licenses := Seq(
       "BSD-like" -> url("http://www.scala-lang.org/downloads/license.html")
     ),
@@ -24,19 +23,24 @@ inThisBuild(
         Some("scm:git:git@github.com:portable-scala/sbt-crossproject.git")
       )
     )
-  ))
+  )
+)
 
 lazy val `sbt-crossproject-root` =
   project
     .in(file("."))
-    .aggregate(`sbt-scalajs-crossproject`,
-               `sbt-scala-native-crossproject`,
-               `sbt-crossproject`,
-               `sbt-crossproject-test`)
-    .dependsOn(`sbt-scalajs-crossproject`,
-               `sbt-scala-native-crossproject`,
-               `sbt-crossproject`,
-               `sbt-crossproject-test`)
+    .aggregate(
+      `sbt-scalajs-crossproject`,
+      `sbt-scala-native-crossproject`,
+      `sbt-crossproject`,
+      `sbt-crossproject-test`
+    )
+    .dependsOn(
+      `sbt-scalajs-crossproject`,
+      `sbt-scala-native-crossproject`,
+      `sbt-crossproject`,
+      `sbt-crossproject-test`
+    )
     .settings(noPublishSettings)
 
 lazy val `sbt-scalajs-crossproject` =

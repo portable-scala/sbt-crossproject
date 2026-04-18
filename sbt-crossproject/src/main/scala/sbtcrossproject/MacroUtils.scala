@@ -6,8 +6,10 @@ private[sbtcrossproject] object MacroUtils {
 
   // Copied from sbt.std.KeyMacros
 
-  def definingValName(c: Context,
-                      invalidEnclosingTree: String => String): String = {
+  def definingValName(
+      c: Context,
+      invalidEnclosingTree: String => String
+  ): String = {
     import c.universe._
     val methodName = c.macroApplication.symbol.name
 
@@ -27,8 +29,10 @@ private[sbtcrossproject] object MacroUtils {
           if mods.hasFlag(Flag.LAZY) =>
         processName(name)
       case _ =>
-        c.error(c.enclosingPosition,
-                invalidEnclosingTree(methodName.decodedName.toString))
+        c.error(
+          c.enclosingPosition,
+          invalidEnclosingTree(methodName.decodedName.toString)
+        )
         "<error>"
     }
 

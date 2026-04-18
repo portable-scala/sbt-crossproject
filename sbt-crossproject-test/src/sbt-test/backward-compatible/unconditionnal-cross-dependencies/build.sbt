@@ -9,8 +9,8 @@ lazy val bar = crossProject
   .settings(
     scalaVersion := "2.11.11",
     organization := g,
-    moduleName := a,
-    version := v
+    moduleName   := a,
+    version      := v
   )
 
 lazy val barJS  = bar.js

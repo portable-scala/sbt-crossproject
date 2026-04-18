@@ -12,7 +12,23 @@ object Extra {
   val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
 
   val sbtPluginSettings = Def.settings(
-    sbtVersion := "1.2.1"
+    crossScalaVersions += "3.8.2",
+    scalacOptions ++= {
+      scalaBinaryVersion.value match {
+        case "2.12" =>
+          Seq("-release:8")
+        case _ =>
+          Nil
+      }
+    },
+    pluginCrossBuild / sbtVersion := {
+      scalaBinaryVersion.value match {
+        case "2.12" =>
+          "1.2.1"
+        case _ =>
+          "2.0.0-RC12"
+      }
+    }
   )
 
   lazy val publishSettings = Seq(

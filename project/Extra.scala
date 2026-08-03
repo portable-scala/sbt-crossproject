@@ -3,16 +3,22 @@ import Keys._
 import ScriptedPlugin.autoImport._
 
 import com.typesafe.tools.mima.plugin.MimaPlugin.autoImport._
+import sbtcompat.PluginCompat.DefOps
 
 import scala.util.Try
 
 object Extra {
 
   val previousVersion: Option[String]                  = Some("1.2.0")
-  val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
+  val newScalaBinaryVersionsInThisRelease: Set[String] = Set("3")
 
-  val sbtPluginSettings = Def.settings(
-    sbtVersion := "1.2.1"
+  val sbt2CrossPluginSettings = Def.settings(
+    scalaVersion := "3.8.4",
+    crossScalaVersions := Seq("2.12.20", "3.8.4"),
+    pluginCrossBuild / sbtVersion := {
+      if (scalaBinaryVersion.value == "2.12") "1.9.0"
+      else "2.0.4"
+    }
   )
 
   lazy val publishSettings = Seq(
@@ -36,7 +42,6 @@ object Extra {
     },
     // MiMa auto-configuration
     mimaPreviousArtifacts ++= {
-      val scalaV        = scalaVersion.value
       val scalaBinaryV  = scalaBinaryVersion.value
       val thisProjectID = projectID.value
       previousVersion match {
@@ -62,14 +67,14 @@ object Extra {
 
   lazy val noPublishSettings = Seq(
     publishArtifact := false,
-    packagedArtifacts := Map.empty,
+    packagedArtifacts := Def.uncached(Map.empty),
     publish / skip := true
   )
 
   private val createRootDoc = taskKey[File]("Generate ScalaDoc from README")
 
   lazy val scaladocFromReadme = Seq(
-    createRootDoc := {
+    createRootDoc := Def.uncached {
       // rootdoc.txt is the ScalaDoc landing page
       // we tweak the markdown so it's valid Scaladoc
 

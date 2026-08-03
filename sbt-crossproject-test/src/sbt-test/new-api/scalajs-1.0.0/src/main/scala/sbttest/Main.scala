@@ -9,6 +9,6 @@ object Main {
     val isScalaJS = 1.0.toString() == "1"
     println(s"isScalaJS = $isScalaJS")
     if (isScalaJS)
-      assert(vmVersion == "1.0.0")
+      assert(vmVersion == "1.22.0")
   }
 }

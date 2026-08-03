@@ -1,0 +1,12 @@
+> ordinaryJVM / compile
+> simpleJVM / compile
+> checkPrivateProjectName
+> typedJVM / compile
+> multilineJVM / compile
+> aroundAssignmentJVM / compile
+> back-tickedJVM / compile
+> legacyJVM / compile
+> legacyJS / name
+
+$ copy-file invalid.sbt.disabled build.sbt
+-> reload

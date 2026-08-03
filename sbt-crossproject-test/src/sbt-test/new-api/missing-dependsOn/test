@@ -1,1 +1,2 @@
--> scalaVersion
+$ copy-file invalid.sbt.disabled build.sbt
+-> reload

@@ -20,7 +20,7 @@ final class CrossProject private[sbtcrossproject] (
 
     mapProjectsByPlatform((platform, project) =>
       project.aggregate(aggregatesByPlatform(platform).map(p =>
-        p: ProjectReference): _*))
+        LocalProject(p.id)): _*))
   }
 
   def dependsOn(deps: CrossClasspathDependency*): CrossProject = {
@@ -31,7 +31,8 @@ final class CrossProject private[sbtcrossproject] (
         .flatMap(dep =>
           dep.project.projects.map {
             case (platform, project) =>
-              platform -> ClasspathDependency(project, dep.configuration)
+              platform -> ClasspathDependency(LocalProject(project.id),
+                                              dep.configuration)
         })
         .groupBy(_._1)
         .mapValues(_.map(_._2))

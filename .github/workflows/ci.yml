@@ -7,10 +7,24 @@ on:
     branches:
       - main
 jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: scalafmt
+        run: ./scripts/scalafmt --test
   test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        scala-version:
+          - "2.12.20"
+          - "3.8.4"
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -19,14 +33,15 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 8
+          java-version: 17
       - uses: sbt/setup-sbt@v1
       - uses: coursier/cache-action@v8
       - name: Install Scala Native dependencies
         run: sudo apt-get install libgc-dev libunwind8-dev
-      - name: scalafmt
-        run: ./scripts/scalafmt --test
+      - name: Compile
+        run: sbt "++ ${{ matrix.scala-version }}!" compile
       - name: MiMa
-        run: sbt ";sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
+        if: matrix.scala-version == '2.12.20'
+        run: sbt ";++ 2.12.20!;sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
       - name: Test
-        run: sbt sbt-crossproject-test/scripted
+        run: sbt "++ ${{ matrix.scala-version }}!" sbt-crossproject-test/scripted

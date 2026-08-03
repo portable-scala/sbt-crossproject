@@ -1,6 +1,6 @@
 import sbtcrossproject.{crossProject, CrossType, Platform}
 
-lazy val check = taskKey[Unit]("check")
+@transient lazy val check = taskKey[Unit]("check")
 
 def doCheckPlatform(platform: Platform, id: String) =
   assert(platform.identifier == id)

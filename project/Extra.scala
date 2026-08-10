@@ -8,7 +8,7 @@ import scala.util.Try
 
 object Extra {
 
-  val previousVersion: Option[String]                  = Some("1.2.0")
+  val previousVersion: Option[String]                  = Some("1.3.2")
   val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
 
   val sbtPluginSettings = Def.settings(

@@ -11,10 +11,6 @@ object Extra {
   val previousVersion: Option[String]                  = Some("1.3.2")
   val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
 
-  val sbtPluginSettings = Def.settings(
-    sbtVersion := "1.2.1"
-  )
-
   lazy val publishSettings = Seq(
     // Publishing
     pomExtra := (

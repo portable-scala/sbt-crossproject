@@ -37,10 +37,10 @@ object CrossPlugin extends AutoPlugin {
       def jvm: Project = project.projects(JVMPlatform)
 
       def jvmSettings(ss: Def.SettingsDefinition*): CrossProject =
-        jvmConfigure(_.settings(ss: _*))
+        jvmConfigure(_.settings(ss *))
 
       def jvmEnablePlugins(plugins: Plugins*): CrossProject =
-        jvmConfigure(_.enablePlugins(plugins: _*))
+        jvmConfigure(_.enablePlugins(plugins *))
 
       def jvmConfigure(transformer: Project => Project): CrossProject =
         project.configurePlatform(JVMPlatform)(transformer)

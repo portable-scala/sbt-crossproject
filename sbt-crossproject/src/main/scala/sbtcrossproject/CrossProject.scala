@@ -18,9 +18,10 @@ final class CrossProject private[sbtcrossproject] (
     val aggregatesByPlatform =
       refs.toSeq.flatMap(_.projects).groupBy(_._1).mapValues(_.map(_._2))
 
-    mapProjectsByPlatform((platform, project) =>
-      project.aggregate(aggregatesByPlatform(platform).map(p =>
-        p: ProjectReference): _*))
+    mapProjectsByPlatform(
+      (platform, project) =>
+        project.aggregate(
+          aggregatesByPlatform(platform).map(p => p: ProjectReference) *))
   }
 
   def dependsOn(deps: CrossClasspathDependency*): CrossProject = {
@@ -37,26 +38,26 @@ final class CrossProject private[sbtcrossproject] (
         .mapValues(_.map(_._2))
 
     mapProjectsByPlatform((platform, project) =>
-      project.dependsOn(dependenciesByPlatform(platform): _*))
+      project.dependsOn(dependenciesByPlatform(platform) *))
   }
 
   def configs(cs: Configuration*): CrossProject =
-    transform(_.configs(cs: _*))
+    transform(_.configs(cs *))
 
   def configureCross(
       transforms: (CrossProject => CrossProject)*): CrossProject =
     transforms.foldLeft(this)((p, t) => t(p))
 
   def configure(transforms: (Project => Project)*): CrossProject =
-    transform(_.configure(transforms: _*))
+    transform(_.configure(transforms *))
 
   @deprecated("use configure", "0.1.0")
   def configureAll(transforms: (Project => Project)*): CrossProject =
-    configure(transforms: _*)
+    configure(transforms *)
 
   def configurePlatform(platforms: Platform*)(
       f: Project => Project): CrossProject =
-    configurePlatforms(platforms: _*)(f)
+    configurePlatforms(platforms *)(f)
 
   def configurePlatforms(platforms: Platform*)(
       f: Project => Project): CrossProject = {
@@ -69,14 +70,14 @@ final class CrossProject private[sbtcrossproject] (
   }
 
   def disablePlugins(ps: AutoPlugin*): CrossProject =
-    transform(_.disablePlugins(ps: _*))
+    transform(_.disablePlugins(ps *))
 
   def enablePlugins(ns: Plugins*): CrossProject =
-    transform(_.enablePlugins(ns: _*))
+    transform(_.enablePlugins(ns *))
 
   def platformsEnablePlugins(platforms: Platform*)(
       plugins: Plugins*): CrossProject =
-    configurePlatforms(platforms: _*)(_.enablePlugins(plugins: _*))
+    configurePlatforms(platforms *)(_.enablePlugins(plugins *))
 
   def in(dir: File): CrossProject =
     settings(
@@ -87,14 +88,14 @@ final class CrossProject private[sbtcrossproject] (
     }
 
   def overrideConfigs(cs: Configuration*): CrossProject =
-    transform(_.overrideConfigs(cs: _*))
+    transform(_.overrideConfigs(cs *))
 
   def settings(ss: Def.SettingsDefinition*): CrossProject =
-    transform(_.settings(ss: _*))
+    transform(_.settings(ss *))
 
   def platformsSettings(platforms: Platform*)(
       ss: Def.SettingsDefinition*): CrossProject =
-    configurePlatforms(platforms: _*)(_.settings(ss: _*))
+    configurePlatforms(platforms *)(_.settings(ss *))
 
   override def toString(): String =
     projects.map {
@@ -344,6 +345,6 @@ object CrossProject {
             base: File,
             crossType: CrossType,
             platforms: Platform*): CrossProject = {
-    apply(id, base)(platforms: _*).crossType(crossType)
+    apply(id, base)(platforms *).crossType(crossType)
   }
 }

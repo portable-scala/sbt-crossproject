@@ -18,10 +18,10 @@ object ScalaNativeCrossPlugin extends sbt.AutoPlugin {
       def native: Project = project.projects(NativePlatform)
 
       def nativeSettings(ss: Def.SettingsDefinition*): CrossProject =
-        nativeConfigure(_.settings(ss: _*))
+        nativeConfigure(_.settings(ss *))
 
       def nativeEnablePlugins(plugins: Plugins*): CrossProject =
-        nativeConfigure(_.enablePlugins(plugins: _*))
+        nativeConfigure(_.enablePlugins(plugins *))
 
       def nativeConfigure(transformer: Project => Project): CrossProject =
         project.configurePlatform(NativePlatform)(transformer)

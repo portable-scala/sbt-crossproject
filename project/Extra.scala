@@ -50,7 +50,7 @@ object Extra {
           val prevProjectID =
             (thisProjectID.organization % thisProjectID.name % prevVersion)
               .cross(thisProjectID.crossVersion)
-              .extra(prevExtraAttributes.toSeq: _*)
+              .extra(prevExtraAttributes.toSeq *)
           Set(prevProjectID)
       }
     }

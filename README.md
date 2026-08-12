@@ -1,19 +1,20 @@
 <h1>sbt-crossproject</h1>
 
-
-[![Join the chat at https://gitter.im/scala-native/sbt-crossproject](https://badges.gitter.im/scala-native/sbt-crossproject.svg)](https://gitter.im/scala-native/sbt-crossproject)
-
-[![Build Status](https://github.com/portable-scala/sbt-crossproject/actions/workflows/ci.yml/badge.svg)](https://github.com/portable-scala/sbt-crossproject/actions)
-
 Cross-platform compilation support for sbt.
 
-Requirements:
+Requirements since sbt-crossproject 1.4.0:
+
+* sbt 1.11.5+ (baseline required by sbt-scala-native 0.5.11)
+* For `JSPlatform`: Scala.js 1.22.0+
+* For `NativePlatform`: Scala Native 0.5.11+
+* JDK 17+
+
+For older versions of dependencies, use sbt-crossproject 1.3.2, which requires:
 
 * sbt 1.2.1+
 * For `JSPlatform`: Scala.js 0.6.23+ or 1.0.0+
 * For `NativePlatform`: Scala Native 0.3.7+
-
-If you are still using sbt 0.13.x, you must use sbt-crossproject v0.6.1 instead of v1.3.2.
+* JDK 8+
 
 <h2>Installation</h2>
 
@@ -22,19 +23,16 @@ If you are still using sbt 0.13.x, you must use sbt-crossproject v0.6.1 instead 
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.3.2")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "1.16.0")
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.4")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.4.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.4.0")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % "1.22.0")
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.11")
 ```
 
 In `build.sbt`:
 
 ```scala
-// If you are using Scala.js 0.6.x, you need the following import:
-//import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-
-val sharedSettings = Seq(scalaVersion := "2.13.14")
+val sharedSettings = Seq(scalaVersion := "2.13.18")
 
 lazy val bar =
   // select supported platforms
@@ -46,23 +44,15 @@ lazy val bar =
     // configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
 
-// Optional in sbt 1.x (mandatory in sbt 0.13.x)
-lazy val barJS     = bar.js
-lazy val barJVM    = bar.jvm
-lazy val barNative = bar.native
-
 lazy val foo =
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .settings(sharedSettings)
     .settings(
-      // %%% now include Scala Native. It applies to all selected platforms
-      libraryDependencies += "org.example" %%% "foo" % "1.2.3"
+      // sbt 1.x: use %%%
+      libraryDependencies += "org.example" %%% "foo" % "1.2.3",
+      // sbt 2.x: use %%
+      libraryDependencies += "org.example" %% "foo" % "1.2.3",
     )
-
-// Optional in sbt 1.x (mandatory in sbt 0.13.x)
-lazy val fooJS = foo.js
-lazy val fooJVM = foo.jvm
-lazy val fooNative = foo.native
 ```
 
 <h3>Removing the platform suffix for one "default" platform</h3>
@@ -76,11 +66,6 @@ lazy val bar =
     .withoutSuffixFor(JVMPlatform)
     .crossType(...)
     .settings(...)
-
-// Optional in sbt 1.x (mandatory in sbt 0.13.x)
-lazy val barJS     = bar.js
-lazy val barJVM    = bar.jvm
-lazy val barNative = bar.native
 ```
 
 The call to `withoutSuffixFor` must come first after the call to `crossProject()`, otherwise it will not compile.
@@ -118,14 +103,14 @@ lazy val bar =
 In `project/plugins.sbt`:
 
 ```scala
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.4")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.4.0")
+addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.11")
 ```
 
 In `build.sbt`:
 
 ```scala
-val sharedSettings = Seq(scalaVersion := "2.11.12")
+ThisBuild / scalaVersion := "2.13.18"
 
 lazy val bar =
   // select supported platforms
@@ -135,40 +120,6 @@ lazy val bar =
     .jvmSettings(/* ... */)
     // configure Scala-Native settings
     .nativeSettings(/* ... */) // defined in sbt-scala-native
-
-// Optional in sbt 1.x (mandatory in sbt 0.13.x)
-lazy val barJVM    = bar.jvm
-lazy val barNative = bar.native
-```
-
-<h3>Migration from Scala.js 0.6.x' default crossProject</h3>
-
-We carefully implemented sbt-crossproject to be mostly source compatible with Scala.js crossProject
-
-In `project/plugins.sbt`:
-
-```scala
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.33")
-```
-
-In `build.sbt`:
-
-```scala
-// shadow sbt-scalajs' crossProject and CrossType from Scala.js 0.6.x
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-
-lazy val bar =
-  // select supported platforms
-  crossProject(JSPlatform, JVMPlatform)
-    .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
-    .settings(/* ... */)
-    .jsSettings(/* ... */) // defined in sbt-scalajs-crossproject
-    .jvmSettings(/* ... */)
-
-// Optional in sbt 1.x (mandatory in sbt 0.13.x)
-lazy val barJS = bar.js
-lazy val barJVM = bar.jvm
 ```
 
 <h3>When using Build.scala</h3>

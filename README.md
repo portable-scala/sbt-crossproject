@@ -4,7 +4,7 @@ Cross-platform compilation support for sbt.
 
 Requirements since sbt-crossproject 1.4.0:
 
-* sbt 1.11.5+ (baseline required by sbt-scala-native 0.5.11)
+* sbt 1.11.5+ or sbt 2.0.6+
 * For `JSPlatform`: Scala.js 1.22.0+
 * For `NativePlatform`: Scala Native 0.5.11+
 * JDK 17+

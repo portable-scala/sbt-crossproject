@@ -8,7 +8,7 @@ import scala.util.Try
 
 object Extra {
 
-  val previousVersion: Option[String]                  = Some("1.3.2")
+  val previousVersion: Option[String]                  = Some("1.4.0")
   val newScalaBinaryVersionsInThisRelease: Set[String] = Set()
 
   lazy val publishSettings = Seq(

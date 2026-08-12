@@ -31,4 +31,4 @@ jobs:
       - name: Test sbt 1
         run: sbt sbt-crossproject-test/scripted
       - name: Test sbt 2
-        run: sbt '++ 3.x' "sbt-crossproject/test ; sbt-scala-native-crossproject/test"
+        run: sbt '++ 3.x' sbt-crossproject-test/scripted

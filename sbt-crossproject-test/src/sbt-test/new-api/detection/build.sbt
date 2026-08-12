@@ -1,5 +1,6 @@
 import sbtcrossproject.Platform
 
+@transient
 lazy val check = taskKey[Unit]("check")
 
 def doCheckPlatform(platform: Platform, id: String) =

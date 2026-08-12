@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        scala: [ '2.12.x', '3.x' ]
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -27,8 +29,6 @@ jobs:
       - name: scalafmt
         run: ./scripts/scalafmt --test
       - name: MiMa
-        run: sbt ";sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
-      - name: Test sbt 1
-        run: sbt sbt-crossproject-test/scripted
-      - name: Test sbt 2
-        run: sbt '++ 3.x' sbt-crossproject-test/scripted
+        run: sbt ++${{ matrix.scala }} ";sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
+      - name: Test
+        run: sbt ++${{ matrix.scala }} sbt-crossproject-test/scripted

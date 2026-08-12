@@ -16,8 +16,7 @@ lazy val bar =
       description := "jvm settings"
     )
     .nativeSettings(
-      description := "native settings",
-      resolvers += Resolver.sonatypeRepo("snapshots")
+      description := "native settings"
     )
 
 lazy val barJS     = bar.js

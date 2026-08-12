@@ -1,5 +1,3 @@
-import sbtcrossproject.{crossProject, CrossType}
-
 lazy val bar = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .settings(scalaVersion := "2.12.17")

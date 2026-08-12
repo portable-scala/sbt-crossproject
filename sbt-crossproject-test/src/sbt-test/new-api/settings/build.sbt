@@ -1,5 +1,3 @@
-import sbtcrossproject.{crossProject, CrossType}
-
 lazy val check = taskKey[Unit]("check settings are applied")
 
 lazy val bar =

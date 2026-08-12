@@ -1,5 +1,3 @@
-import sbtcrossproject.{crossProject, CrossType}
-
 val g = "org.example.platform-specific"
 val a = "bar"
 val v = "0.1.0"

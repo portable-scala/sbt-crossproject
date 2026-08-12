@@ -18,11 +18,13 @@ object CrossPlugin extends AutoPlugin {
     // Cross-classpath dependency builders
 
     final implicit def toCrossClasspathDependencyConstructor(
-        cp: CrossProject): CrossClasspathDependency.Constructor =
+        cp: CrossProject
+    ): CrossClasspathDependency.Constructor =
       new CrossClasspathDependency.Constructor(cp)
 
     final implicit def toCrossClasspathDependency(
-        cp: CrossProject): CrossClasspathDependency =
+        cp: CrossProject
+    ): CrossClasspathDependency =
       new CrossClasspathDependency(cp, None)
 
     // The JVM platform
@@ -30,7 +32,8 @@ object CrossPlugin extends AutoPlugin {
     val JVMPlatform = sbtcrossproject.JVMPlatform
 
     implicit def JVMCrossProjectBuilderOps(
-        builder: CrossProject.Builder): JVMCrossProjectOps =
+        builder: CrossProject.Builder
+    ): JVMCrossProjectOps =
       new JVMCrossProjectOps(builder)
 
     implicit class JVMCrossProjectOps(project: CrossProject) {

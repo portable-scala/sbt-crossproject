@@ -18,5 +18,5 @@ lazy val foobar = crossProject(JVMPlatform, NativePlatform)
   .settings(scalaVersion := "2.12.17")
   .dependsOn(bar % "test")
 
-lazy val foobarJVM = foobar.jvm
+lazy val foobarJVM    = foobar.jvm
 lazy val foobarNative = foobar.native

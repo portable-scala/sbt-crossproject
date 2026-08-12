@@ -8,8 +8,8 @@ lazy val bar =
     .settings(
       scalaVersion := "2.12.17",
       organization := g,
-      moduleName := a,
-      version := v
+      moduleName   := a,
+      version      := v
     )
 
 lazy val barNative = bar.native

@@ -5,5 +5,5 @@ lazy val old = crossProject
   .jsSettings(description := "js description")
   .jvmSettings(description := "jvm description")
 
-lazy val oldJS = old.js
+lazy val oldJS  = old.js
 lazy val oldJVM = old.jvm

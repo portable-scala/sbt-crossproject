@@ -43,9 +43,11 @@ abstract class CrossType {
    *  @param conf name of sub-directory for the configuration (typically "main"
    *      or "test")
    */
-  def partiallySharedSrcDir(projectBase: File,
-                            platforms: Seq[Platform],
-                            conf: String): Option[File] = None
+  def partiallySharedSrcDir(
+      projectBase: File,
+      platforms: Seq[Platform],
+      conf: String
+  ): Option[File] = None
 
   /** The location of a shared resources directory (if it exists)
    *  @param projectBase the base directory of a (true sbt) Project
@@ -59,9 +61,11 @@ abstract class CrossType {
    *  @param conf name of sub-directory for the configuration (typically "main"
    *      or "test")
    */
-  def partiallySharedResourcesDir(projectBase: File,
-                                  platforms: Seq[Platform],
-                                  conf: String): Option[File] = None
+  def partiallySharedResourcesDir(
+      projectBase: File,
+      platforms: Seq[Platform],
+      conf: String
+  ): Option[File] = None
 
 }
 
@@ -77,8 +81,10 @@ object CrossType {
    */
   object Full extends CrossType {
 
-    @deprecated("use projectDir(crossBase: File, platform: Platform): File",
-                "0.1.0")
+    @deprecated(
+      "use projectDir(crossBase: File, platform: Platform): File",
+      "0.1.0"
+    )
     def projectDir(crossBase: File, projectType: String): File =
       crossBase / projectType
 
@@ -88,20 +94,26 @@ object CrossType {
     def sharedSrcDir(projectBase: File, conf: String): Option[File] =
       Some(projectBase.getParentFile / "shared" / "src" / conf / "scala")
 
-    override def partiallySharedSrcDir(projectBase: File,
-                                       platforms: Seq[Platform],
-                                       conf: String): Option[File] = {
+    override def partiallySharedSrcDir(
+        projectBase: File,
+        platforms: Seq[Platform],
+        conf: String
+    ): Option[File] = {
       val dir = platforms.map(_.identifier).mkString("-")
       Some(projectBase.getParentFile / dir / "src" / conf / "scala")
     }
 
-    override def sharedResourcesDir(projectBase: File,
-                                    conf: String): Option[File] =
+    override def sharedResourcesDir(
+        projectBase: File,
+        conf: String
+    ): Option[File] =
       Some(projectBase.getParentFile / "shared" / "src" / conf / "resources")
 
-    override def partiallySharedResourcesDir(projectBase: File,
-                                             platforms: Seq[Platform],
-                                             conf: String): Option[File] = {
+    override def partiallySharedResourcesDir(
+        projectBase: File,
+        platforms: Seq[Platform],
+        conf: String
+    ): Option[File] = {
       val dir = platforms.map(_.identifier).mkString("-")
       Some(projectBase.getParentFile / dir / "src" / conf / "resources")
     }
@@ -117,8 +129,10 @@ object CrossType {
    * </pre>
    */
   object Pure extends CrossType {
-    @deprecated("use projectDir(crossBase: File, platform: Platform): File",
-                "0.1.0")
+    @deprecated(
+      "use projectDir(crossBase: File, platform: Platform): File",
+      "0.1.0"
+    )
     def projectDir(crossBase: File, projectType: String): File =
       crossBase / ("." + projectType)
 
@@ -128,8 +142,10 @@ object CrossType {
     def sharedSrcDir(projectBase: File, conf: String): Option[File] =
       Some(projectBase.getParentFile / "src" / conf / "scala")
 
-    override def sharedResourcesDir(projectBase: File,
-                                    conf: String): Option[File] =
+    override def sharedResourcesDir(
+        projectBase: File,
+        conf: String
+    ): Option[File] =
       Some(projectBase.getParentFile / "src" / conf / "resources")
   }
 
@@ -142,8 +158,10 @@ object CrossType {
    * </pre>
    */
   object Dummy extends CrossType {
-    @deprecated("use projectDir(crossBase: File, platform: Platform): File",
-                "0.1.0")
+    @deprecated(
+      "use projectDir(crossBase: File, platform: Platform): File",
+      "0.1.0"
+    )
     def projectDir(crossBase: File, projectType: String): File =
       crossBase / projectType
 
@@ -152,8 +170,10 @@ object CrossType {
 
     def sharedSrcDir(projectBase: File, conf: String): Option[File] = None
 
-    override def sharedResourcesDir(projectBase: File,
-                                    conf: String): Option[File] =
+    override def sharedResourcesDir(
+        projectBase: File,
+        conf: String
+    ): Option[File] =
       None
   }
 }

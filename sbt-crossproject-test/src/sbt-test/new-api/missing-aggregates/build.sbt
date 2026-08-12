@@ -16,5 +16,5 @@ lazy val foo = crossProject(JSPlatform, NativePlatform)
   .settings(scalaVersion := "2.12.17")
   .aggregate(bar, buzz)
 
-lazy val fooJS = foo.js
+lazy val fooJS     = foo.js
 lazy val fooNative = foo.native

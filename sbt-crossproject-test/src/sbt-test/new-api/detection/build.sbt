@@ -1,4 +1,4 @@
-import sbtcrossproject.{crossProject, CrossType, Platform}
+import sbtcrossproject.Platform
 
 lazy val check = taskKey[Unit]("check")
 

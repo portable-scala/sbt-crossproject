@@ -5,7 +5,7 @@ lazy val bar =
     .withoutSuffixFor(JVMPlatform)
     .crossType(CrossType.Pure)
     .settings(
-      scalaVersion := "2.12.17",
+      scalaVersion := "2.12.21",
       description := "common settings"
     )
 

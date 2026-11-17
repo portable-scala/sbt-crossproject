@@ -2,9 +2,15 @@ val g = "org.example.cross-dependencies-without-cross"
 val a = "bar"
 val v = "0.1.0"
 
-val baseSettings = Seq(scalaVersion := "2.12.17")
+val platformDependency = Def.setting {
+  val dependency = g %% a % v
+  if (sbtVersion.value.startsWith("1.")) dependency.cross(crossVersion.value)
+  else dependency
+}
 
-val externalDependency = Seq(libraryDependencies += g %%% a % v)
+val baseSettings = Seq(scalaVersion := "2.12.21")
+
+val externalDependency = Seq(libraryDependencies += platformDependency.value)
 
 lazy val bar = project
   .settings(baseSettings)

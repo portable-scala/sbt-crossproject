@@ -3,12 +3,16 @@ import Extra._
 val ScalaJSVersionBaseline     = "1.22.0"  // first version supporting sbt 2.x
 val ScalaNativeVersionBaseline = "0.5.11"  // first version supporting sbt 2.x
 val SBT1xVersionBaseline       = "1.11.5"  // required by sbt-scala-native 0.5.11
-val SBT1xScalaVersion          = "2.12.20" // version used to build sbt 1.11.5
-val SBT2xVersionBaseline       = "2.0.6"
-val SBT2xScalaVersion          = "3.8.4"
+val SBT1xScalaVersion          = "2.12.21"
+val SBT2xVersionBaseline       = "2.1.0"
+val SBT2xScalaVersion          = "3.9.0"
 
 val sbtPluginSettings = Def.settings(
-  crossScalaVersions += SBT2xScalaVersion,
+  crossScalaVersions := Seq(SBT1xScalaVersion, SBT2xScalaVersion),
+  scriptedSbt := (if (scalaBinaryVersion.value == "2.12") "1.13.1" else "2.1.0"),
+  scalacOptions ++= {
+    if (scalaBinaryVersion.value == "2.12") Seq("-Xsource:3", "-release:8") else Nil
+  },
   pluginCrossBuild / sbtVersion := {
     scalaBinaryVersion.value match {
       case "2.12" =>
@@ -127,6 +131,8 @@ lazy val `sbt-crossproject-test` =
           `sbt-scalajs-crossproject` / publishLocal,
           `sbt-scala-native-crossproject` / publishLocal
         )
-        .evaluated
+        .evaluated,
+      // The deprecated package-object macros exist only in the sbt 1 artifact.
+      TaskKey[Unit]("scriptedTestSbt2") := scripted.toTask(" new-api/*").value
     )
     .settings(duplicateProjectFolders)

@@ -2,6 +2,9 @@
 
 Cross-platform compilation support for sbt.
 
+The current development version builds its sbt 2 plugin with Scala 3.9 LTS and requires sbt 2.1.0 or newer.
+The sbt 1 compatibility baseline remains 1.11.5.
+
 Requirements since sbt-crossproject 1.4.0:
 
 * sbt 1.11.5+ or sbt 2.0.6+
@@ -157,7 +160,7 @@ Since this is the case of most existing sbt projects it is often desired during 
 
 This can be done with the following set of options:
 
-`lazy val foo = crossProject.crossType(CrossType.Pure).in(file("."))`
+`lazy val foo = crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure).in(file("."))`
 
 - `.crossType(CrossType.Full)`
 

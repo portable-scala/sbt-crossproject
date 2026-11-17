@@ -13,6 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         scala: [ '2.12.x', '3.x' ]
+        java: [17, 21, 25]
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -21,7 +22,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 17
+          java-version: ${{ matrix.java }}
       - uses: sbt/setup-sbt@v1
       - uses: coursier/cache-action@v8
       - name: Install Scala Native dependencies
@@ -30,5 +31,9 @@ jobs:
         run: ./scripts/scalafmt --test
       - name: MiMa
         run: sbt ++${{ matrix.scala }} ";sbt-crossproject/mimaReportBinaryIssues;sbt-scalajs-crossproject/mimaReportBinaryIssues;sbt-scala-native-crossproject/mimaReportBinaryIssues"
-      - name: Test
-        run: sbt ++${{ matrix.scala }} sbt-crossproject-test/scripted
+      - name: Test sbt 1, including deprecated macro compatibility
+        if: matrix.scala == '2.12.x'
+        run: sbt ++2.12.x sbt-crossproject-test/scripted
+      - name: Test sbt 2 supported APIs
+        if: matrix.scala == '3.x'
+        run: sbt ++3.x sbt-crossproject-test/scriptedTestSbt2
